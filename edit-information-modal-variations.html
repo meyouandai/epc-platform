@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Information Modal Variations - EPC Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .modal-container {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:disabled {
+            background: #f9fafb;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 24px 0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+        }
+
+        .inline-edit-field {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .field-info {
+            flex: 1;
+        }
+
+        .field-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 2px;
+        }
+
+        .field-value {
+            font-size: 14px;
+            color: #1a1a1a;
+        }
+
+        .edit-icon {
+            padding: 6px;
+            color: #667eea;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .edit-icon:hover {
+            background: #f3f4f6;
+        }
+
+        .request-icon {
+            padding: 6px;
+            color: #f59e0b;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .request-icon:hover {
+            background: #fef3c7;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: #f9fafb;
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            color: #1a1a1a;
+            cursor: pointer;
+        }
+
+        .variation-title {
+            background: #667eea;
+            color: white;
+            padding: 12px 16px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 12px 12px 0 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        .badge-instant {
+            background: #10b981;
+            color: white;
+        }
+
+        .badge-request {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .pros-cons {
+            margin-top: 16px;
+            font-size: 12px;
+        }
+
+        .pros {
+            color: #059669;
+            margin-bottom: 8px;
+        }
+
+        .cons {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Edit Information Modal Variations</h1>
+            <p>Different approaches for handling profile information changes</p>
+        </div>
+
+        <div class="options-grid">
+            <!-- Option 1: Split Form -->
+            <div class="modal-container">
+                <div class="variation-title">Option 1: Split Form</div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">Edit Personal Information</div>
+                        <div class="modal-subtitle">Update your profile details</div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="section-title">Instant Changes</div>
+                        <div class="form-group">
+                            <label>Phone Number <span class="badge badge-instant">Instant</span></label>
+                            <input type="tel" value="+44 7700 900123">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Name <span class="badge badge-instant">Instant</span></label>
+                            <input type="text" value="Smith Energy Solutions Ltd">
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="section-title">Requires Verification</div>
+                        <p class="help-text">These changes require identity verification and will be processed by our support team.</p>
+
+                        <div class="form-group">
+                            <label>Full Name <span class="badge badge-request">Support</span></label>
+                            <input type="text" value="John Smith" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address <span class="badge badge-request">Support</span></label>
+                            <input type="email" value="john.smith@epc-assessments.co.uk" disabled>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary">Request Support</button>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">✓ Clear separation • ✓ Immediate feedback • ✓ Simple to understand</div>
+                    <div class="cons">✗ Two separate workflows • ✗ Longer modal</div>
+                </div>
+            </div>
+
+            <!-- Option 2: Inline Edit States -->
+            <div class="modal-container">
+                <div class="variation-title">Option 2: Inline Edit States</div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">Edit Personal Information</div>
+                        <div class="modal-subtitle">Click the icon to edit each field</div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="inline-edit-field">
+                            <div class="field-info">
+                                <div class="field-label">Full Name</div>
+                                <div class="field-value">John Smith</div>
+                            </div>
+                            <div class="request-icon">📝</div>
+                        </div>
+
+                        <div class="inline-edit-field">
+                            <div class="field-info">
+                                <div class="field-label">Email Address</div>
+                                <div class="field-value">john.smith@epc-assessments.co.uk</div>
+                            </div>
+                            <div class="request-icon">📝</div>
+                        </div>
+
+                        <div class="inline-edit-field">
+                            <div class="field-info">
+                                <div class="field-label">Phone Number</div>
+                                <div class="field-value">+44 7700 900123</div>
+                            </div>
+                            <div class="edit-icon">✏️</div>
+                        </div>
+
+                        <div class="inline-edit-field">
+                            <div class="field-info">
+                                <div class="field-label">Company Name</div>
+                                <div class="field-value">Smith Energy Solutions Ltd</div>
+                            </div>
+                            <div class="edit-icon">✏️</div>
+                        </div>
+
+                        <p class="help-text">📝 = Requires verification • ✏️ = Edit instantly</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Done</button>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">✓ Compact design • ✓ Visual clarity • ✓ Modern UX pattern</div>
+                    <div class="cons">✗ Icons may be unclear • ✗ Extra clicks required</div>
+                </div>
+            </div>
+
+            <!-- Option 3: Two-Step Process -->
+            <div class="modal-container">
+                <div class="variation-title">Option 3: Two-Step Selector</div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">What would you like to change?</div>
+                        <div class="modal-subtitle">Select the information you need to update</div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="name">
+                            <label class="checkbox-label" for="name">
+                                Full Name <span class="badge badge-request">Support</span>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="email">
+                            <label class="checkbox-label" for="email">
+                                Email Address <span class="badge badge-request">Support</span>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="phone" checked>
+                            <label class="checkbox-label" for="phone">
+                                Phone Number <span class="badge badge-instant">Instant</span>
+                            </label>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="company" checked>
+                            <label class="checkbox-label" for="company">
+                                Company Name <span class="badge badge-instant">Instant</span>
+                            </label>
+                        </div>
+
+                        <p class="help-text">Next step will show the appropriate form for your selection</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Continue</button>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">✓ Progressive disclosure • ✓ Clear expectations • ✓ Focused workflow</div>
+                    <div class="cons">✗ Extra step • ✗ More complex flow</div>
+                </div>
+            </div>
+
+            <!-- Option 4: Tabbed Approach -->
+            <div class="modal-container">
+                <div class="variation-title">Option 4: Tabbed Interface</div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">Edit Information</div>
+                        <div style="display: flex; gap: 4px; margin-top: 12px;">
+                            <button class="btn" style="background: #667eea; color: white; padding: 6px 12px;">Quick Edit</button>
+                            <button class="btn" style="background: #f3f4f6; color: #6b7280; padding: 6px 12px;">Support Request</button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" value="+44 7700 900123">
+                        </div>
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" value="Smith Energy Solutions Ltd">
+                        </div>
+                        <p class="help-text">Changes here are applied immediately after saving.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">✓ Familiar pattern • ✓ Clean separation • ✓ Scalable</div>
+                    <div class="cons">✗ Takes more space • ✗ May feel over-engineered</div>
+                </div>
+            </div>
+
+            <!-- Option 5: Simple Request Form -->
+            <div class="modal-container">
+                <div class="variation-title">Option 5: Support-First Approach</div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">Request Information Change</div>
+                        <div class="modal-subtitle">Our support team will verify and update your details</div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>What would you like to change?</label>
+                            <textarea rows="3" placeholder="e.g., Update my email address from john.old@email.com to john.new@email.com" style="width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; resize: vertical;"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Supporting Documents (Optional)</label>
+                            <input type="file" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+                            <p class="help-text">Upload ID, proof of address, or other verification documents</p>
+                        </div>
+
+                        <div style="background: #f0f9ff; padding: 16px; border-radius: 6px; border-left: 4px solid #0ea5e9;">
+                            <div style="font-weight: 500; color: #0c4a6e; margin-bottom: 4px;">Quick Changes Available</div>
+                            <div style="font-size: 13px; color: #075985;">Phone number and company name can be updated instantly in your profile settings.</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Submit Request</button>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">✓ Simple and clear • ✓ Handles all cases • ✓ No confusion</div>
+                    <div class="cons">✗ No instant changes • ✗ Everything requires support</div>
+                </div>
+            </div>
+
+            <!-- Option 6: Context Menu -->
+            <div class="modal-container">
+                <div class="variation-title">Option 6: Smart Context Menu</div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">Edit Personal Information</div>
+                        <div class="modal-subtitle">Right-click or long-press any field to edit</div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <div style="position: relative;">
+                                <input type="text" value="John Smith" readonly style="background: #f9fafb; cursor: pointer;">
+                                <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #f59e0b; font-size: 12px;">Support Required</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <div style="position: relative;">
+                                <input type="email" value="john.smith@epc-assessments.co.uk" readonly style="background: #f9fafb; cursor: pointer;">
+                                <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #f59e0b; font-size: 12px;">Support Required</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <div style="position: relative;">
+                                <input type="tel" value="+44 7700 900123" style="cursor: pointer;">
+                                <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #10b981; font-size: 12px;">✓ Editable</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <div style="position: relative;">
+                                <input type="text" value="Smith Energy Solutions Ltd" style="cursor: pointer;">
+                                <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #10b981; font-size: 12px;">✓ Editable</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+                <div class="pros-cons">
+                    <div class="pros">✓ Intuitive interaction • ✓ Space efficient • ✓ Clear visual cues</div>
+                    <div class="cons">✗ Requires user education • ✗ Mobile interaction unclear</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; padding: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <h2 style="margin-bottom: 16px; color: #1a1a1a;">Recommendation Summary</h2>
+            <p style="margin-bottom: 16px; color: #374151;">For EPC assessors (small business owners who value simplicity):</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3 style="color: #059669; margin-bottom: 8px;">🏆 Best Choice: Option 1 (Split Form)</h3>
+                    <ul style="color: #374151; font-size: 14px; line-height: 1.6;">
+                        <li>Immediately obvious what can be changed vs. what needs support</li>
+                        <li>No learning curve or hidden interactions</li>
+                        <li>Works perfectly on mobile</li>
+                        <li>Matches the straightforward nature of the user base</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 style="color: #0ea5e9; margin-bottom: 8px;">🥈 Alternative: Option 5 (Support-First)</h3>
+                    <ul style="color: #374151; font-size: 14px; line-height: 1.6;">
+                        <li>Simplest possible approach</li>
+                        <li>Reduces support complexity</li>
+                        <li>Good if most changes require verification anyway</li>
+                        <li>Could add instant fields later if needed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

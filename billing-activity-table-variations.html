@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent Activity Table Variations - Billing Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 32px;
+            color: #1a1a1a;
+        }
+
+        .variation {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .variation-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .activity-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .view-all {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Table Styles */
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table-header {
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .table-header th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activity-table td {
+            padding: 16px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+
+        .activity-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .activity-main {
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .activity-detail {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .activity-date {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .activity-amount {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .activity-amount.charge {
+            color: #dc2626;
+        }
+
+        .activity-amount.credit {
+            color: #059669;
+        }
+
+        .activity-amount.neutral {
+            color: #6b7280;
+        }
+
+        .activity-type {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .type-financial {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .type-account {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .type-trust {
+            background: #e9d5ff;
+            color: #7c3aed;
+        }
+
+        .type-system {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* List Styles for Mixed Format */
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .activity-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .activity-item-left {
+            flex: 1;
+        }
+
+        .activity-item-right {
+            text-align: right;
+            margin-left: 16px;
+        }
+
+        .activity-item .activity-main {
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .activity-item .activity-detail {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .activity-item .activity-date {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Section Separators */
+        .section-separator {
+            margin: 24px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* Empty cells */
+        .empty-cell {
+            color: #9ca3af;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recent Activity Table Variations</h1>
+
+        <!-- Variation 1: Full Table Format -->
+        <div class="variation">
+            <div class="variation-title">Variation 1: Full Table Format (4 columns)</div>
+            <div class="activity-section">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <table class="activity-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Date</th>
+                            <th>Activity</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="activity-date">26 Jan 2025</td>
+                            <td>
+                                <div class="activity-main">Lead purchasing paused</div>
+                                <div class="activity-detail">Account purchasing suspended by user</div>
+                            </td>
+                            <td><span class="activity-type type-account">Account</span></td>
+                            <td class="empty-cell">—</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">25 Jan 2025</td>
+                            <td>
+                                <div class="activity-main">Spending limit increased</div>
+                                <div class="activity-detail">Monthly limit updated: £150 → £250</div>
+                            </td>
+                            <td><span class="activity-type type-account">Account</span></td>
+                            <td class="empty-cell">—</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">24 Jan 2025</td>
+                            <td>
+                                <div class="activity-main">Trust level milestone</div>
+                                <div class="activity-detail">2 payments remaining until Silver status</div>
+                            </td>
+                            <td><span class="activity-type type-trust">Trust</span></td>
+                            <td class="empty-cell">—</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">23 Jan 2025</td>
+                            <td>
+                                <div class="activity-main">Monthly payment processed</div>
+                                <div class="activity-detail">December billing period settled automatically</div>
+                            </td>
+                            <td><span class="activity-type type-financial">Financial</span></td>
+                            <td class="activity-amount charge">£240</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">19 Jan 2025</td>
+                            <td>
+                                <div class="activity-main">Credit applied</div>
+                                <div class="activity-detail">Lead refund credited to account</div>
+                            </td>
+                            <td><span class="activity-type type-financial">Financial</span></td>
+                            <td class="activity-amount credit">+£15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Variation 2: Simplified 3-Column Table -->
+        <div class="variation">
+            <div class="variation-title">Variation 2: Simplified 3-Column Table</div>
+            <div class="activity-section">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <table class="activity-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Date</th>
+                            <th>Activity</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="activity-date">26 Jan 2025</td>
+                            <td class="activity-main">Lead purchasing paused</td>
+                            <td class="activity-detail">Account purchasing suspended by user</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">25 Jan 2025</td>
+                            <td class="activity-main">Spending limit increased</td>
+                            <td class="activity-detail">Monthly limit updated: £150 → £250</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">24 Jan 2025</td>
+                            <td class="activity-main">Trust level milestone</td>
+                            <td class="activity-detail">2 payments remaining until Silver status</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">23 Jan 2025</td>
+                            <td class="activity-main">Monthly payment processed</td>
+                            <td class="activity-detail">December billing period settled - £240</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">19 Jan 2025</td>
+                            <td class="activity-main">Credit applied</td>
+                            <td class="activity-detail">Lead refund credited to account - +£15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Variation 3: Mixed Format (Financial Table + Account List) -->
+        <div class="variation">
+            <div class="variation-title">Variation 3: Mixed Format (Separate Financial & Account)</div>
+            <div class="activity-section">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+
+                <!-- Financial Transactions Table -->
+                <div class="section-separator">
+                    <div class="section-label">Recent Transactions</div>
+                </div>
+                <table class="activity-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="activity-date">23 Jan 2025</td>
+                            <td>
+                                <div class="activity-main">Monthly payment processed</div>
+                                <div class="activity-detail">December billing period settled automatically</div>
+                            </td>
+                            <td class="activity-amount charge">£240</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">19 Jan 2025</td>
+                            <td>
+                                <div class="activity-main">Credit applied</div>
+                                <div class="activity-detail">Lead refund credited to account</div>
+                            </td>
+                            <td class="activity-amount credit">+£15</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Account Changes List -->
+                <div class="section-separator">
+                    <div class="section-label">Account Changes</div>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-item-content">
+                            <div class="activity-item-left">
+                                <div class="activity-main">Lead purchasing paused</div>
+                                <div class="activity-detail">Account purchasing suspended by user</div>
+                            </div>
+                            <div class="activity-item-right">
+                                <div class="activity-date">26 Jan 2025</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-item-content">
+                            <div class="activity-item-left">
+                                <div class="activity-main">Spending limit increased</div>
+                                <div class="activity-detail">Monthly limit updated: £150 → £250</div>
+                            </div>
+                            <div class="activity-item-right">
+                                <div class="activity-date">25 Jan 2025</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-item-content">
+                            <div class="activity-item-left">
+                                <div class="activity-main">Trust level milestone</div>
+                                <div class="activity-detail">2 payments remaining until Silver status</div>
+                            </div>
+                            <div class="activity-item-right">
+                                <div class="activity-date">24 Jan 2025</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Variation 4: Compact Table with Amount Column -->
+        <div class="variation">
+            <div class="variation-title">Variation 4: Compact Table (Amount when applicable)</div>
+            <div class="activity-section">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <table class="activity-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th style="width: 100px;">Date</th>
+                            <th>Activity</th>
+                            <th style="width: 80px; text-align: right;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="activity-date">26 Jan</td>
+                            <td>
+                                <div class="activity-main">Lead purchasing paused</div>
+                                <div class="activity-detail">Account purchasing suspended by user</div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">25 Jan</td>
+                            <td>
+                                <div class="activity-main">Spending limit increased</div>
+                                <div class="activity-detail">Monthly limit: £150 → £250</div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">24 Jan</td>
+                            <td>
+                                <div class="activity-main">Trust level milestone</div>
+                                <div class="activity-detail">2 payments until Silver status</div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">23 Jan</td>
+                            <td>
+                                <div class="activity-main">Monthly payment processed</div>
+                                <div class="activity-detail">December billing period settled</div>
+                            </td>
+                            <td class="activity-amount charge">£240</td>
+                        </tr>
+                        <tr>
+                            <td class="activity-date">19 Jan</td>
+                            <td>
+                                <div class="activity-main">Credit applied</div>
+                                <div class="activity-detail">Lead refund credited to account</div>
+                            </td>
+                            <td class="activity-amount credit">+£15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Comparison with Option 6 -->
+        <div class="variation">
+            <div class="variation-title">Option 6: Original List Format (for comparison)</div>
+            <div class="activity-section">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-item-content">
+                            <div class="activity-item-left">
+                                <div class="activity-main">Lead purchasing paused</div>
+                                <div class="activity-detail">Account purchasing suspended by user</div>
+                                <div class="activity-date">2 hours ago</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-item-content">
+                            <div class="activity-item-left">
+                                <div class="activity-main">Spending limit increased</div>
+                                <div class="activity-detail">Monthly limit updated: £150 → £250</div>
+                                <div class="activity-date">Yesterday</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-item-content">
+                            <div class="activity-item-left">
+                                <div class="activity-main">Monthly payment processed: £240</div>
+                                <div class="activity-detail">December billing period settled automatically</div>
+                                <div class="activity-date">3 days ago</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-item-content">
+                            <div class="activity-item-left">
+                                <div class="activity-main">Credit applied: +£15</div>
+                                <div class="activity-detail">Lead refund credited to account</div>
+                                <div class="activity-date">1 week ago</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

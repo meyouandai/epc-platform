@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Limit Modal Variations - Updated</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #111827;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .scenario-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .scenario-header {
+            background: #1f2937;
+            color: white;
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .scenario-description {
+            background: #f9fafb;
+            padding: 12px 20px;
+            font-size: 13px;
+            color: #6b7280;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* Modal Styles */
+        .modal-wrapper {
+            background: white;
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-button:hover {
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .current-status {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .status-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .account-level {
+            background: #f3e8ff;
+            border: 1px solid #c4b5fd;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .account-badge {
+            background: #8b5cf6;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .account-badge.bronze {
+            background: #cd7f32;
+        }
+
+        .account-badge.silver {
+            background: #c0c0c0;
+            color: #374151;
+        }
+
+        .account-badge.gold {
+            background: #ffd700;
+            color: #374151;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            background: #10b981;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .options-section {
+            margin: 24px 0;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .limit-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .limit-cards-grid.four-col {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .limit-cards-grid.two-col {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .limit-cards-grid.three-col {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .limit-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .limit-card:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .limit-card.selected {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .limit-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f9fafb;
+        }
+
+        .limit-card.disabled:hover {
+            border-color: #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .limit-amount {
+            font-size: 26px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .limit-description {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .limit-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-current {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-locked {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-new {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .help-text {
+            background: #f0f9ff;
+            border-left: 3px solid #3b82f6;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #1e3a8a;
+        }
+
+        .upgrade-notice {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        .silver-notice {
+            background: #f0f9ff;
+            border-left: 3px solid #c0c0c0;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #1e3a8a;
+        }
+
+        .gold-options {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .gold-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .gold-option:hover {
+            background: #fef3c7;
+            border-color: #fbbf24;
+        }
+
+        .gold-option.selected {
+            background: #fef3c7;
+            border-color: #fbbf24;
+        }
+
+        .radio-button {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .radio-button.checked {
+            border-color: #fbbf24;
+        }
+
+        .radio-button.checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #fbbf24;
+            border-radius: 50%;
+        }
+
+        .option-details {
+            flex: 1;
+        }
+
+        .option-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .option-description {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 32px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+        }
+
+        @media (max-width: 768px) {
+            .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .limit-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .limit-cards-grid.four-col {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .limit-amount {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Limit Modal Variations - Updated Design</h1>
+
+        <div class="scenarios-grid">
+            <!-- Scenario 1: Bronze User - Multiple Options Available -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 1: Bronze User - Multiple Options</div>
+                <div class="scenario-description">Bronze user at £100 limit with £150, £250, £500 unlocked</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Manage Your Spending Limit</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge bronze" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #cd7f32; color: white;">Bronze</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£100</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£350</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Progress to Silver</span>
+                                <span class="status-value">£350 of £500</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                        <div class="options-section">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Done</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 2: Silver User - Recently Upgraded -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 2: Silver User - Recently Upgraded</div>
+                <div class="scenario-description">Just upgraded to Silver, still at £500 limit with new options available</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Manage Your Spending Limit</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge silver" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #c0c0c0; color: #374151;">Silver</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£500</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£520</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Progress to Gold</span>
+                                <span class="status-value">£520 of £1000</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 52%"></div>
+                            </div>
+                        </div>
+
+                        <div class="options-section">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£250">
+                                    <div class="limit-amount">£250</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£500">
+                                    <div class="limit-amount">£500</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+
+                                <div class="limit-card disabled" data-amount="£1000">
+                                    <div class="limit-amount">£1000</div>
+                                    <div class="limit-badge badge-locked">Gold</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Done</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 3: Gold User - Payment Options -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 3: Gold User - Payment Method Choice</div>
+                <div class="scenario-description">Gold user can choose between pay-as-go or monthly invoicing</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Choose Your Payment Method</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge gold" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #ffd700; color: #374151;">Gold</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£1000</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£1,250</span>
+                            </div>
+                        </div>
+
+                        <div class="gold-options">
+                            <div class="section-label">Choose Payment Method</div>
+
+                            <div class="gold-option selected" data-method="payasyougo">
+                                <div class="radio-button checked"></div>
+                                <div class="option-details">
+                                    <div class="option-title">Pay-as-you-go (Current)</div>
+                                    <div class="option-description">Set your charge threshold. Automatic billing when reached.</div>
+                                </div>
+                            </div>
+
+                            <div class="gold-option" data-method="monthly">
+                                <div class="radio-button"></div>
+                                <div class="option-details">
+                                    <div class="option-title">Monthly Invoice</div>
+                                    <div class="option-description">Invoiced monthly for total usage.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="options-section" id="payasyougo-limits">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£250">
+                                    <div class="limit-amount">£250</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£500">
+                                    <div class="limit-amount">£500</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£1000">
+                                    <div class="limit-amount">£1000</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Done</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 4: Bronze User - Near Silver Upgrade -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 4: Bronze User - Near Silver</div>
+                <div class="scenario-description">Bronze user at £450 with £500 available, close to Silver upgrade</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Manage Your Spending Limit</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge bronze" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #cd7f32; color: white;">Bronze</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£450</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£470</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Progress to Silver</span>
+                                <span class="status-value">£470 of £500</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 94%"></div>
+                            </div>
+                        </div>
+
+                        <div class="options-section">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£250">
+                                    <div class="limit-amount">£250</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£450">
+                                    <div class="limit-amount">£450</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£500">
+                                    <div class="limit-amount">£500</div>
+                                </div>
+
+                                <div class="limit-card disabled" data-amount="£1000">
+                                    <div class="limit-amount">£1000</div>
+                                    <div class="limit-badge badge-locked">Silver</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity to all modals
+        document.querySelectorAll('.scenario-container').forEach((container, index) => {
+            const cards = container.querySelectorAll('.limit-card:not(.disabled)');
+            const actionBtn = container.querySelector('[data-action-btn]');
+            const goldOptions = container.querySelectorAll('.gold-option');
+
+            // Handle limit card selection
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected from all cards in this container
+                    cards.forEach(c => c.classList.remove('selected'));
+                    // Add selected to clicked card
+                    this.classList.add('selected');
+
+                    // Update button text and footer layout
+                    const amount = this.getAttribute('data-amount');
+                    const currentAmount = container.querySelector('.status-value').textContent;
+                    const footer = container.querySelector('[data-footer]');
+
+                    if (amount === currentAmount) {
+                        // Single button when no changes
+                        footer.className = 'modal-footer single-button';
+                        footer.innerHTML = '<button class="btn btn-primary" data-action-btn>Done</button>';
+                    } else {
+                        // Two buttons when changes made
+                        footer.className = 'modal-footer';
+                        footer.innerHTML = '<button class="btn btn-secondary">Cancel</button><button class="btn btn-primary" data-action-btn>Update to ' + amount + '</button>';
+                    }
+                });
+            });
+
+            // Handle gold payment method options
+            goldOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected from all options in this container
+                    goldOptions.forEach(o => {
+                        o.classList.remove('selected');
+                        o.querySelector('.radio-button').classList.remove('checked');
+                    });
+
+                    // Add selected to clicked option
+                    this.classList.add('selected');
+                    this.querySelector('.radio-button').classList.add('checked');
+
+                    // Update button text based on method
+                    const method = this.getAttribute('data-method');
+                    // Find the current limit row in the Gold scenario
+                    const statusRows = container.querySelectorAll('.status-row');
+                    let currentLimitRow = null;
+                    statusRows.forEach(row => {
+                        const label = row.querySelector('.status-label');
+                        if (label && label.textContent === 'Current Limit') {
+                            currentLimitRow = row;
+                        }
+                    });
+
+                    const footer = container.querySelector('[data-footer]');
+
+                    if (method === 'monthly') {
+                        // Hide pay-as-you-go limits
+                        const payasyougoLimits = container.querySelector('#payasyougo-limits');
+                        if (payasyougoLimits) payasyougoLimits.style.display = 'none';
+                        // Hide current limit row for monthly
+                        if (currentLimitRow) currentLimitRow.style.display = 'none';
+
+                        // Two buttons for switching to monthly
+                        if (footer) {
+                            footer.className = 'modal-footer';
+                            footer.innerHTML = '<button class="btn btn-secondary">Cancel</button><button class="btn btn-primary" data-action-btn>Switch to Monthly Invoicing</button>';
+                        }
+                    } else {
+                        // Show pay-as-you-go limits
+                        const payasyougoLimits = container.querySelector('#payasyougo-limits');
+                        if (payasyougoLimits) payasyougoLimits.style.display = 'block';
+                        // Show current limit row for pay-as-you-go
+                        if (currentLimitRow) currentLimitRow.style.display = 'flex';
+
+                        // Single Done button for current method
+                        if (footer) {
+                            footer.className = 'modal-footer single-button';
+                            footer.innerHTML = '<button class="btn btn-primary" data-action-btn>Done</button>';
+                        }
+                    }
+                });
+            });
+
+            // Close button functionality
+            const closeBtn = container.querySelector('.close-button');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    console.log(`Modal ${index + 1} would close`);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing History with Refund Scenarios - Option D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 32px;
+            color: #1a1a1a;
+        }
+
+        .billing-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .billing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table-header {
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .table-header th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .billing-table td {
+            padding: 16px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        .billing-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .billing-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .invoice-id {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .period-text {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .amount {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .amount.positive {
+            color: #111827;
+        }
+
+        .amount.negative {
+            color: #dc2626;
+        }
+
+        .amount.adjusted {
+            color: #059669;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .status-paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-overdue {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .status-failed {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            background: white;
+            color: #374151;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .action-btn.primary {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .action-btn.primary:hover {
+            background: #5a6fd8;
+        }
+
+        /* Details Modal Styles */
+        .details-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .details-modal {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .breakdown-section {
+            margin-bottom: 24px;
+        }
+
+        .breakdown-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            border-top: 2px solid #e5e7eb;
+            padding-top: 12px;
+            margin-top: 8px;
+        }
+
+        .breakdown-label {
+            color: #6b7280;
+        }
+
+        .breakdown-value {
+            color: #111827;
+        }
+
+        .breakdown-value.negative {
+            color: #dc2626;
+        }
+
+        .lead-details {
+            background: #f9fafb;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 8px 0;
+        }
+
+        .lead-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 13px;
+        }
+
+        .refund-reason {
+            color: #dc2626;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .scenario-note {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Billing History - Option D: Invoice + Net Amounts</h1>
+
+        <!-- Scenario 1: No Refunds (Clean Invoice) -->
+        <div class="billing-section">
+            <div class="section-title">Scenario 1: Standard Invoice (No Refunds)</div>
+            <div class="scenario-note">
+                Normal billing period with no refunds or adjustments.
+            </div>
+            <table class="billing-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>Date</th>
+                        <th>Invoice ID</th>
+                        <th>Period</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>15 Jan 2025</td>
+                        <td class="invoice-id">INV-2025-001</td>
+                        <td>
+                            <div>Dec 15 - Jan 15, 2025</div>
+                            <div class="period-text">16 leads purchased</div>
+                        </td>
+                        <td class="amount positive">£240.00</td>
+                        <td><span class="status-badge status-paid">Paid</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="#" class="action-btn" onclick="showDetails('inv1')">View Details</a>
+                                <a href="#" class="action-btn">Download PDF</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Scenario 2: Individual Lead Refunds -->
+        <div class="billing-section">
+            <div class="section-title">Scenario 2: Individual Lead Refunds</div>
+            <div class="scenario-note">
+                Some leads were refunded after the initial invoice. Shows net amount with refund details available.
+            </div>
+            <table class="billing-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>Date</th>
+                        <th>Invoice ID</th>
+                        <th>Period</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>15 Feb 2025</td>
+                        <td class="invoice-id">INV-2025-002</td>
+                        <td>
+                            <div>Jan 15 - Feb 15, 2025</div>
+                            <div class="period-text">16 leads purchased, 3 refunded</div>
+                        </td>
+                        <td class="amount adjusted">£195.00 <small style="color: #6b7280;">(net)</small></td>
+                        <td><span class="status-badge status-paid">Paid</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="#" class="action-btn" onclick="showDetails('inv2')">View Details</a>
+                                <a href="#" class="action-btn">Download PDF</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Scenario 3: Partial Period Refund -->
+        <div class="billing-section">
+            <div class="section-title">Scenario 3: Partial Period Refund</div>
+            <div class="scenario-note">
+                Account was paused mid-period, resulting in a partial refund for unused time.
+            </div>
+            <table class="billing-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>Date</th>
+                        <th>Invoice ID</th>
+                        <th>Period</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>15 Mar 2025</td>
+                        <td class="invoice-id">INV-2025-003</td>
+                        <td>
+                            <div>Feb 15 - Mar 15, 2025</div>
+                            <div class="period-text">8 leads purchased (paused mid-period)</div>
+                        </td>
+                        <td class="amount adjusted">£120.00 <small style="color: #6b7280;">(net)</small></td>
+                        <td><span class="status-badge status-paid">Paid</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="#" class="action-btn" onclick="showDetails('inv3')">View Details</a>
+                                <a href="#" class="action-btn">Download PDF</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Scenario 4: Full Invoice Refund -->
+        <div class="billing-section">
+            <div class="section-title">Scenario 4: Full Invoice Refund</div>
+            <div class="scenario-note">
+                Entire billing period was cancelled due to service issues. Full refund issued.
+            </div>
+            <table class="billing-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>Date</th>
+                        <th>Invoice ID</th>
+                        <th>Period</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>15 Apr 2025</td>
+                        <td class="invoice-id">INV-2025-004</td>
+                        <td>
+                            <div>Mar 15 - Apr 15, 2025</div>
+                            <div class="period-text">14 leads purchased (service issues)</div>
+                        </td>
+                        <td class="amount negative">£0.00 <small style="color: #6b7280;">(fully refunded)</small></td>
+                        <td><span class="status-badge status-paid">Refunded</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="#" class="action-btn" onclick="showDetails('inv4')">View Details</a>
+                                <a href="#" class="action-btn">Download PDF</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Complete Billing History View -->
+        <div class="billing-section">
+            <div class="section-title">Complete View: All Scenarios Together</div>
+            <div class="scenario-note">
+                How the billing history would look with all types of transactions mixed together.
+            </div>
+            <table class="billing-table">
+                <thead class="table-header">
+                    <tr>
+                        <th>Date</th>
+                        <th>Invoice ID</th>
+                        <th>Period</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>15 Apr 2025</td>
+                        <td class="invoice-id">INV-2025-004</td>
+                        <td>
+                            <div>Mar 15 - Apr 15, 2025</div>
+                            <div class="period-text">14 leads purchased (service issues)</div>
+                        </td>
+                        <td class="amount negative">£0.00 <small style="color: #6b7280;">(fully refunded)</small></td>
+                        <td><span class="status-badge status-paid">Refunded</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="#" class="action-btn" onclick="showDetails('inv4')">View Details</a>
+                                <a href="#" class="action-btn">Download PDF</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15 Mar 2025</td>
+                        <td class="invoice-id">INV-2025-003</td>
+                        <td>
+                            <div>Feb 15 - Mar 15, 2025</div>
+                            <div class="period-text">8 leads purchased (paused mid-period)</div>
+                        </td>
+                        <td class="amount adjusted">£120.00 <small style="color: #6b7280;">(net)</small></td>
+                        <td><span class="status-badge status-paid">Paid</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="#" class="action-btn" onclick="showDetails('inv3')">View Details</a>
+                                <a href="#" class="action-btn">Download PDF</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15 Feb 2025</td>
+                        <td class="invoice-id">INV-2025-002</td>
+                        <td>
+                            <div>Jan 15 - Feb 15, 2025</div>
+                            <div class="period-text">16 leads purchased, 3 refunded</div>
+                        </td>
+                        <td class="amount adjusted">£195.00 <small style="color: #6b7280;">(net)</small></td>
+                        <td><span class="status-badge status-paid">Paid</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="#" class="action-btn" onclick="showDetails('inv2')">View Details</a>
+                                <a href="#" class="action-btn">Download PDF</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15 Jan 2025</td>
+                        <td class="invoice-id">INV-2025-001</td>
+                        <td>
+                            <div>Dec 15 - Jan 15, 2025</div>
+                            <div class="period-text">16 leads purchased</div>
+                        </td>
+                        <td class="amount positive">£240.00</td>
+                        <td><span class="status-badge status-paid">Paid</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="#" class="action-btn" onclick="showDetails('inv1')">View Details</a>
+                                <a href="#" class="action-btn">Download PDF</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Details Modals -->
+    <div id="detailsOverlay" class="details-overlay" onclick="hideDetails()">
+        <div class="details-modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Invoice Details</div>
+                <button class="close-btn" onclick="hideDetails()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDetails(invoiceId) {
+            const overlay = document.getElementById('detailsOverlay');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            const details = {
+                'inv1': {
+                    title: 'INV-2025-001 - Details',
+                    content: `
+                        <div class="breakdown-section">
+                            <div class="breakdown-title">Billing Period: Dec 15 - Jan 15, 2025</div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Lead charges (16 × £15.00)</span>
+                                <span class="breakdown-value">£240.00</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Refunds</span>
+                                <span class="breakdown-value">£0.00</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Total Amount</span>
+                                <span class="breakdown-value">£240.00</span>
+                            </div>
+                        </div>
+                        <div class="breakdown-section">
+                            <div class="breakdown-title">Lead Breakdown</div>
+                            <div class="lead-details">
+                                <div class="lead-item"><span>SW1A 2AA - EPC Assessment</span><span>£15.00</span></div>
+                                <div class="lead-item"><span>EC1A 1BB - EPC Assessment</span><span>£15.00</span></div>
+                                <div class="lead-item"><span>W1K 3BB - EPC Assessment</span><span>£15.00</span></div>
+                                <div class="lead-item"><span>... 13 more leads</span><span>£195.00</span></div>
+                            </div>
+                        </div>
+                    `
+                },
+                'inv2': {
+                    title: 'INV-2025-002 - Details',
+                    content: `
+                        <div class="breakdown-section">
+                            <div class="breakdown-title">Billing Period: Jan 15 - Feb 15, 2025</div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Lead charges (16 × £15.00)</span>
+                                <span class="breakdown-value">£240.00</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Refunds (3 × £15.00)</span>
+                                <span class="breakdown-value negative">-£45.00</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Net Amount</span>
+                                <span class="breakdown-value">£195.00</span>
+                            </div>
+                        </div>
+                        <div class="breakdown-section">
+                            <div class="breakdown-title">Refunded Leads</div>
+                            <div class="lead-details">
+                                <div class="lead-item">
+                                    <div>
+                                        <div>SW1A 2AA - EPC Assessment</div>
+                                        <div class="refund-reason">Cancelled by customer</div>
+                                    </div>
+                                    <span>-£15.00</span>
+                                </div>
+                                <div class="lead-item">
+                                    <div>
+                                        <div>EC1A 1BB - EPC Assessment</div>
+                                        <div class="refund-reason">Invalid lead data</div>
+                                    </div>
+                                    <span>-£15.00</span>
+                                </div>
+                                <div class="lead-item">
+                                    <div>
+                                        <div>W1K 3BB - EPC Assessment</div>
+                                        <div class="refund-reason">Duplicate lead</div>
+                                    </div>
+                                    <span>-£15.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                'inv3': {
+                    title: 'INV-2025-003 - Details',
+                    content: `
+                        <div class="breakdown-section">
+                            <div class="breakdown-title">Billing Period: Feb 15 - Mar 15, 2025</div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Lead charges (8 × £15.00)</span>
+                                <span class="breakdown-value">£120.00</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Pro-rated adjustment</span>
+                                <span class="breakdown-value negative">£0.00</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Net Amount</span>
+                                <span class="breakdown-value">£120.00</span>
+                            </div>
+                        </div>
+                        <div class="breakdown-section">
+                            <div class="breakdown-title">Account Activity</div>
+                            <div class="lead-details">
+                                <div class="lead-item">
+                                    <span>Account paused on Mar 1, 2025</span>
+                                    <span>50% through period</span>
+                                </div>
+                                <div class="lead-item">
+                                    <span>Leads purchased before pause</span>
+                                    <span>8 leads</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                'inv4': {
+                    title: 'INV-2025-004 - Details',
+                    content: `
+                        <div class="breakdown-section">
+                            <div class="breakdown-title">Billing Period: Mar 15 - Apr 15, 2025</div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Lead charges (14 × £15.00)</span>
+                                <span class="breakdown-value">£210.00</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Full period refund</span>
+                                <span class="breakdown-value negative">-£210.00</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Net Amount</span>
+                                <span class="breakdown-value">£0.00</span>
+                            </div>
+                        </div>
+                        <div class="breakdown-section">
+                            <div class="breakdown-title">Refund Reason</div>
+                            <div class="lead-details">
+                                <div class="lead-item">
+                                    <div>
+                                        <div>Service disruption</div>
+                                        <div class="refund-reason">Platform outage affected lead quality</div>
+                                    </div>
+                                    <span>Full refund</span>
+                                </div>
+                                <div class="lead-item">
+                                    <span>Refund processed on Apr 20, 2025</span>
+                                    <span>£210.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
+            title.textContent = details[invoiceId].title;
+            body.innerHTML = details[invoiceId].content;
+            overlay.style.display = 'flex';
+        }
+
+        function hideDetails() {
+            document.getElementById('detailsOverlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

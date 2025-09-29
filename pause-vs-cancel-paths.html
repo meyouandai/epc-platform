@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pause vs Cancel - Two Distinct Paths</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .paths-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .path-column {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .path-header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid;
+        }
+
+        .pause-path .path-header {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .cancel-path .path-header {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .path-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pause-path .path-title {
+            color: #d97706;
+        }
+
+        .cancel-path .path-title {
+            color: #dc2626;
+        }
+
+        .path-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .path-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        /* Modal Styles */
+        .modal-step {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .step-header {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .step-content {
+            padding: 16px;
+        }
+
+        .disclosure-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+        }
+
+        .optional {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .soft {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .required {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .aggressive {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        /* Options */
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .option {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            font-size: 14px;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f9fafb;
+        }
+
+        .option.destructive {
+            border-color: #f87171;
+            color: #991b1b;
+        }
+
+        .option.destructive:hover {
+            background: #fef2f2;
+            border-color: #ef4444;
+        }
+
+        /* Retention Tactics */
+        .retention-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .retention-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d4ed8;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .retention-content {
+            font-size: 14px;
+            color: #1e40af;
+            line-height: 1.5;
+        }
+
+        .offer-box {
+            background: #f0fdf4;
+            border: 2px solid #16a34a;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        .offer-title {
+            font-weight: 600;
+            color: #15803d;
+            margin-bottom: 4px;
+        }
+
+        .offer-details {
+            font-size: 13px;
+            color: #166534;
+        }
+
+        /* Warning Levels */
+        .warning-gentle {
+            background: #fefce8;
+            border: 1px solid #eab308;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        .warning-strong {
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .warning-urgent {
+            background: #7c2d12;
+            color: white;
+            border: 3px solid #dc2626;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+            margin: 4px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 40px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .comparison h2 {
+            text-align: center;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: #f3f4f6;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: top;
+        }
+
+        .pressure-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pressure-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .low { background: #16a34a; }
+        .medium { background: #f59e0b; }
+        .high { background: #ef4444; }
+        .extreme { background: #7c2d12; }
+
+        /* Skip Options */
+        .skip-option {
+            text-align: center;
+            margin: 16px 0;
+            padding: 8px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .skip-link {
+            color: #6b7280;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .skip-link:hover {
+            color: #374151;
+        }
+
+        /* Progressive Disclosure */
+        .disclosure-stage {
+            margin: 16px 0;
+            padding: 16px;
+            border-left: 4px solid;
+            background: #f9fafb;
+        }
+
+        .stage-1 { border-color: #16a34a; }
+        .stage-2 { border-color: #f59e0b; }
+        .stage-3 { border-color: #ef4444; }
+        .stage-4 { border-color: #7c2d12; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pause vs Cancel - Strategic User Paths</h1>
+
+        <div class="paths-container">
+            <!-- PAUSE PATH -->
+            <div class="path-column pause-path">
+                <div class="path-header">
+                    <div class="path-icon">⏸️</div>
+                    <div class="path-title">Pause Path</div>
+                    <div class="path-subtitle">"I plan to return"</div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 1: Initial Pause Request
+                        <span class="disclosure-level optional">Optional</span>
+                    </div>
+                    <div class="step-content">
+                        <p style="font-size: 14px; margin-bottom: 12px;">User clicks "Pause Purchasing" in profile</p>
+
+                        <div class="option-group">
+                            <div class="option">Quick pause (no questions asked)</div>
+                            <div class="option">Tell us why (optional context)</div>
+                        </div>
+
+                        <div class="skip-option">
+                            <div class="skip-link">Skip - Just pause now</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 2: Gentle Value Reminder
+                        <span class="disclosure-level soft">Soft</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="warning-gentle">
+                            <strong>Quick reminder:</strong> Your 12 post codes will be released and may be claimed by other assessors.
+                        </div>
+
+                        <div class="option-group">
+                            <div class="option">Continue with pause</div>
+                            <div class="option">Show me alternatives first</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 3: Smart Alternatives (If Requested)
+                        <span class="disclosure-level optional">Optional</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="retention-box">
+                            <div class="retention-title">
+                                💡 Consider These Options
+                            </div>
+                            <div class="retention-content">
+                                Instead of full pause, you could:
+                                <ul style="margin: 8px 0 0 20px; font-size: 13px;">
+                                    <li>Reduce to your top 3 post codes (save 70%)</li>
+                                    <li>Set daily lead limits</li>
+                                    <li>Holiday mode (hold areas for fee)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button class="btn btn-success">Optimize Instead</button>
+                            <button class="btn btn-secondary">Still Pause</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 4: Confirmation
+                        <span class="disclosure-level optional">Optional</span>
+                    </div>
+                    <div class="step-content">
+                        <p style="font-size: 14px; margin-bottom: 12px;">Account successfully paused. You can resume anytime from your profile.</p>
+
+                        <div style="background: #f0f9ff; padding: 12px; border-radius: 6px; margin-top: 12px;">
+                            <p style="font-size: 12px; color: #1e40af;">
+                                <strong>Optional:</strong> Want us to email you when your high-demand areas (M1, M2) become available again?
+                            </p>
+                            <button class="btn btn-primary" style="margin-top: 8px; padding: 6px 12px; font-size: 12px;">
+                                Yes, notify me
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CANCEL PATH -->
+            <div class="path-column cancel-path">
+                <div class="path-header">
+                    <div class="path-icon">❌</div>
+                    <div class="path-title">Cancel Path</div>
+                    <div class="path-subtitle">"I want to close my account"</div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 1: Cancel Request
+                        <span class="disclosure-level required">Required</span>
+                    </div>
+                    <div class="step-content">
+                        <p style="font-size: 14px; margin-bottom: 12px;">Help us understand so we can improve:</p>
+
+                        <div class="option-group">
+                            <div class="option">Not getting enough leads</div>
+                            <div class="option">Leads are poor quality</div>
+                            <div class="option">Too expensive</div>
+                            <div class="option">Found another solution</div>
+                            <div class="option">Business circumstances changed</div>
+                            <div class="option">Other (please specify)</div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 16px;">
+                            <div class="skip-link">Skip - I don't want to share</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 2: Problem-Specific Retention
+                        <span class="disclosure-level aggressive">Aggressive</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="retention-box">
+                            <div class="retention-title">
+                                🛠️ Let's Fix This Together
+                            </div>
+                            <div class="retention-content">
+                                <strong>Too expensive?</strong> We can offer you:
+                                <div class="offer-box">
+                                    <div class="offer-title">Special Retention Offer</div>
+                                    <div class="offer-details">
+                                        • 50% discount for next 3 months<br>
+                                        • Free upgrade to Silver status<br>
+                                        • Personal account manager<br>
+                                        • No commitment - cancel anytime
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 16px;">
+                            <button class="btn btn-success">Accept Offer</button>
+                            <button class="btn btn-secondary">Still Cancel</button>
+                            <button class="btn btn-primary">Speak to Support</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 3: Final Retention Push
+                        <span class="disclosure-level aggressive">Aggressive</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="warning-strong">
+                            <strong>⚠️ Are you sure?</strong><br>
+                            You'll lose:
+                            <ul style="margin: 8px 0 0 20px; font-size: 13px;">
+                                <li>All 12 active post codes (including M1, M2 with 41 people waiting)</li>
+                                <li>Your Bronze trust level and history</li>
+                                <li>Access to £2,400+ in monthly leads</li>
+                                <li>Your customer reviews and ratings</li>
+                            </ul>
+                        </div>
+
+                        <div class="disclosure-stage stage-3">
+                            <strong>Alternative:</strong> Instead of cancelling, pause your account for free. Keep your data and post codes reserved for 30 days while you decide.
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 16px;">
+                            <button class="btn btn-warning">Pause Instead</button>
+                            <button class="btn btn-danger">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 4: Nuclear Retention
+                        <span class="disclosure-level aggressive">Aggressive</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="warning-urgent">
+                            <h3 style="margin-bottom: 12px;">🚨 WAIT!</h3>
+                            <p style="margin-bottom: 16px;">This action cannot be undone.</p>
+
+                            <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; margin: 16px 0;">
+                                <strong>Last chance offer:</strong><br>
+                                Free 3 months + £500 lead credit<br>
+                                <em>Available for next 60 seconds only</em>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; justify-content: center; margin-top: 20px;">
+                                <button class="btn btn-success">Take Offer</button>
+                                <button class="btn btn-danger">Still Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-step">
+                    <div class="step-header">
+                        Step 5: Account Deletion Process
+                        <span class="disclosure-level required">Required</span>
+                    </div>
+                    <div class="step-content">
+                        <div class="warning-strong">
+                            <strong>Final confirmation required:</strong><br>
+                            Type "DELETE MY ACCOUNT" to confirm permanent deletion.
+                        </div>
+
+                        <input type="text" placeholder="Type DELETE MY ACCOUNT" style="width: 100%; padding: 8px; margin: 12px 0; border: 2px solid #ef4444; border-radius: 4px;">
+
+                        <div style="display: flex; gap: 8px; margin-top: 16px;">
+                            <button class="btn btn-secondary">Cancel</button>
+                            <button class="btn btn-danger">Permanently Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="comparison">
+            <h2>Disclosure Strategy Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Pause Path</th>
+                        <th>Cancel Path</th>
+                        <th>Rationale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Disclosure Pressure</strong></td>
+                        <td>
+                            <div class="pressure-indicator">
+                                <div class="pressure-dot low"></div>
+                                <div class="pressure-dot low"></div>
+                                <div class="pressure-dot medium"></div>
+                                Low-Medium
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pressure-indicator">
+                                <div class="pressure-dot high"></div>
+                                <div class="pressure-dot high"></div>
+                                <div class="pressure-dot extreme"></div>
+                                High-Extreme
+                            </div>
+                        </td>
+                        <td>Pause is temporary; Cancel is permanent loss</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Skip Options</strong></td>
+                        <td>✅ Multiple skip opportunities</td>
+                        <td>⚠️ Limited, with social pressure</td>
+                        <td>Respect user autonomy for pause</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Retention Offers</strong></td>
+                        <td>Helpful alternatives (optimization)</td>
+                        <td>Aggressive discounts & ultimatums</td>
+                        <td>Match offer intensity to user intent</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Required Fields</strong></td>
+                        <td>None (all optional)</td>
+                        <td>Reason required (with skip option)</td>
+                        <td>Business needs cancel feedback more</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Confirmation Steps</strong></td>
+                        <td>1 step (with alternatives)</td>
+                        <td>3-4 steps (increasing urgency)</td>
+                        <td>Prevent accidental permanent deletion</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Post-Action</strong></td>
+                        <td>Optional re-engagement setup</td>
+                        <td>Exit survey & win-back email</td>
+                        <td>Different recovery strategies</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: white; border-radius: 12px; padding: 24px; margin-top: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h3 style="color: #111827; margin-bottom: 16px;">🎯 Strategic Recommendations</h3>
+
+            <div class="disclosure-stage stage-1">
+                <strong>Pause Path:</strong> Minimal friction. Users have clear intent to return, so focus on helpful alternatives rather than pressure. Build goodwill for their return.
+            </div>
+
+            <div class="disclosure-stage stage-3">
+                <strong>Cancel Path:</strong> High stakes require more intervention. Use progressive disclosure - start reasonable, escalate strategically. Every retained customer is worth the effort.
+            </div>
+
+            <div class="disclosure-stage stage-2">
+                <strong>Balance:</strong> Both paths must feel respectful. Even aggressive retention should offer genuine value, not just delay tactics.
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

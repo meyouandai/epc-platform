@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page Design Variations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            padding: 20px;
+        }
+
+        .variation-container {
+            margin-bottom: 60px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .variation-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a202c;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        /* Common elements */
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f7fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .portfolio-item {
+            aspect-ratio: 1;
+            background: #f7fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #cbd5e0;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .portfolio-item.filled {
+            background: #667eea;
+            border: none;
+            color: white;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .service-category {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 6px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        /* Variation 1: Current Layout (Cleaned) */
+        .variation-1 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .main-content-1 {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .sidebar-1 {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Variation 2: Three Column Layout */
+        .variation-2 {
+            display: grid;
+            grid-template-columns: 300px 1fr 280px;
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .left-sidebar-2 {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .main-content-2 {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .right-sidebar-2 {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Variation 3: Horizontal Sections */
+        .variation-3 {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .hero-section-3 {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 24px;
+            align-items: center;
+            padding: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+
+        .sections-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* Variation 4: Tabs Layout */
+        .variation-4 {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tabs-4 {
+            display: flex;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+
+        .tab-4 {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-4.active {
+            border-bottom-color: #4f46e5;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        /* Variation 5: Card Grid Layout */
+        .variation-5 {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card-5 {
+            padding: 24px;
+            border-radius: 12px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .feature-card-5.photo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .display-name-selector {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .name-preview {
+            background: #4f46e5;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4f46e5;
+            border: 1px solid #4f46e5;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .compact-services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .compact-service {
+            background: #f0f9ff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid #0ea5e9;
+            color: #0369a1;
+        }
+
+        .offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .offering-badge {
+            background: #10b981;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Variation 1: Current Layout (Cleaned) -->
+    <div class="variation-container">
+        <h2 class="variation-title">Option 1: Two-Column Clean (Current - Simplified)</h2>
+        <div class="variation-1">
+            <div class="main-content-1">
+                <!-- Profile Photo -->
+                <div class="card">
+                    <div class="card-content">
+                        <div style="display: flex; align-items: center; gap: 24px;">
+                            <div class="profile-photo">
+                                📸
+                                <button class="upload-btn">📷</button>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 8px;">Profile Photo</h3>
+                                <p style="color: #64748b;">Upload a professional photo to enhance your profile</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About -->
+                <div class="card">
+                    <div class="card-content">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                            <h3>About Your Company</h3>
+                            <span style="color: #64748b; font-size: 14px;">156/500 characters</span>
+                        </div>
+                        <textarea style="width: 100%; height: 120px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; resize: vertical;" placeholder="Professional EPC assessments with over 10 years experience..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Services -->
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">Services</h3>
+                        <div class="services-grid">
+                            <div class="service-category">
+                                <h4 style="margin-bottom: 12px;">Certificates</h4>
+                                <div class="service-item">
+                                    <input type="checkbox" checked>
+                                    <span>Domestic EPC Certificate</span>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <span>Commercial EPC Certificate</span>
+                                </div>
+                            </div>
+                            <div class="service-category">
+                                <h4 style="margin-bottom: 12px;">Additional</h4>
+                                <div class="service-item">
+                                    <input type="checkbox" checked>
+                                    <span>Energy Audits</span>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <span>Floor Plans</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio -->
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">Portfolio</h3>
+                        <div class="portfolio-grid">
+                            <div class="portfolio-item">➕</div>
+                            <div class="portfolio-item filled">📷</div>
+                            <div class="portfolio-item filled">🏠</div>
+                        </div>
+                        <p style="color: #64748b; font-size: 14px; margin-top: 12px;">3/10 images uploaded</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-1">
+                <!-- Display Name Only -->
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">Display Settings</h3>
+                        <div class="display-name-selector">
+                            <label style="margin-bottom: 8px; display: block; font-weight: 500;">How should your name appear to customers?</label>
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; margin-bottom: 8px;">
+                                <option>Full Name</option>
+                                <option selected>Business Name</option>
+                                <option>Both</option>
+                            </select>
+                            <input type="text" placeholder="Enter business name" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px;" value="Energy Certs Pro">
+                            <div class="name-preview">Energy Certs Pro</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Offerings -->
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">Additional Offerings</h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" checked>
+                                <span style="font-size: 14px;">Same-Day Service</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox">
+                                <span style="font-size: 14px;">Online Booking</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" checked>
+                                <span style="font-size: 14px;">Card Payments</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 24px; display: flex; gap: 12px;">
+            <button class="btn-primary">Save Profile</button>
+            <button class="btn-secondary">👁️ Preview as Customer</button>
+        </div>
+    </div>
+
+    <!-- Variation 2: Three Column Layout -->
+    <div class="variation-container">
+        <h2 class="variation-title">Option 2: Three-Column Layout</h2>
+        <div class="variation-2">
+            <div class="left-sidebar-2">
+                <!-- Profile Photo -->
+                <div class="card">
+                    <div class="card-content" style="text-align: center;">
+                        <div class="profile-photo" style="margin: 0 auto 16px;">
+                            📸
+                            <button class="upload-btn">📷</button>
+                        </div>
+                        <h3 style="margin-bottom: 8px;">John Smith</h3>
+                        <div class="name-preview" style="margin: 0;">Energy Certs Pro</div>
+                    </div>
+                </div>
+
+                <!-- Display Settings -->
+                <div class="card">
+                    <div class="card-content">
+                        <h4 style="margin-bottom: 12px;">Display Settings</h4>
+                        <select style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                            <option>Full Name</option>
+                            <option selected>Business Name</option>
+                            <option>Both</option>
+                        </select>
+                        <input type="text" placeholder="Business name" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; margin-top: 8px;" value="Energy Certs Pro">
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content-2">
+                <!-- About -->
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">About</h3>
+                        <textarea style="width: 100%; height: 100px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px;" placeholder="Professional EPC assessments..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Services Compact -->
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">Services</h3>
+                        <div class="compact-services">
+                            <div class="compact-service">✅ Domestic EPC</div>
+                            <div class="compact-service">✅ Energy Audits</div>
+                            <div class="compact-service">❌ Commercial EPC</div>
+                            <div class="compact-service">❌ Floor Plans</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio -->
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">Portfolio (3/10)</h3>
+                        <div class="portfolio-grid">
+                            <div class="portfolio-item">➕</div>
+                            <div class="portfolio-item filled">📷</div>
+                            <div class="portfolio-item filled">🏠</div>
+                            <div class="portfolio-item filled">📊</div>
+                            <div class="portfolio-item">➕</div>
+                            <div class="portfolio-item">➕</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-sidebar-2">
+                <!-- Additional Offerings -->
+                <div class="card">
+                    <div class="card-content">
+                        <h4 style="margin-bottom: 12px;">Offerings</h4>
+                        <div class="offerings-grid">
+                            <div class="offering-badge">Same Day</div>
+                            <div class="offering-badge">Card Pay</div>
+                            <div class="offering-badge">Free Quote</div>
+                            <div class="offering-badge">Online Book</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="card">
+                    <div class="card-content">
+                        <h4 style="margin-bottom: 12px;">Quick Stats</h4>
+                        <div style="text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #4f46e5;">150+</div>
+                            <div style="font-size: 12px; color: #64748b;">Certificates Issued</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="btn-primary" style="width: 100%;">Save Profile</button>
+                    <button class="btn-secondary" style="width: 100%;">👁️ Preview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variation 3: Horizontal Hero Layout -->
+    <div class="variation-container">
+        <h2 class="variation-title">Option 3: Hero Section Layout</h2>
+        <div class="variation-3">
+            <!-- Hero Section -->
+            <div class="hero-section-3">
+                <div class="profile-photo">
+                    📸
+                    <button class="upload-btn">📷</button>
+                </div>
+                <div>
+                    <h2 style="margin-bottom: 8px;">Energy Certs Pro</h2>
+                    <p style="opacity: 0.9; margin-bottom: 16px;">Professional EPC assessments with over 10 years of experience. We provide fast, reliable, and competitively priced energy performance certificates.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 12px; font-size: 12px;">Same Day Service</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 12px; font-size: 12px;">Card Payments</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 12px; font-size: 12px;">Free Quotes</span>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <button style="background: white; color: #4f46e5; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 8px; display: block;">👁️ Preview</button>
+                    <div style="font-size: 12px; opacity: 0.8;">How customers see you</div>
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="sections-grid-3">
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">Services & Portfolio</h3>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 8px; font-size: 14px; color: #64748b;">SERVICES OFFERED</h4>
+                            <div class="compact-services">
+                                <div class="compact-service">Domestic EPC</div>
+                                <div class="compact-service">Energy Audits</div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 8px; font-size: 14px; color: #64748b;">PORTFOLIO</h4>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                                <div style="aspect-ratio: 1; background: #f0f9ff; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px;">📷</div>
+                                <div style="aspect-ratio: 1; background: #f0f9ff; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px;">🏠</div>
+                                <div style="aspect-ratio: 1; background: #f0f9ff; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px;">📊</div>
+                                <div style="aspect-ratio: 1; background: #e2e8f0; border: 2px dashed #cbd5e0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px;">➕</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">Settings & About</h3>
+                        <div style="margin-bottom: 16px;">
+                            <label style="font-weight: 500; margin-bottom: 8px; display: block;">Display Name</label>
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                                <option>Full Name</option>
+                                <option selected>Business Name</option>
+                                <option>Both</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-weight: 500; margin-bottom: 8px; display: block;">About</label>
+                            <textarea style="width: 100%; height: 80px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 13px;" placeholder="Professional EPC assessments..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn-primary" style="padding: 16px 32px; font-size: 16px;">Save Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variation 4: Tabbed Interface -->
+    <div class="variation-container">
+        <h2 class="variation-title">Option 4: Tabbed Interface</h2>
+        <div class="variation-4">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2>Company Profile</h2>
+                <button class="btn-secondary">👁️ Preview as Customer</button>
+            </div>
+
+            <div class="tabs-4">
+                <button class="tab-4 active">Basic Info</button>
+                <button class="tab-4">Services</button>
+                <button class="tab-4">Portfolio</button>
+                <button class="tab-4">Settings</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div style="display: grid; grid-template-columns: 300px 1fr; gap: 24px;">
+                <div class="card">
+                    <div class="card-content" style="text-align: center;">
+                        <div class="profile-photo" style="margin: 0 auto 16px;">
+                            📸
+                            <button class="upload-btn">📷</button>
+                        </div>
+                        <h3>John Smith</h3>
+                        <div class="name-preview" style="margin: 8px 0;">Energy Certs Pro</div>
+                        <div style="margin-top: 16px;">
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; margin-bottom: 8px;">
+                                <option>Full Name</option>
+                                <option selected>Business Name</option>
+                                <option>Both</option>
+                            </select>
+                            <input type="text" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px;" value="Energy Certs Pro">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 style="margin-bottom: 16px;">About Your Company</h3>
+                        <textarea style="width: 100%; height: 150px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px;" placeholder="Professional EPC assessments with over 10 years of experience..."></textarea>
+                        <div style="text-align: right; color: #64748b; font-size: 14px; margin-top: 8px;">156/500 characters</div>
+
+                        <h4 style="margin: 24px 0 16px;">Quick Services</h4>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span style="background: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 16px; font-size: 14px;">✅ Domestic EPC</span>
+                            <span style="background: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 16px; font-size: 14px;">✅ Energy Audits</span>
+                            <span style="background: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 16px; font-size: 14px;">⏳ Commercial EPC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; text-align: center;">
+                <button class="btn-primary">Save Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variation 5: Card Grid Layout -->
+    <div class="variation-container">
+        <h2 class="variation-title">Option 5: Modular Card Grid</h2>
+        <div style="text-align: center; margin-bottom: 24px;">
+            <h2 style="margin-bottom: 8px;">Company Profile</h2>
+            <button class="btn-secondary">👁️ Preview as Customer</button>
+        </div>
+
+        <div class="variation-5">
+            <!-- Profile Card -->
+            <div class="feature-card-5 photo">
+                <div class="profile-photo" style="margin: 0 auto 16px; border: 3px solid rgba(255,255,255,0.3);">
+                    📸
+                    <button class="upload-btn" style="background: rgba(255,255,255,0.2);">📷</button>
+                </div>
+                <h3 style="margin-bottom: 8px;">John Smith</h3>
+                <div style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; display: inline-block; margin-bottom: 16px;">Energy Certs Pro</div>
+                <div style="display: flex; justify-content: center; gap: 8px;">
+                    <select style="padding: 8px; border: none; border-radius: 4px; background: rgba(255,255,255,0.9);">
+                        <option>Full Name</option>
+                        <option selected>Business Name</option>
+                        <option>Both</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- About Card -->
+            <div class="feature-card-5">
+                <h3 style="margin-bottom: 16px;">About Your Company</h3>
+                <textarea style="width: 100%; height: 120px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px;" placeholder="Professional EPC assessments..."></textarea>
+                <div style="text-align: right; color: #64748b; font-size: 14px;">156/500 characters</div>
+            </div>
+
+            <!-- Services Card -->
+            <div class="feature-card-5">
+                <h3 style="margin-bottom: 16px;">Services</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <h4 style="margin-bottom: 8px; font-size: 14px; color: #64748b;">CERTIFICATES</h4>
+                        <label style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">
+                            <input type="checkbox" checked>
+                            <span style="font-size: 14px;">Domestic EPC</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">
+                            <input type="checkbox">
+                            <span style="font-size: 14px;">Commercial EPC</span>
+                        </label>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 8px; font-size: 14px; color: #64748b;">ADDITIONAL</h4>
+                        <label style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">
+                            <input type="checkbox" checked>
+                            <span style="font-size: 14px;">Energy Audits</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin: 4px 0;">
+                            <input type="checkbox">
+                            <span style="font-size: 14px;">Floor Plans</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Card -->
+            <div class="feature-card-5">
+                <h3 style="margin-bottom: 16px;">Portfolio</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
+                    <div class="portfolio-item" style="height: 80px;">➕</div>
+                    <div class="portfolio-item filled" style="height: 80px;">📷</div>
+                    <div class="portfolio-item filled" style="height: 80px;">🏠</div>
+                </div>
+                <div style="text-align: center; color: #64748b; font-size: 14px;">3/10 images</div>
+            </div>
+
+            <!-- Offerings Card -->
+            <div class="feature-card-5">
+                <h3 style="margin-bottom: 16px;">Additional Offerings</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" checked>
+                        <span style="font-size: 14px;">Same-Day Service</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" checked>
+                        <span style="font-size: 14px;">Card Payments</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox">
+                        <span style="font-size: 14px;">Online Booking</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" checked>
+                        <span style="font-size: 14px;">Free Quotes</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Save Card -->
+            <div class="feature-card-5" style="display: flex; align-items: center; justify-content: center; background: #f8fafc;">
+                <button class="btn-primary" style="padding: 16px 32px; font-size: 16px;">Save Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 40px; color: #64748b;">
+        <p>Choose your preferred layout design and let me know which direction you'd like to go!</p>
+    </div>
+</body>
+</html>

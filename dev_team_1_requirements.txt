@@ -1,0 +1,10 @@
+# Dev Team 1 Requirements
+# Multi-model competitive development team dependencies
+
+# Required
+anthropic>=0.25.0
+requests>=2.25.0
+google-generativeai>=0.4.0
+
+# Optional (add if you have API keys)
+# openai>=1.0.0

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page - Pause Control Variations</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .variation {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .variation-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        /* Common Styles */
+        .profile-header {
+            margin-bottom: 32px;
+        }
+
+        .profile-title-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .profile-title-section p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: 2px;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .profile-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .profile-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+
+        .field-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .field-value {
+            font-size: 14px;
+            color: #111827;
+            font-weight: 500;
+        }
+
+        /* Banner Styles */
+        .account-status-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-radius: 12px;
+            border: 2px solid;
+            margin-bottom: 24px;
+        }
+
+        .account-status-banner.active {
+            background: #f0fdf4;
+            border-color: #16a34a;
+        }
+
+        .account-status-banner.paused {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .status-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .status-icon {
+            font-size: 24px;
+        }
+
+        .status-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .status-description {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .status-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #15803d;
+        }
+
+        .btn-secondary {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #d97706;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Account Control Variations */
+        .account-controls {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .control-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 12px;
+        }
+
+        .control-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .control-description {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .control-action {
+            margin-left: auto;
+        }
+
+        /* Inline Control */
+        .inline-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-top: 16px;
+        }
+
+        .inline-control-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .inline-control-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 2px;
+        }
+
+        .inline-control-desc {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Toggle Switch */
+        .toggle-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .toggle-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toggle-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .toggle-desc {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-switch.active {
+            background: #16a34a;
+        }
+
+        .toggle-switch.paused {
+            background: #f59e0b;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .toggle-switch.active::after,
+        .toggle-switch.paused::after {
+            transform: translateX(20px);
+        }
+
+        /* Status Indicator Styles */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-indicator.active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-indicator.paused {
+            background: #fef3c7;
+            color: #f59e0b;
+        }
+
+        /* Separate Card */
+        .account-status-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .account-status-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Profile Page - Pause Control Positioning Variations</h1>
+
+        <!-- Variation 1: Current Banner Style -->
+        <div class="variation">
+            <div class="variation-title">1. Current Style - Top Banner</div>
+
+            <div class="profile-header">
+                <div class="profile-title-section">
+                    <h2>Account Settings</h2>
+                    <p>Manage your profile, preferences, and account status</p>
+                </div>
+
+                <!-- Account Status Banner -->
+                <div class="account-status-banner active">
+                    <div class="status-info">
+                        <span class="status-icon">✅</span>
+                        <div class="status-text">
+                            <div class="status-label">Account Active</div>
+                            <div class="status-description">Actively purchasing leads in your selected areas</div>
+                        </div>
+                    </div>
+                    <div class="status-actions">
+                        <button class="btn btn-secondary">Pause Purchasing</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active">Overview</button>
+                <button class="tab-btn">Account Details</button>
+                <button class="tab-btn">Preferences</button>
+                <button class="tab-btn">Business Info</button>
+            </div>
+
+            <div class="overview-grid">
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <span class="field-value">John Smith</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <span class="field-value">john.smith@example.com</span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h3>Account Summary</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Trust Level:</span>
+                        <span class="field-value">Bronze</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Total Leads:</span>
+                        <span class="field-value">234</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 2: Inside Account Summary Card -->
+        <div class="variation">
+            <div class="variation-title">2. Inside Account Summary Card</div>
+
+            <div class="profile-header">
+                <div class="profile-title-section">
+                    <h2>Account Settings</h2>
+                    <p>Manage your profile, preferences, and account status</p>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active">Overview</button>
+                <button class="tab-btn">Account Details</button>
+                <button class="tab-btn">Preferences</button>
+                <button class="tab-btn">Business Info</button>
+            </div>
+
+            <div class="overview-grid">
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <span class="field-value">John Smith</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <span class="field-value">john.smith@example.com</span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h3>Account Summary</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Trust Level:</span>
+                        <span class="field-value">Bronze</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Total Leads:</span>
+                        <span class="field-value">234</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Account Status:</span>
+                        <span class="status-indicator active">● Active</span>
+                    </div>
+
+                    <!-- Account Controls inside card -->
+                    <div class="account-controls">
+                        <div class="control-title">Lead Purchasing</div>
+                        <div class="control-description">Control whether your account actively purchases new leads</div>
+                        <div class="inline-control">
+                            <div class="inline-control-text">
+                                <div class="inline-control-title">Currently Active</div>
+                                <div class="inline-control-desc">Purchasing leads in 12 active post codes</div>
+                            </div>
+                            <button class="btn btn-secondary">Pause</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 3: Separate Status Card -->
+        <div class="variation">
+            <div class="variation-title">3. Separate Account Status Card</div>
+
+            <div class="profile-header">
+                <div class="profile-title-section">
+                    <h2>Account Settings</h2>
+                    <p>Manage your profile, preferences, and account status</p>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active">Overview</button>
+                <button class="tab-btn">Account Details</button>
+                <button class="tab-btn">Preferences</button>
+                <button class="tab-btn">Business Info</button>
+            </div>
+
+            <!-- Separate Account Status Card -->
+            <div class="account-status-card">
+                <h3>🎯 Account Status</h3>
+                <div class="card-content">
+                    <div class="card-info">
+                        <div class="card-title">Lead Purchasing: Active</div>
+                        <div class="card-desc">Actively acquiring leads across 12 post codes</div>
+                    </div>
+                    <button class="btn btn-secondary">Pause Purchasing</button>
+                </div>
+            </div>
+
+            <div class="overview-grid">
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <span class="field-value">John Smith</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <span class="field-value">john.smith@example.com</span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h3>Account Summary</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Trust Level:</span>
+                        <span class="field-value">Bronze</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Total Leads:</span>
+                        <span class="field-value">234</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 4: Toggle Switch Style -->
+        <div class="variation">
+            <div class="variation-title">4. Toggle Switch in Account Summary</div>
+
+            <div class="profile-header">
+                <div class="profile-title-section">
+                    <h2>Account Settings</h2>
+                    <p>Manage your profile, preferences, and account status</p>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active">Overview</button>
+                <button class="tab-btn">Account Details</button>
+                <button class="tab-btn">Preferences</button>
+                <button class="tab-btn">Business Info</button>
+            </div>
+
+            <div class="overview-grid">
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <span class="field-value">John Smith</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <span class="field-value">john.smith@example.com</span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h3>Account Summary</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Trust Level:</span>
+                        <span class="field-value">Bronze</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Total Leads:</span>
+                        <span class="field-value">234</span>
+                    </div>
+
+                    <!-- Toggle Control -->
+                    <div class="toggle-control">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Lead Purchasing</div>
+                            <div class="toggle-desc">Enable or disable automatic lead acquisition</div>
+                        </div>
+                        <div class="toggle-switch active"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 5: Minimal Inline Style -->
+        <div class="variation">
+            <div class="variation-title">5. Minimal Inline with Account Summary</div>
+
+            <div class="profile-header">
+                <div class="profile-title-section">
+                    <h2>Account Settings</h2>
+                    <p>Manage your profile, preferences, and account status</p>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active">Overview</button>
+                <button class="tab-btn">Account Details</button>
+                <button class="tab-btn">Preferences</button>
+                <button class="tab-btn">Business Info</button>
+            </div>
+
+            <div class="overview-grid">
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <span class="field-value">John Smith</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <span class="field-value">john.smith@example.com</span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h3>Account Summary</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Trust Level:</span>
+                        <span class="field-value">Bronze</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Total Leads:</span>
+                        <span class="field-value">234</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Lead Purchasing:</span>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="status-indicator active">● Active</span>
+                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">Pause</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 6: Three-Card Layout with dedicated status -->
+        <div class="variation">
+            <div class="variation-title">6. Three-Card Layout with Dedicated Status Card</div>
+
+            <div class="profile-header">
+                <div class="profile-title-section">
+                    <h2>Account Settings</h2>
+                    <p>Manage your profile, preferences, and account status</p>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active">Overview</button>
+                <button class="tab-btn">Account Details</button>
+                <button class="tab-btn">Preferences</button>
+                <button class="tab-btn">Business Info</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <span class="field-value">John Smith</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <span class="field-value">john.smith@example.com</span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h3>Account Summary</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Trust Level:</span>
+                        <span class="field-value">Bronze</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Total Leads:</span>
+                        <span class="field-value">234</span>
+                    </div>
+                </div>
+
+                <div class="profile-card" style="background: #f0fdf4; border-color: #16a34a;">
+                    <h3 style="color: #16a34a;">🎯 Lead Purchasing</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Status:</span>
+                        <span class="status-indicator active">● Active</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Active Areas:</span>
+                        <span class="field-value">12 post codes</span>
+                    </div>
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #dcfce7;">
+                        <button class="btn btn-secondary" style="width: 100%;">Pause Purchasing</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

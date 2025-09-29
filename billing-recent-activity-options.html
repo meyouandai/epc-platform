@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent Activity Options - Billing Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 32px;
+            color: #1a1a1a;
+        }
+
+        .option {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .option-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .recent-activity {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .view-all {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.charge {
+            background: #fecaca;
+            color: #dc2626;
+        }
+
+        .activity-icon.lead {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .activity-icon.account {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .activity-icon.payment {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .activity-icon.trust {
+            background: #e9d5ff;
+            color: #7c3aed;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-main {
+            font-size: 14px;
+            color: #111827;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .activity-detail {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 2px;
+        }
+
+        .activity-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .activity-amount {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .activity-amount.charge {
+            color: #dc2626;
+        }
+
+        .activity-amount.credit {
+            color: #059669;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .lead-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+
+        .lead-postcode {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .lead-details {
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .status-contacted {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-qualified {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recent Activity Options for Billing Page</h1>
+
+        <!-- Option 1: Billing-Focused Activity -->
+        <div class="option">
+            <div class="option-title">Option 1: Billing & Payment Activity</div>
+            <div class="recent-activity">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon charge">💳</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Lead charge processed</div>
+                            <div class="activity-detail">SW1A 2AA - Property assessment inquiry</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">2 hours ago</span>
+                                <span class="activity-amount charge">-£15</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon account">⚙️</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Spending limit increased</div>
+                            <div class="activity-detail">Limit changed from £150 to £250</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">Yesterday</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon payment">✅</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Monthly payment completed</div>
+                            <div class="activity-detail">December billing period settled</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">3 days ago</span>
+                                <span class="activity-amount charge">-£240</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon charge">🔄</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Lead refund processed</div>
+                            <div class="activity-detail">EC1A 1BB - Cancelled assessment</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">1 week ago</span>
+                                <span class="activity-amount credit">+£15</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Option 2: Lead-Focused Activity -->
+        <div class="option">
+            <div class="option-title">Option 2: Recent Lead Activity</div>
+            <div class="recent-activity">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Leads</h3>
+                    <a href="#" class="view-all">View All Leads</a>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon lead">🏠</div>
+                        <div class="activity-content">
+                            <div class="activity-main">New lead purchased</div>
+                            <div class="lead-card">
+                                <div class="lead-postcode">SW1A 2AA</div>
+                                <div class="lead-details">3-bed terrace • EPC rating needed</div>
+                                <span class="status-badge status-pending">Not Contacted</span>
+                            </div>
+                            <div class="activity-meta">
+                                <span class="activity-time">2 hours ago</span>
+                                <span class="activity-amount charge">£15</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon lead">📞</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Lead contacted</div>
+                            <div class="lead-card">
+                                <div class="lead-postcode">EC1A 1BB</div>
+                                <div class="lead-details">2-bed flat • Assessment booked</div>
+                                <span class="status-badge status-contacted">Contacted</span>
+                            </div>
+                            <div class="activity-meta">
+                                <span class="activity-time">5 hours ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon lead">✨</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Lead qualified</div>
+                            <div class="lead-card">
+                                <div class="lead-postcode">W1K 3BB</div>
+                                <div class="lead-details">4-bed house • Job confirmed</div>
+                                <span class="status-badge status-qualified">Job Booked</span>
+                            </div>
+                            <div class="activity-meta">
+                                <span class="activity-time">Yesterday</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Option 3: Mixed Activity -->
+        <div class="option">
+            <div class="option-title">Option 3: Mixed Activity (Billing + Key Account Events)</div>
+            <div class="recent-activity">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon charge">💳</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Lead charge: SW1A 2AA</div>
+                            <div class="activity-detail">Property assessment inquiry</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">2 hours ago</span>
+                                <span class="activity-amount charge">-£15</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon lead">📞</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Job booked from lead</div>
+                            <div class="activity-detail">EC1A 1BB - Assessment scheduled for tomorrow</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">5 hours ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon account">⚙️</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Account purchasing resumed</div>
+                            <div class="activity-detail">Lead purchasing reactivated for all postcodes</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">Yesterday</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon trust">⭐</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Trust level progress</div>
+                            <div class="activity-detail">2 more payments until Silver status</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">3 days ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon payment">✅</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Monthly payment completed</div>
+                            <div class="activity-detail">December billing period - 16 leads</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">1 week ago</span>
+                                <span class="activity-amount charge">-£240</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Option 4: Financial Summary Style -->
+        <div class="option">
+            <div class="option-title">Option 4: Financial Summary Focus</div>
+            <div class="recent-activity">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Billing Activity</h3>
+                    <a href="#" class="view-all">View Statement</a>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon charge">💳</div>
+                        <div class="activity-content">
+                            <div class="activity-main">3 leads purchased today</div>
+                            <div class="activity-detail">SW1A 2AA, EC1A 1BB, W1K 3BB</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">Today</span>
+                                <span class="activity-amount charge">-£45</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon charge">💳</div>
+                        <div class="activity-content">
+                            <div class="activity-main">2 leads purchased</div>
+                            <div class="activity-detail">Daily lead spending</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">Yesterday</span>
+                                <span class="activity-amount charge">-£30</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon payment">📊</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Spending milestone reached</div>
+                            <div class="activity-detail">70% of monthly limit used (£175 of £250)</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">2 days ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon payment">✅</div>
+                        <div class="activity-content">
+                            <div class="activity-main">Monthly payment processed</div>
+                            <div class="activity-detail">December period - 16 leads purchased</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">1 week ago</span>
+                                <span class="activity-amount charge">-£240</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Option 5: Empty State -->
+        <div class="option">
+            <div class="option-title">Option 5: Empty State (New Account)</div>
+            <div class="recent-activity">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                </div>
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h4>No recent activity</h4>
+                    <p>Your billing activity will appear here as you purchase leads and make payments.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 6: Refined Billing-Only Activity -->
+        <div class="option">
+            <div class="option-title">Option 6: Refined Billing-Only Activity</div>
+            <div class="recent-activity">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-main">Lead purchasing paused</div>
+                            <div class="activity-detail">Account purchasing suspended by user</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-main">Spending limit increased</div>
+                            <div class="activity-detail">Monthly limit updated: £150 → £250</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">Yesterday</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-main">Trust level milestone</div>
+                            <div class="activity-detail">2 payments remaining until Silver status</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">2 days ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-main">Monthly payment processed: £240</div>
+                            <div class="activity-detail">December billing period settled automatically</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">3 days ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-main">New billing period started</div>
+                            <div class="activity-detail">January 15 - February 15 • £250 spending limit active</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">3 days ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-main">Payment method updated</div>
+                            <div class="activity-detail">Default card changed to Visa •••• 4532</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">1 week ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-main">Credit applied: +£15</div>
+                            <div class="activity-detail">Lead refund credited to account</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">1 week ago</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-content">
+                            <div class="activity-main">Account purchasing resumed</div>
+                            <div class="activity-detail">Lead purchasing reactivated for all postcodes</div>
+                            <div class="activity-meta">
+                                <span class="activity-time">2 weeks ago</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

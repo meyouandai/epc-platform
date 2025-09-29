@@ -1,0 +1,364 @@
+import React, { useState } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Camera, 
+  Building, 
+  Briefcase,
+  BadgeCheck,
+  MapPin, 
+  UserCircle, 
+  Clock,
+  ShieldCheck,
+  Receipt,
+  Image,
+  Plus,
+  X
+} from 'lucide-react';
+
+const SERVICES = {
+  certificates: {
+    domesticEPC: "Domestic EPC Certificate",
+    commercialEPC: "Commercial EPC Certificate",
+    displayEnergyCertificates: "Display Energy Certificates (DECs)"
+  },
+  assessments: {
+    sapCalculations: "SAP Calculations",
+    energyAudits: "Energy Audits",
+    commercialEnergyAudits: "Commercial Energy Audits",
+    retrofitAdvice: "Retrofit Advice"
+  },
+  additional: {
+    floorPlans: "Floor Plans",
+    photography: "Photography",
+    carbonMonoxide: "Carbon Monoxide"
+  },
+  advisory: {
+    energyEfficiencyAdvice: "Energy Efficiency Advice",
+    greenDealAdvice: "Green Deal Advice",
+    grantAssistance: "Grant Funding and Incentive Program Assistance"
+  }
+};
+
+const ADDITIONAL_OFFERINGS = {
+  sameDayService: "Same-Day Service",
+  onlineBooking: "Instant Online Booking",
+  cardPayments: "Card Payments Accepted",
+  payAfterSurvey: "Pay After Survey",
+  freeQuotes: "Free Quotes",
+  instantEPC: "Instant EPC Certificate"
+};
+
+const getDisplayNameValue = (option, name = "Dawn Cave", business = "Energy Certs Ltd") => {
+  switch(option) {
+    case 'business':
+      return business;
+    case 'businessAndName':
+      return `${business} - ${name}`;
+    default:
+      return name;
+  }
+};
+
+const VerificationItem = ({ icon: Icon, label, value, badge }) => (
+  <div className="flex items-center gap-2 p-3 border rounded-md">
+    <Icon className="w-4 h-4 text-gray-600" />
+    <span className="flex-grow text-gray-700">{label}</span>
+    {badge ? (
+      <Badge className={`${badge.className} px-3 py-1 ${badge.text === 'Verified' ? 'bg-purple-100 text-purple-800' : ''}`}>
+        {badge.text}
+      </Badge>
+    ) : (
+      <span className="text-gray-700 font-medium">{value}</span>
+    )}
+  </div>
+);
+
+const ProfilePage = () => {
+  const [services, setServices] = useState({
+    certificates: {
+      domesticEPC: false,
+      commercialEPC: false,
+      displayEnergyCertificates: false
+    },
+    assessments: {
+      sapCalculations: false,
+      energyAudits: false,
+      commercialEnergyAudits: false,
+      retrofitAdvice: false
+    },
+    additional: {
+      floorPlans: false,
+      photography: false,
+      carbonMonoxide: false
+    },
+    advisory: {
+      energyEfficiencyAdvice: false,
+      greenDealAdvice: false,
+      grantAssistance: false
+    }
+  });
+
+  const [offerings, setOfferings] = useState({
+    sameDayService: false,
+    onlineBooking: false,
+    cardPayments: false,
+    payAfterSurvey: false,
+    freeQuotes: false,
+    instantEPC: false
+  });
+
+  const [displayNameOption, setDisplayNameOption] = useState('name'); // 'name', 'business', 'businessAndName'
+  const [about, setAbout] = useState('');
+  const ABOUT_MAX_LENGTH = 500;
+  const [portfolioImages] = useState([
+    { id: 1, url: '/api/placeholder/400/400', title: 'Sample EPC 1' },
+    { id: 2, url: '/api/placeholder/400/400', title: 'Sample EPC 2' },
+    { id: 3, url: '/api/placeholder/400/400', title: 'Property Photo' },
+  ]);
+
+  return (
+    <div className="container mx-auto p-4 max-w-7xl">
+      <h1 className="text-2xl font-semibold mb-6">Company Profile</h1>
+      
+      <div className="grid grid-cols-12 gap-6">
+        {/* Left Column */}
+        <div className="col-span-8 space-y-6">
+          {/* Profile Image Section */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-6">
+                <div className="relative">
+                  <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Camera className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <Button 
+                    size="sm" 
+                    className="absolute bottom-0 right-0 rounded-full"
+                  >
+                    <Camera className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold">Profile Photo</h2>
+                  <p className="text-gray-500 mt-1">
+                    Upload a professional photo to enhance your profile
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* About Section */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">About</h2>
+                <span className="text-sm text-gray-500">
+                  {about.length}/{ABOUT_MAX_LENGTH} characters
+                </span>
+              </div>
+              <textarea 
+                className="w-full h-32 p-3 border rounded-md"
+                placeholder="Write a professional bio describing your experience and expertise..."
+                maxLength={ABOUT_MAX_LENGTH}
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Services Section */}
+          <Card>
+            <CardContent className="pt-6">
+              <h2 className="text-xl font-semibold mb-4">Services</h2>
+              <div className="grid grid-cols-2 gap-x-6 gap-y-8">
+                {Object.entries(services).map(([category, items]) => (
+                  <div key={category}>
+                    <h3 className="font-medium mb-3 capitalize">{category}</h3>
+                    <div className="space-y-3">
+                      {Object.entries(items).map(([key, value]) => (
+                        <div key={key} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={key}
+                            checked={value}
+                            onCheckedChange={(checked) => {
+                              setServices(prev => ({
+                                ...prev,
+                                [category]: {
+                                  ...prev[category],
+                                  [key]: checked
+                                }
+                              }));
+                            }}
+                          />
+                          <Label htmlFor={key} className="text-sm">
+                            {SERVICES[category][key]}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Portfolio Section */}
+          <Card>
+            <CardContent className="pt-6">
+              <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
+              <div className="grid grid-cols-3 gap-4">
+                {/* Image Upload Box */}
+                <div className="aspect-square border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50">
+                  <Plus className="w-6 h-6 text-gray-400 mb-2" />
+                  <span className="text-sm text-gray-500">Add Photo</span>
+                </div>
+                
+                {/* Existing Portfolio Items */}
+                {portfolioImages.map((image) => (
+                  <div key={image.id} className="relative aspect-square bg-gray-100 rounded-lg group">
+                    <img 
+                      src={image.url}
+                      alt={image.title}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 rounded-lg">
+                      <button className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50">
+                        <X className="w-4 h-4 text-red-600" />
+                      </button>
+                      <div className="absolute bottom-0 left-0 right-0 p-2 bg-black bg-opacity-50 rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        <p className="text-white text-sm truncate">{image.title}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-between items-center mt-4">
+                <p className="text-sm text-gray-500">
+                  Upload photos of your previous work
+                </p>
+                <p className="text-sm text-gray-500">
+                  {portfolioImages.length}/10 images
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column */}
+        <div className="col-span-4 space-y-6">
+          {/* Company Verification Status */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center mb-6">
+                <h2 className="text-xl font-semibold mb-2">Company Status</h2>
+                <Badge className="bg-blue-600 text-white mb-1">Active</Badge>
+                <div className="text-sm text-gray-600">
+                  Member since 2024
+                </div>
+              </div>
+              <div className="space-y-2">
+                <VerificationItem 
+                  icon={Briefcase} 
+                  label="Company Type" 
+                  value="Ltd Company" 
+                />
+                <div className="flex items-center gap-2 p-3 border rounded-md relative group">
+                  <UserCircle className="w-4 h-4 text-gray-600" />
+                  <span className="flex-grow text-gray-700">Display Name</span>
+                  <div className="relative">
+                    <div className="flex items-center gap-2 cursor-pointer">
+                      <span className="text-gray-700 font-medium">
+                        {getDisplayNameValue(displayNameOption)}
+                      </span>
+                      <svg 
+                        className="w-4 h-4 text-gray-400 group-hover:text-gray-600" 
+                        fill="none" 
+                        strokeWidth="2" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                    <select
+                      value={displayNameOption}
+                      onChange={(e) => setDisplayNameOption(e.target.value)}
+                      className="absolute inset-0 w-full opacity-0 cursor-pointer"
+                    >
+                      <option value="name">Full Name</option>
+                      <option value="business">Business Name</option>
+                      <option value="businessAndName">Business & Name</option>
+                    </select>
+                  </div>
+                </div>
+                <VerificationItem 
+                  icon={UserCircle} 
+                  label="Identity" 
+                  badge={{ className: "", text: "Verified" }} 
+                />
+                <VerificationItem 
+                  icon={ShieldCheck} 
+                  label="Public Liability Insurance" 
+                  badge={{ className: "", text: "Verified" }} 
+                />
+                <VerificationItem 
+                  icon={BadgeCheck} 
+                  label="Accreditations" 
+                  badge={{ className: "", text: "Verified" }} 
+                />
+                <VerificationItem 
+                  icon={MapPin} 
+                  label="Address" 
+                  badge={{ className: "", text: "Verified" }} 
+                />
+                <VerificationItem 
+                  icon={Building} 
+                  label="VAT Registered" 
+                  badge={{ className: "bg-gray-100 text-gray-800", text: "No" }} 
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Additional Offerings */}
+          <Card>
+            <CardContent className="pt-6">
+              <h2 className="text-xl font-semibold mb-4">Additional Offerings</h2>
+              <div className="space-y-3">
+                {Object.entries(offerings).map(([key, value]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`offering-${key}`}
+                      checked={value}
+                      onCheckedChange={(checked) => {
+                        setOfferings(prev => ({
+                          ...prev,
+                          [key]: checked
+                        }));
+                      }}
+                    />
+                    <Label htmlFor={`offering-${key}`} className="text-sm">
+                      {ADDITIONAL_OFFERINGS[key]}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="mt-6">
+        <Button>Save Profile</Button>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;

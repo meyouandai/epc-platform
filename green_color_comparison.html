@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Better Green Color Variations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #1f2937;
+        }
+
+        .color-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #374151;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .color-option {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .color-name {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1f2937;
+        }
+
+        .color-code {
+            font-family: monospace;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .demo-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .demo-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* Base pill style */
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .pill-price {
+            opacity: 0.8;
+            font-size: 13px;
+        }
+
+        /* Base badge style */
+        .badge {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        /* Stat value style */
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* Link style */
+        .link {
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Option 1: Spotify Green */
+        .option1 .pill {
+            border-color: #1db954;
+            background: #1db954;
+            color: white;
+        }
+        .option1 .badge {
+            background: #e3f9ed;
+            color: #0d5829;
+        }
+        .option1 .stat-value {
+            color: #1db954;
+        }
+        .option1 .link {
+            color: #1db954;
+        }
+
+        /* Option 2: WhatsApp Green */
+        .option2 .pill {
+            border-color: #25d366;
+            background: #25d366;
+            color: white;
+        }
+        .option2 .badge {
+            background: #e7f9ef;
+            color: #075e54;
+        }
+        .option2 .stat-value {
+            color: #25d366;
+        }
+        .option2 .link {
+            color: #25d366;
+        }
+
+        /* Option 3: Success Green */
+        .option3 .pill {
+            border-color: #22c55e;
+            background: #22c55e;
+            color: white;
+        }
+        .option3 .badge {
+            background: #f0fdf4;
+            color: #14532d;
+        }
+        .option3 .stat-value {
+            color: #22c55e;
+        }
+        .option3 .link {
+            color: #22c55e;
+        }
+
+        /* Option 4: Apple Green */
+        .option4 .pill {
+            border-color: #30d158;
+            background: #30d158;
+            color: white;
+        }
+        .option4 .badge {
+            background: #e8fbee;
+            color: #0f4822;
+        }
+        .option4 .stat-value {
+            color: #30d158;
+        }
+        .option4 .link {
+            color: #30d158;
+        }
+
+        /* Option 5: Cash App Green */
+        .option5 .pill {
+            border-color: #00d632;
+            background: #00d632;
+            color: white;
+        }
+        .option5 .badge {
+            background: #e6fceb;
+            color: #00521c;
+        }
+        .option5 .stat-value {
+            color: #00d632;
+        }
+        .option5 .link {
+            color: #00d632;
+        }
+
+        /* Option 6: Stripe Green */
+        .option6 .pill {
+            border-color: #00d924;
+            background: #00d924;
+            color: white;
+        }
+        .option6 .badge {
+            background: #e8fbe9;
+            color: #00450f;
+        }
+        .option6 .stat-value {
+            color: #00d924;
+        }
+        .option6 .link {
+            color: #00d924;
+        }
+
+        /* Option 7: Material Green */
+        .option7 .pill {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+        .option7 .badge {
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+        .option7 .stat-value {
+            color: #4caf50;
+        }
+        .option7 .link {
+            color: #4caf50;
+        }
+
+        /* Option 8: Fresh Mint */
+        .option8 .pill {
+            border-color: #00c896;
+            background: #00c896;
+            color: white;
+        }
+        .option8 .badge {
+            background: #e6faf4;
+            color: #004d3b;
+        }
+        .option8 .stat-value {
+            color: #00c896;
+        }
+        .option8 .link {
+            color: #00c896;
+        }
+
+        /* Option 9: Discord Green */
+        .option9 .pill {
+            border-color: #3ba55c;
+            background: #3ba55c;
+            color: white;
+        }
+        .option9 .badge {
+            background: #ebf7f0;
+            color: #15402a;
+        }
+        .option9 .stat-value {
+            color: #3ba55c;
+        }
+        .option9 .link {
+            color: #3ba55c;
+        }
+
+        /* Option 10: Robinhood Green */
+        .option10 .pill {
+            border-color: #00c805;
+            background: #00c805;
+            color: white;
+        }
+        .option10 .badge {
+            background: #e6fce7;
+            color: #004d02;
+        }
+        .option10 .stat-value {
+            color: #00c805;
+        }
+        .option10 .link {
+            color: #00c805;
+        }
+
+        /* Option 11: Shopify Green */
+        .option11 .pill {
+            border-color: #5cb85c;
+            background: #5cb85c;
+            color: white;
+        }
+        .option11 .badge {
+            background: #eef9ee;
+            color: #236023;
+        }
+        .option11 .stat-value {
+            color: #5cb85c;
+        }
+        .option11 .link {
+            color: #5cb85c;
+        }
+
+        /* Option 12: Xbox Green */
+        .option12 .pill {
+            border-color: #107c10;
+            background: #107c10;
+            color: white;
+        }
+        .option12 .badge {
+            background: #e7f3e7;
+            color: #052e05;
+        }
+        .option12 .stat-value {
+            color: #107c10;
+        }
+        .option12 .link {
+            color: #107c10;
+        }
+
+        .comparison-note {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .comparison-note h3 {
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .comparison-note p {
+            color: #78350f;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Modern Green Color Options</h1>
+
+        <div class="comparison-note">
+            <h3>Fresh Green Options</h3>
+            <p>These are more vibrant, modern greens used by popular apps and services. Each maintains consistency across all UI elements.</p>
+        </div>
+
+        <div class="color-section">
+            <h2 class="section-title">Vibrant Modern Greens</h2>
+
+            <div class="color-grid">
+                <!-- Option 1: Spotify -->
+                <div class="color-option option1">
+                    <div class="color-name">Spotify Green</div>
+                    <div class="color-code">Main: #1db954</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 2: WhatsApp -->
+                <div class="color-option option2">
+                    <div class="color-name">WhatsApp Green</div>
+                    <div class="color-code">Main: #25d366</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 3: Success -->
+                <div class="color-option option3">
+                    <div class="color-name">Success Green</div>
+                    <div class="color-code">Main: #22c55e</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 4: Apple -->
+                <div class="color-option option4">
+                    <div class="color-name">Apple Green</div>
+                    <div class="color-code">Main: #30d158</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 5: Cash App -->
+                <div class="color-option option5">
+                    <div class="color-name">Cash App Green</div>
+                    <div class="color-code">Main: #00d632</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 6: Stripe -->
+                <div class="color-option option6">
+                    <div class="color-name">Stripe Green</div>
+                    <div class="color-code">Main: #00d924</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 7: Material -->
+                <div class="color-option option7">
+                    <div class="color-name">Material Green</div>
+                    <div class="color-code">Main: #4caf50</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 8: Fresh Mint -->
+                <div class="color-option option8">
+                    <div class="color-name">Fresh Mint</div>
+                    <div class="color-code">Main: #00c896</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 9: Discord -->
+                <div class="color-option option9">
+                    <div class="color-name">Discord Green</div>
+                    <div class="color-code">Main: #3ba55c</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 10: Robinhood -->
+                <div class="color-option option10">
+                    <div class="color-name">Robinhood Green</div>
+                    <div class="color-code">Main: #00c805</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 11: Shopify -->
+                <div class="color-option option11">
+                    <div class="color-name">Shopify Green</div>
+                    <div class="color-code">Main: #5cb85c</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 12: Xbox -->
+                <div class="color-option option12">
+                    <div class="color-name">Xbox Green</div>
+                    <div class="color-code">Main: #107c10</div>
+                    <div class="demo-items">
+                        <div class="demo-row">
+                            <span class="stat-value">42</span>
+                            <span style="color: #6b7280; font-size: 14px;">Active</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="badge">3</span>
+                            <span style="color: #6b7280; font-size: 12px;">Count</span>
+                        </div>
+                        <div class="demo-row">
+                            <span class="pill">
+                                <span>EC1</span>
+                                <span class="pill-price">£6</span>
+                            </span>
+                            <span class="pill">
+                                <span>WC1</span>
+                                <span class="pill-price">£5</span>
+                            </span>
+                        </div>
+                        <div class="demo-row">
+                            <a href="#" class="link">Select all</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

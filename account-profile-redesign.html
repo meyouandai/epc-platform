@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Profile - EPC Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+
+        /* Header */
+        .profile-header {
+            margin-bottom: 24px;
+        }
+
+        .profile-header h2 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .profile-header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Tab Navigation */
+        .profile-tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: #1a1a1a;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        /* Account Status Card */
+        .account-status-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .account-status-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .profile-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .profile-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .profile-field {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+
+        .field-label {
+            font-size: 14px;
+            color: #6b7280;
+            min-width: 120px;
+        }
+
+        .field-value {
+            font-size: 14px;
+            color: #1a1a1a;
+            flex: 1;
+        }
+
+        .trust-badge-profile {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .profile-actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* Preferences */
+        .preferences-section {
+            max-width: 600px;
+        }
+
+        .preferences-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .preference-item {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .preference-item:last-child {
+            border-bottom: none;
+        }
+
+        .preference-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            cursor: pointer;
+        }
+
+        .preference-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .preference-description {
+            margin-top: 8px;
+            margin-left: 30px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .preference-input {
+            width: 100px;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-left: auto;
+        }
+
+        /* Business Info */
+        .profile-form h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .profile-form h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f9fafb;
+            color: #1a1a1a;
+        }
+
+        .form-group input[readonly] {
+            cursor: not-allowed;
+            color: #6b7280;
+        }
+
+        .form-actions {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .help-text {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* Pause State Alert */
+        .alert-section {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-radius: 6px;
+        }
+
+        .alert-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 4px;
+        }
+
+        .alert-text {
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        /* Hidden by default */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <h2>Account Settings</h2>
+            <p>Manage your profile, preferences, and account status</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="profile-tabs">
+            <button class="tab-btn active" onclick="switchTab('account')">
+                Account Details
+            </button>
+            <button class="tab-btn" onclick="switchTab('settings')">
+                Settings
+            </button>
+            <button class="tab-btn" onclick="switchTab('security')">
+                Security
+            </button>
+        </div>
+
+
+        <!-- Account Details Tab Content -->
+        <div class="tab-content" id="account-tab">
+            <!-- Account Status Card -->
+            <div class="account-status-card" style="margin-bottom: 24px;">
+                <h3>Account Status</h3>
+                <div class="card-content">
+                    <div class="card-info">
+                        <div class="card-title" id="statusTitle">
+                            Lead Purchasing: Active
+                        </div>
+                        <div class="card-desc" id="statusDesc">
+                            Actively acquiring leads across 12 post codes
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" id="statusButton" onclick="togglePause()">
+                        Pause Purchasing
+                    </button>
+                </div>
+                <div class="alert-section hidden" id="pauseAlert">
+                    <div class="alert-title">What's paused?</div>
+                    <div class="alert-text">
+                        New lead acquisition is stopped. Your post code selections and billing remain unchanged. Resume anytime.
+                    </div>
+                </div>
+            </div>
+
+            <div class="overview-grid">
+                <!-- Personal Information Card -->
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <span class="field-value">John Smith</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <span class="field-value">john.smith@epc-assessments.co.uk</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Phone:</span>
+                        <span class="field-value">+44 7700 900123</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Company:</span>
+                        <span class="field-value">Smith Energy Solutions Ltd</span>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn btn-secondary">Edit Information</button>
+                    </div>
+                </div>
+
+                <!-- Account Summary Card -->
+                <div class="profile-card">
+                    <h3>Account Summary</h3>
+                    <div class="profile-field">
+                        <span class="field-label">Trust Level:</span>
+                        <span class="trust-badge-profile" style="background-color: #cd7f32; color: white;">
+                            Bronze
+                        </span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Member Since:</span>
+                        <span class="field-value">15 August 2024</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Total Leads:</span>
+                        <span class="field-value">234</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Account Age:</span>
+                        <span class="field-value">5 months</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Information Section -->
+            <div class="profile-form" style="margin-top: 32px;">
+                <h3>Business Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Company Number</label>
+                        <input type="text" value="12345678" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>VAT Number</label>
+                        <input type="text" value="GB123456789" readonly>
+                    </div>
+                </div>
+
+                <h4>Business Address</h4>
+                <div class="form-group">
+                    <label>Address Line 1</label>
+                    <input type="text" value="123 Energy Street" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Address Line 2</label>
+                    <input type="text" value="Business Park" readonly>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" value="Manchester" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Post Code</label>
+                        <input type="text" value="M1 2AB" readonly>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary">Update Business Info</button>
+                    <p class="help-text">Some changes may require verification</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab Content -->
+        <div class="tab-content hidden" id="settings-tab">
+            <div class="preferences-section">
+                <h3>Lead Notifications</h3>
+                <div class="preference-item">
+                    <div style="margin-bottom: 8px; color: #4b5563; font-size: 14px; font-weight: 500;">New Lead Alerts</div>
+                    <p class="preference-description" style="margin-left: 0; margin-bottom: 12px;">How would you like to receive notifications when new leads match your postcodes?</p>
+                    <div style="display: flex; gap: 24px;">
+                        <label class="preference-label" style="opacity: 0.6; cursor: not-allowed;">
+                            <input type="checkbox" checked disabled>
+                            <span>Email (Required)</span>
+                        </label>
+                        <label class="preference-label">
+                            <input type="checkbox">
+                            <span>SMS</span>
+                        </label>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 32px;">Account Notifications</h3>
+                <div class="preference-item">
+                    <div style="margin-bottom: 8px; color: #4b5563; font-size: 14px; font-weight: 500;">System Updates</div>
+                    <p class="preference-description" style="margin-left: 0; margin-bottom: 12px;">Payment confirmations, spending limits reached, and account issues</p>
+                    <div style="display: flex; gap: 24px;">
+                        <label class="preference-label" style="opacity: 0.6; cursor: not-allowed;">
+                            <input type="checkbox" checked disabled>
+                            <span>Email (Required)</span>
+                        </label>
+                        <label class="preference-label">
+                            <input type="checkbox">
+                            <span>SMS</span>
+                        </label>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 32px;">Marketing Communications</h3>
+                <div class="preference-item">
+                    <label class="preference-label">
+                        <input type="checkbox">
+                        <span>Partner Offers</span>
+                    </label>
+                    <p class="preference-description">Special offers from trusted EPC industry suppliers and partners</p>
+                </div>
+                <div class="preference-item">
+                    <label class="preference-label">
+                        <input type="checkbox" checked>
+                        <span>Product Updates</span>
+                    </label>
+                    <p class="preference-description">New features and improvements to the platform</p>
+                </div>
+                <div class="preference-item">
+                    <label class="preference-label">
+                        <input type="checkbox" checked>
+                        <span>Industry News</span>
+                    </label>
+                    <p class="preference-description">EPC regulation changes and market insights</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Tab Content -->
+        <div class="tab-content hidden" id="security-tab">
+            <div class="preferences-section">
+                <h3>Account Security</h3>
+                <div class="preference-item">
+                    <div class="preference-label" style="justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Password</div>
+                            <p class="preference-description" style="margin: 0;">Change your account password</p>
+                        </div>
+                        <button class="btn btn-secondary">Change Password</button>
+                    </div>
+                </div>
+
+                <div class="preference-item">
+                    <div class="preference-label" style="justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Export Account Data</div>
+                            <p class="preference-description" style="margin: 0;">Download all your account data and activity history</p>
+                        </div>
+                        <button class="btn btn-secondary">Export Data</button>
+                    </div>
+                </div>
+
+                <div class="preference-item" style="border-bottom: none;">
+                    <div class="preference-label" style="justify-content: space-between;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px; color: #dc2626;">Close Account</div>
+                            <p class="preference-description" style="margin: 0;">Permanently delete your account and all data</p>
+                        </div>
+                        <button class="btn" style="background: #dc2626; color: white;">Close Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isPaused = false;
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const statusTitle = document.getElementById('statusTitle');
+            const statusDesc = document.getElementById('statusDesc');
+            const statusButton = document.getElementById('statusButton');
+            const pauseAlert = document.getElementById('pauseAlert');
+
+            if (isPaused) {
+                statusTitle.textContent = 'Lead Purchasing: Paused';
+                statusDesc.textContent = 'Purchasing suspended by user - 12 post codes preserved';
+                statusButton.textContent = 'Resume Purchasing';
+                statusButton.classList.remove('btn-secondary');
+                statusButton.classList.add('btn-primary');
+                pauseAlert.classList.remove('hidden');
+            } else {
+                statusTitle.textContent = 'Lead Purchasing: Active';
+                statusDesc.textContent = 'Actively acquiring leads across 12 post codes';
+                statusButton.textContent = 'Pause Purchasing';
+                statusButton.classList.remove('btn-primary');
+                statusButton.classList.add('btn-secondary');
+                pauseAlert.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

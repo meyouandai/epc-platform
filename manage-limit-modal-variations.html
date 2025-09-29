@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Limit Modal Variations</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .modal-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .modal-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .current-status {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .status-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            background: #10b981;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .options-section {
+            margin: 24px 0;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .limit-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .limit-option:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .limit-option.selected {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .limit-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f9fafb;
+        }
+
+        .limit-option.disabled:hover {
+            border-color: #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .radio-dot {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+        }
+
+        .limit-option.selected .radio-dot {
+            border-color: #10b981;
+        }
+
+        .limit-option.selected .radio-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+        }
+
+        .limit-info {
+            flex: 1;
+        }
+
+        .limit-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .limit-description {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .limit-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-current {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-locked {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-new {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .progress-info {
+            background: #fefce8;
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #713f12;
+        }
+
+        .help-text {
+            background: #f0f9ff;
+            border-left: 3px solid #3b82f6;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #1e3a8a;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+        }
+
+        .version-label {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-container">
+        <h1>Manage Limit Modal Variations</h1>
+        <p class="intro">Compare different approaches to displaying limit management and progression tracking</p>
+
+        <div class="modal-grid">
+
+            <!-- VERSION 1: Spend-Based Progress (Recommended) -->
+            <div class="modal-wrapper">
+                <div class="version-label">Version 1: Spend-Based Progress (Recommended)</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Spending Limit</div>
+                    <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Current Limit</span>
+                            <span class="status-value">£100</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Progress to Next Tier</span>
+                            <span class="status-value">£100 of £200</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%"></div>
+                        </div>
+                    </div>
+
+                    <div class="options-section">
+                        <div class="section-label">Available Limits</div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£50</div>
+                                <div class="limit-description">Lower limit, more frequent payments</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£100</div>
+                                <div class="limit-description">Your current limit</div>
+                            </div>
+                            <div class="limit-badge badge-current">Current</div>
+                        </div>
+
+                        <div class="limit-option disabled">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£150</div>
+                                <div class="limit-description">Need £100 more in payments</div>
+                            </div>
+                            <div class="limit-badge badge-locked">Locked</div>
+                        </div>
+                    </div>
+
+                    <div class="help-text">
+                        💡 Progress continues regardless of limit changes. Downgrading doesn't reset your eligibility.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Keep Current Limit</button>
+                </div>
+            </div>
+
+            <!-- VERSION 2: Detailed Progress Breakdown -->
+            <div class="modal-wrapper">
+                <div class="version-label">Version 2: Detailed Progress Breakdown</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Spending Limit</div>
+                    <div class="modal-subtitle">Account Level: Bronze</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Current Limit</span>
+                            <span class="status-value">£150</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Total Spent at This Limit</span>
+                            <span class="status-value">£150</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Remaining for Next Tier</span>
+                            <span class="status-value">£150 more needed</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-info">
+                        📊 You need to spend £300 total at £150 limit to unlock £250. You're halfway there!
+                    </div>
+
+                    <div class="options-section">
+                        <div class="section-label">Choose Your Limit</div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£50</div>
+                                <div class="limit-description">Starter limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£100</div>
+                                <div class="limit-description">Previously used</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£150</div>
+                                <div class="limit-description">Current selection</div>
+                            </div>
+                            <div class="limit-badge badge-current">Current</div>
+                        </div>
+
+                        <div class="limit-option disabled">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£250</div>
+                                <div class="limit-description">Unlocks after £150 more spending</div>
+                            </div>
+                            <div class="limit-badge badge-locked">Coming Soon</div>
+                        </div>
+
+                        <div class="limit-option disabled">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£500</div>
+                                <div class="limit-description">Requires £250 tier completion</div>
+                            </div>
+                            <div class="limit-badge badge-locked">Future</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Update Limit</button>
+                </div>
+            </div>
+
+            <!-- VERSION 3: Simplified (No Progress) -->
+            <div class="modal-wrapper">
+                <div class="version-label">Version 3: Simplified (No Progress Tracking)</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Spending Limit</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Your Current Limit</span>
+                            <span class="status-value">£100</span>
+                        </div>
+                    </div>
+
+                    <div class="options-section">
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£50</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£100</div>
+                            </div>
+                            <div class="limit-badge badge-current">Current</div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£150</div>
+                            </div>
+                            <div class="limit-badge badge-new">Available</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+
+            <!-- VERSION 4: Account Journey View -->
+            <div class="modal-wrapper">
+                <div class="version-label">Version 4: Account Journey View</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Your Account Journey</div>
+                    <div class="modal-subtitle">Bronze Member → Silver at £1000 total spent</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Current Limit</span>
+                            <span class="status-value">£250</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Lifetime Spending</span>
+                            <span class="status-value">£650</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Until Silver</span>
+                            <span class="status-value">£350 more</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 65%"></div>
+                        </div>
+                    </div>
+
+                    <div class="options-section">
+                        <div class="section-label">Your Unlocked Limits</div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£50</div>
+                                <div class="limit-description">Starter</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£100</div>
+                                <div class="limit-description">Unlocked at £100 spent</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£150</div>
+                                <div class="limit-description">Unlocked at £200 spent</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£250</div>
+                                <div class="limit-description">Unlocked at £300 spent</div>
+                            </div>
+                            <div class="limit-badge badge-current">Current</div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£500</div>
+                                <div class="limit-description">Unlocked at £500 spent</div>
+                            </div>
+                            <div class="limit-badge badge-new">Available</div>
+                        </div>
+                    </div>
+
+                    <div class="help-text">
+                        🎯 At £1000 total spent, you'll automatically become a Silver member with access to £750+ limits!
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Update Limit</button>
+                </div>
+            </div>
+
+            <!-- VERSION 5: Minimal with Hints -->
+            <div class="modal-wrapper">
+                <div class="version-label">Version 5: Minimal with Subtle Hints</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Change Spending Limit</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="options-section">
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£50</div>
+                                <div class="limit-description">More frequent payments</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£100</div>
+                                <div class="limit-description">Current limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£150</div>
+                                <div class="limit-description">Fewer payment interruptions</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option disabled">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£250</div>
+                                <div class="limit-description">Continue using service to unlock</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- VERSION 6: Silver Member Example -->
+            <div class="modal-wrapper">
+                <div class="version-label">Version 6: Silver Member View</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Spending Limit</div>
+                    <div class="modal-subtitle">Silver Member</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Account Level</span>
+                            <span class="status-value" style="color: #c0c0c0;">Silver</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Current Limit</span>
+                            <span class="status-value">£500</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Progress to Gold</span>
+                            <span class="status-value">£500 of £1000 at current limit</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%"></div>
+                        </div>
+                    </div>
+
+                    <div class="options-section">
+                        <div class="section-label">Available Limits</div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£250</div>
+                                <div class="limit-description">Bronze limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£500</div>
+                                <div class="limit-description">Entry Silver limit</div>
+                            </div>
+                            <div class="limit-badge badge-current">Current</div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£750</div>
+                                <div class="limit-description">Mid-tier Silver</div>
+                            </div>
+                            <div class="limit-badge badge-new">Available</div>
+                        </div>
+
+                        <div class="limit-option disabled">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1000</div>
+                                <div class="limit-description">Need £250 more at £750 to unlock</div>
+                            </div>
+                            <div class="limit-badge badge-locked">Locked</div>
+                        </div>
+                    </div>
+
+                    <div class="help-text">
+                        🏆 Gold membership unlocks automatically at £2000 total lifetime spending, bringing monthly billing options.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Confirm Selection</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

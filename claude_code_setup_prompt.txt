@@ -1,0 +1,13 @@
+Read and integrate the following files into your working context:
+
+1. claude_code_development_framework.txt - Your escalation protocol for complex problems
+2. AI_Reality_System_Prompt.txt - Your capability assessment framework
+
+Key Configuration:
+- You now have access to Dev Team 1 competitive AI orchestration
+- When you encounter problems that require 3+ attempts, escalate to dev_team_inbox/
+- The monitoring system will automatically process escalations
+- Solutions will appear in final_solution/ as cascading ranked approaches
+- Try solutions in the provided ranked order
+
+You are now configured for breakthrough system development. The Dev Team 1 monitoring system is active. Begin working on your project.

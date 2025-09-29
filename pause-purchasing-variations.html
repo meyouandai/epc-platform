@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pause Purchasing - Communication Variations</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .variation {
+            margin-bottom: 40px;
+        }
+
+        .variation-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background: #e5e7eb;
+            border-radius: 8px;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        /* Info Sections */
+        .info-section {
+            margin-bottom: 24px;
+        }
+
+        .info-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-list li {
+            padding: 8px 0;
+            font-size: 14px;
+            color: #374151;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .info-list li .icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .warning-box.critical {
+            background: #fee2e2;
+            border-color: #f87171;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-box.critical .warning-title {
+            color: #991b1b;
+        }
+
+        .warning-text {
+            font-size: 14px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+
+        .warning-box.critical .warning-text {
+            color: #7f1d1d;
+        }
+
+        /* Post Code List */
+        .postcode-list {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .postcode-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        .postcode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+        }
+
+        .postcode-item {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 6px 10px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .postcode-item.high-demand {
+            border-color: #ef4444;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        /* Options */
+        .pause-options {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f9fafb;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #eef2ff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .option-desc {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Modal Footer */
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #d97706;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Waitlist Info */
+        .waitlist-info {
+            background: #fefce8;
+            border: 1px solid #facc15;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        .waitlist-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #a16207;
+            margin-bottom: 4px;
+        }
+
+        .waitlist-text {
+            font-size: 12px;
+            color: #713f12;
+        }
+
+        /* Timer */
+        .timer-display {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .timer-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #166534;
+            margin-bottom: 4px;
+        }
+
+        .timer-label {
+            font-size: 12px;
+            color: #15803d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pause Purchasing - Communication Strategies</h1>
+
+        <!-- Variation 1: Direct Warning -->
+        <div class="variation">
+            <div class="variation-title">1. Direct Warning Approach</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Pause Lead Purchasing</div>
+                    <div class="modal-subtitle">Temporarily suspend all lead acquisition</div>
+                    <button class="close-button">×</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="warning-box critical">
+                        <div class="warning-title">
+                            ⚠️ Important: Post Codes Will Be Released
+                        </div>
+                        <div class="warning-text">
+                            When you pause purchasing, your 12 active post codes will immediately become available to other assessors. You may lose access to high-demand areas.
+                        </div>
+                    </div>
+
+                    <div class="postcode-list">
+                        <div class="postcode-header">Your Active Post Codes (Will Be Released):</div>
+                        <div class="postcode-grid">
+                            <div class="postcode-item high-demand">M1</div>
+                            <div class="postcode-item high-demand">M2</div>
+                            <div class="postcode-item">M3</div>
+                            <div class="postcode-item">M4</div>
+                            <div class="postcode-item high-demand">M15</div>
+                            <div class="postcode-item">M20</div>
+                            <div class="postcode-item">M21</div>
+                            <div class="postcode-item">M22</div>
+                            <div class="postcode-item high-demand">M25</div>
+                            <div class="postcode-item">M30</div>
+                            <div class="postcode-item">M31</div>
+                            <div class="postcode-item">M32</div>
+                        </div>
+                    </div>
+
+                    <div class="waitlist-info">
+                        <div class="waitlist-number">47 assessors</div>
+                        <div class="waitlist-text">Currently waiting for post codes in your areas</div>
+                    </div>
+
+                    <div class="info-section">
+                        <h4>What happens when you pause?</h4>
+                        <ul class="info-list">
+                            <li><span class="icon">❌</span> All 12 post codes released immediately</li>
+                            <li><span class="icon">🔄</span> Other assessors can claim your areas</li>
+                            <li><span class="icon">⏰</span> No guarantee of getting them back</li>
+                            <li><span class="icon">💰</span> No charges during pause period</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Keep Active</button>
+                    <button class="btn btn-danger">Release & Pause</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 2: Pause Options -->
+        <div class="variation">
+            <div class="variation-title">2. Pause Options Approach</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Choose Pause Option</div>
+                    <div class="modal-subtitle">Select how to handle your post codes</div>
+                    <button class="close-button">×</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="pause-options">
+                        <div class="option selected">
+                            <input type="radio" name="pause-type" checked>
+                            <div class="option-content">
+                                <div class="option-title">Quick Pause (Hold for 24 hours)</div>
+                                <div class="option-desc">Keep your post codes reserved for 24 hours. Perfect for short breaks. £5/day holding fee applies.</div>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <input type="radio" name="pause-type">
+                            <div class="option-content">
+                                <div class="option-title">Vacation Mode (Hold for 7 days)</div>
+                                <div class="option-desc">Reserve post codes for up to 7 days. Ideal for holidays. £25 flat fee.</div>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <input type="radio" name="pause-type">
+                            <div class="option-content">
+                                <div class="option-title">Full Pause (Release immediately)</div>
+                                <div class="option-desc">Release all post codes to other assessors. No fees. You'll need to reclaim areas when you return.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <div class="warning-title">
+                            💡 Recommendation
+                        </div>
+                        <div class="warning-text">
+                            You have 4 high-demand post codes (M1, M2, M15, M25) with waiting lists. Consider using Quick Pause to retain access.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Continue with Quick Pause</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 3: Granular Control -->
+        <div class="variation">
+            <div class="variation-title">3. Selective Pause Approach</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Manage Post Code Coverage</div>
+                    <div class="modal-subtitle">Choose which areas to keep active</div>
+                    <button class="close-button">×</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="info-section">
+                        <h4>Select post codes to keep active:</h4>
+                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">
+                            Keep high-value areas active while pausing others to reduce costs
+                        </p>
+                    </div>
+
+                    <div class="postcode-list">
+                        <div style="display: grid; gap: 8px;">
+                            <label style="display: flex; align-items: center; padding: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 6px;">
+                                <input type="checkbox" checked style="margin-right: 12px;">
+                                <span style="flex: 1; font-size: 14px; font-weight: 500;">M1 - Manchester City Centre</span>
+                                <span style="font-size: 12px; color: #ef4444;">23 waiting</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 6px;">
+                                <input type="checkbox" checked style="margin-right: 12px;">
+                                <span style="flex: 1; font-size: 14px; font-weight: 500;">M2 - Manchester Central</span>
+                                <span style="font-size: 12px; color: #ef4444;">18 waiting</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 6px;">
+                                <input type="checkbox" style="margin-right: 12px;">
+                                <span style="flex: 1; font-size: 14px; font-weight: 500;">M3 - Salford</span>
+                                <span style="font-size: 12px; color: #6b7280;">Available</span>
+                            </label>
+                            <label style="display: flex; align-items: center; padding: 8px; background: white; border: 1px solid #e5e7eb; border-radius: 6px;">
+                                <input type="checkbox" style="margin-right: 12px;">
+                                <span style="flex: 1; font-size: 14px; font-weight: 500;">M4 - Ancoats</span>
+                                <span style="font-size: 12px; color: #6b7280;">Available</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin: 16px 0; padding: 12px; background: #f3f4f6; border-radius: 8px;">
+                        <span style="font-size: 14px; color: #374151;">Active post codes: 2 selected</span>
+                        <span style="font-size: 14px; font-weight: 600; color: #111827;">Est. daily leads: 3-5</span>
+                    </div>
+
+                    <div class="warning-box">
+                        <div class="warning-title">
+                            Cost Reduction
+                        </div>
+                        <div class="warning-text">
+                            Keeping only 2 post codes active will reduce your daily spend by approximately 83% while maintaining coverage in your highest-value areas.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Apply Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 4: Temporary Hold with Timer -->
+        <div class="variation">
+            <div class="variation-title">4. Grace Period Approach</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Pause Lead Purchasing</div>
+                    <div class="modal-subtitle">Your post codes have a 15-minute grace period</div>
+                    <button class="close-button">×</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="timer-display">
+                        <div class="timer-value">15:00</div>
+                        <div class="timer-label">Grace period to resume without losing post codes</div>
+                    </div>
+
+                    <div class="info-section">
+                        <h4>Grace Period Benefits:</h4>
+                        <ul class="info-list">
+                            <li><span class="icon">⏱️</span> 15 minutes to change your mind</li>
+                            <li><span class="icon">🔒</span> Post codes remain locked to you</li>
+                            <li><span class="icon">🔄</span> Resume anytime within grace period</li>
+                            <li><span class="icon">⚡</span> After 15 minutes, areas released to waitlist</li>
+                        </ul>
+                    </div>
+
+                    <div class="postcode-list">
+                        <div class="postcode-header">Protected Until 3:45 PM:</div>
+                        <div class="postcode-grid">
+                            <div class="postcode-item">M1</div>
+                            <div class="postcode-item">M2</div>
+                            <div class="postcode-item">M3</div>
+                            <div class="postcode-item">M4</div>
+                            <div class="postcode-item">M15</div>
+                            <div class="postcode-item">M20</div>
+                            <div class="postcode-item">M21</div>
+                            <div class="postcode-item">M22</div>
+                            <div class="postcode-item">M25</div>
+                            <div class="postcode-item">M30</div>
+                            <div class="postcode-item">M31</div>
+                            <div class="postcode-item">M32</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Start Grace Period</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 5: Alternative Coverage -->
+        <div class="variation">
+            <div class="variation-title">5. Smart Suggestion Approach</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Before You Pause...</div>
+                    <div class="modal-subtitle">Consider these alternatives</div>
+                    <button class="close-button">×</button>
+                </div>
+
+                <div class="modal-body">
+                    <div style="background: #f0f9ff; border: 1px solid #0284c7; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                        <h4 style="color: #0c4a6e; margin-bottom: 12px;">💡 Smart Alternative</h4>
+                        <p style="font-size: 14px; color: #075985; line-height: 1.5;">
+                            Instead of pausing, consider reducing to fewer post codes. You currently have 12 active areas but receive 80% of your leads from just 3 post codes (M1, M2, M15).
+                        </p>
+                        <button class="btn btn-primary" style="margin-top: 12px; width: 100%;">
+                            Optimize Coverage Instead
+                        </button>
+                    </div>
+
+                    <div class="info-section">
+                        <h4>If you still want to pause:</h4>
+                        <ul class="info-list">
+                            <li><span class="icon">🚨</span> <strong>M1, M2:</strong> Very high demand - 41 assessors waiting</li>
+                            <li><span class="icon">⚠️</span> <strong>M15, M25:</strong> High demand - 18 assessors waiting</li>
+                            <li><span class="icon">✅</span> <strong>Others:</strong> Lower demand - likely reclaimable</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box critical">
+                        <div class="warning-title">
+                            Final Warning
+                        </div>
+                        <div class="warning-text">
+                            Based on current demand, you have less than 5% chance of reclaiming M1 or M2 within the next 30 days if you release them now.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Optimize Coverage</button>
+                    <button class="btn btn-danger">Pause Anyway</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

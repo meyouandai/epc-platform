@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Services Section Variations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            color: #1f2937;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .variation {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .variation-header {
+            background: #f3f4f6;
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .variation-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .variation-subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .variation-content {
+            padding: 24px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+
+        /* Variation 1: Current Enhanced - 2x2 Grid */
+        .current-enhanced {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .service-category {
+            margin-bottom: 24px;
+        }
+
+        .category-title {
+            font-weight: 500;
+            margin-bottom: 12px;
+            text-transform: capitalize;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .service-item:hover {
+            background: #f9fafb;
+        }
+
+        .service-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #667eea;
+        }
+
+        .service-item label {
+            font-size: 0.875rem;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        /* Variation 2: Single Column with Sections */
+        .single-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .service-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .service-badge.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .service-badge:hover {
+            border-color: #667eea;
+        }
+
+        /* Variation 3: Toggle Grid */
+        .toggle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .toggle-category {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .toggle-category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .toggle-service-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .toggle-service-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-service-info {
+            flex: 1;
+        }
+
+        .toggle-service-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: #1f2937;
+            font-size: 0.875rem;
+        }
+
+        .toggle-service-desc {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Additional offerings section */
+        .offerings-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .offerings-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .offering-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .offering-item:hover {
+            background: white;
+        }
+
+        .offering-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: #10b981;
+        }
+
+        .offering-label {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        /* Stats section */
+        .stats-section {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stats-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .stats-text {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .current-enhanced,
+            .toggle-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .offerings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 1rem; color: #1f2937; font-size: 2rem; font-weight: 700;">
+            Complete Services Selection
+        </h1>
+        <p style="text-align: center; margin-bottom: 3rem; color: #6b7280; max-width: 800px; margin-left: auto; margin-right: auto;">
+            All 14 services + 6 additional offerings from the codebase. Test how each design handles the full content.
+        </p>
+
+        <!-- Variation 1: Current Design Enhanced -->
+        <div class="variation">
+            <div class="variation-header">
+                <h2 class="variation-title">Variation 1: 2x2 Grid Layout (Current Enhanced)</h2>
+                <p class="variation-subtitle">Four categories in a 2x2 grid + separate offerings section</p>
+            </div>
+            <div class="variation-content">
+                <div class="card">
+                    <div class="card-content">
+                        <h2 class="section-title">Services</h2>
+                        <div class="current-enhanced">
+                            <div class="service-category">
+                                <h3 class="category-title">
+                                    <span>📋</span>
+                                    Certificates
+                                </h3>
+                                <div class="service-item">
+                                    <input type="checkbox" checked>
+                                    <label>Domestic EPC Certificate</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <label>Commercial EPC Certificate</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox" checked>
+                                    <label>Display Energy Certificates (DECs)</label>
+                                </div>
+                            </div>
+
+                            <div class="service-category">
+                                <h3 class="category-title">
+                                    <span>🔍</span>
+                                    Assessments
+                                </h3>
+                                <div class="service-item">
+                                    <input type="checkbox" checked>
+                                    <label>SAP Calculations</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <label>Energy Audits</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <label>Commercial Energy Audits</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox" checked>
+                                    <label>Retrofit Advice</label>
+                                </div>
+                            </div>
+
+                            <div class="service-category">
+                                <h3 class="category-title">
+                                    <span>🛠️</span>
+                                    Additional
+                                </h3>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <label>Floor Plans</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox" checked>
+                                    <label>Photography</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <label>Carbon Monoxide</label>
+                                </div>
+                            </div>
+
+                            <div class="service-category">
+                                <h3 class="category-title">
+                                    <span>💡</span>
+                                    Advisory
+                                </h3>
+                                <div class="service-item">
+                                    <input type="checkbox" checked>
+                                    <label>Energy Efficiency Advice</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <label>Green Deal Advice</label>
+                                </div>
+                                <div class="service-item">
+                                    <input type="checkbox">
+                                    <label>Grant Funding and Incentive Program Assistance</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="offerings-section">
+                    <h3 class="offerings-title">
+                        <span>✨</span>
+                        Additional Offerings
+                    </h3>
+                    <div class="offerings-grid">
+                        <div class="offering-item">
+                            <input type="checkbox" class="offering-checkbox" checked>
+                            <label class="offering-label">Same-Day Service</label>
+                        </div>
+                        <div class="offering-item">
+                            <input type="checkbox" class="offering-checkbox" checked>
+                            <label class="offering-label">Instant Online Booking</label>
+                        </div>
+                        <div class="offering-item">
+                            <input type="checkbox" class="offering-checkbox" checked>
+                            <label class="offering-label">Card Payments Accepted</label>
+                        </div>
+                        <div class="offering-item">
+                            <input type="checkbox" class="offering-checkbox">
+                            <label class="offering-label">Pay After Survey</label>
+                        </div>
+                        <div class="offering-item">
+                            <input type="checkbox" class="offering-checkbox" checked>
+                            <label class="offering-label">Free Quotes</label>
+                        </div>
+                        <div class="offering-item">
+                            <input type="checkbox" class="offering-checkbox">
+                            <label class="offering-label">Instant EPC Certificate</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stats-title">Service Portfolio Summary</div>
+                    <div class="stats-text">6 services selected across 4 categories • 4 additional offerings enabled</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 2: Single Column with Sections -->
+        <div class="variation">
+            <div class="variation-header">
+                <h2 class="variation-title">Variation 2: Single Column Badge Layout</h2>
+                <p class="variation-subtitle">Stacked sections with tag-style service selection</p>
+            </div>
+            <div class="variation-content">
+                <div class="card">
+                    <div class="card-content">
+                        <h2 class="section-title">Services Configuration</h2>
+                        <div class="single-column">
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <div class="section-icon">📋</div>
+                                    <h3>Energy Performance Certificates</h3>
+                                </div>
+                                <div class="services-grid">
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Domestic EPC Certificate</span>
+                                    </div>
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Commercial EPC Certificate</span>
+                                    </div>
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Display Energy Certificates (DECs)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <div class="section-icon" style="background: #10b981;">🔍</div>
+                                    <h3>Energy Assessments</h3>
+                                </div>
+                                <div class="services-grid">
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>SAP Calculations</span>
+                                    </div>
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Energy Audits</span>
+                                    </div>
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Commercial Energy Audits</span>
+                                    </div>
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Retrofit Advice</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <div class="section-icon" style="background: #f59e0b;">🛠️</div>
+                                    <h3>Supporting Services</h3>
+                                </div>
+                                <div class="services-grid">
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Floor Plans</span>
+                                    </div>
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Photography</span>
+                                    </div>
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Carbon Monoxide</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <div class="section-icon" style="background: #8b5cf6;">💡</div>
+                                    <h3>Advisory Services</h3>
+                                </div>
+                                <div class="services-grid">
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Energy Efficiency Advice</span>
+                                    </div>
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Green Deal Advice</span>
+                                    </div>
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Grant Funding and Incentive Program Assistance</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-card">
+                                <div class="section-header">
+                                    <div class="section-icon" style="background: #ec4899;">✨</div>
+                                    <h3>Additional Offerings</h3>
+                                </div>
+                                <div class="services-grid">
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Same-Day Service</span>
+                                    </div>
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Instant Online Booking</span>
+                                    </div>
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Card Payments Accepted</span>
+                                    </div>
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Pay After Survey</span>
+                                    </div>
+                                    <div class="service-badge selected">
+                                        <input type="checkbox" checked>
+                                        <span>Free Quotes</span>
+                                    </div>
+                                    <div class="service-badge">
+                                        <input type="checkbox">
+                                        <span>Instant EPC Certificate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stats-title">Configuration Overview</div>
+                    <div class="stats-text">6 core services enabled • 4 additional offerings active • Ready for customer bookings</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 3: Toggle Grid -->
+        <div class="variation">
+            <div class="variation-header">
+                <h2 class="variation-title">Variation 3: Toggle Switch Grid</h2>
+                <p class="variation-subtitle">Modern toggles with service descriptions in responsive grid</p>
+            </div>
+            <div class="variation-content">
+                <div class="card">
+                    <div class="card-content">
+                        <h2 class="section-title">Service Management</h2>
+                        <div class="toggle-grid">
+                            <div class="toggle-category">
+                                <div class="toggle-category-header">
+                                    <div class="section-icon">📋</div>
+                                    <h3>Certificates</h3>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Domestic EPC Certificate</div>
+                                        <div class="toggle-service-desc">Residential properties under 1000m²</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Commercial EPC Certificate</div>
+                                        <div class="toggle-service-desc">Commercial and industrial buildings</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Display Energy Certificates</div>
+                                        <div class="toggle-service-desc">Public buildings over 1000m²</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                            </div>
+
+                            <div class="toggle-category">
+                                <div class="toggle-category-header">
+                                    <div class="section-icon" style="background: #10b981;">🔍</div>
+                                    <h3>Assessments</h3>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">SAP Calculations</div>
+                                        <div class="toggle-service-desc">Standard Assessment Procedure</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Energy Audits</div>
+                                        <div class="toggle-service-desc">Comprehensive efficiency reviews</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Commercial Energy Audits</div>
+                                        <div class="toggle-service-desc">Commercial building assessments</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Retrofit Advice</div>
+                                        <div class="toggle-service-desc">Energy improvement recommendations</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                            </div>
+
+                            <div class="toggle-category">
+                                <div class="toggle-category-header">
+                                    <div class="section-icon" style="background: #f59e0b;">🛠️</div>
+                                    <h3>Additional Services</h3>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Floor Plans</div>
+                                        <div class="toggle-service-desc">Detailed property layout drawings</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Photography</div>
+                                        <div class="toggle-service-desc">Professional property photography</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Carbon Monoxide</div>
+                                        <div class="toggle-service-desc">Gas appliance safety testing</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                            </div>
+
+                            <div class="toggle-category">
+                                <div class="toggle-category-header">
+                                    <div class="section-icon" style="background: #8b5cf6;">💡</div>
+                                    <h3>Advisory</h3>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Energy Efficiency Advice</div>
+                                        <div class="toggle-service-desc">Expert efficiency consultations</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Green Deal Advice</div>
+                                        <div class="toggle-service-desc">Green financing guidance</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Grant Assistance</div>
+                                        <div class="toggle-service-desc">Funding and incentive programs</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                            </div>
+
+                            <div class="toggle-category">
+                                <div class="toggle-category-header">
+                                    <div class="section-icon" style="background: #ec4899;">✨</div>
+                                    <h3>Service Features</h3>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Same-Day Service</div>
+                                        <div class="toggle-service-desc">Express service available</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Instant Online Booking</div>
+                                        <div class="toggle-service-desc">24/7 online scheduling</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Card Payments Accepted</div>
+                                        <div class="toggle-service-desc">All major cards accepted</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Pay After Survey</div>
+                                        <div class="toggle-service-desc">Payment after completion</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Free Quotes</div>
+                                        <div class="toggle-service-desc">No charge for estimates</div>
+                                    </div>
+                                    <div class="toggle-switch active"></div>
+                                </div>
+                                <div class="toggle-service-item">
+                                    <div class="toggle-service-info">
+                                        <div class="toggle-service-name">Instant EPC Certificate</div>
+                                        <div class="toggle-service-desc">Digital delivery available</div>
+                                    </div>
+                                    <div class="toggle-switch"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stats-title">Portfolio Status</div>
+                    <div class="stats-text">6 services active • 4 delivery features enabled • Full configuration ready</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.service-badge').forEach(badge => {
+            badge.addEventListener('click', () => {
+                badge.classList.toggle('selected');
+                const checkbox = badge.querySelector('input[type="checkbox"]');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+            });
+        });
+
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
+
+        // Update stats when items change
+        function updateStats() {
+            // This would update the stats sections with current selections
+            console.log('Stats updated');
+        }
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateStats);
+        });
+    </script>
+</body>
+</html>

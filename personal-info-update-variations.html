@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Information Update - Design Variations</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .variations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .variation {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .variation-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background: #f3f4ff;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Profile Card Styles */
+        .profile-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .profile-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+
+        .field-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .field-value {
+            font-size: 14px;
+            color: #111827;
+            font-weight: 500;
+        }
+
+        /* Inline Edit Styles */
+        .field-value-editable {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .edit-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .edit-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .edit-btn.secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+
+        .edit-btn.secondary:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        /* Inline Input Styles */
+        .inline-input {
+            padding: 4px 8px;
+            border: 2px solid #667eea;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            background: white;
+            min-width: 200px;
+        }
+
+        .inline-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .save-btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        /* Security Levels */
+        .security-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 8px;
+        }
+
+        .security-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .instant { background: #16a34a; }
+        .verify { background: #f59e0b; }
+        .support { background: #ef4444; }
+
+        .security-text {
+            font-size: 10px;
+            color: #6b7280;
+        }
+
+        /* Update Modal Styles */
+        .update-modal {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Form Styles */
+        .update-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-input {
+            padding: 10px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-input.changed {
+            border-color: #f59e0b;
+            background: #fefce8;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .form-help.warning {
+            color: #d97706;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            border-color: #d1d5db;
+            background: #f9fafb;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        /* Change Summary */
+        .changes-summary {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .changes-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #d97706;
+            margin-bottom: 8px;
+        }
+
+        .change-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #fbbf24;
+        }
+
+        .change-item:last-child {
+            border-bottom: none;
+        }
+
+        .change-from {
+            color: #92400e;
+            text-decoration: line-through;
+        }
+
+        .change-to {
+            color: #16a34a;
+            font-weight: 500;
+        }
+
+        /* Verification Status */
+        .verification-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .verified {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .unverified {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Smart Update Categories */
+        .update-category {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .category-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-fields {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .field-name {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .field-current {
+            font-size: 13px;
+            color: #0f172a;
+            font-weight: 500;
+        }
+
+        .field-action {
+            font-size: 11px;
+        }
+
+        /* Three Column Layout */
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        /* Settings List */
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .setting-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .setting-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .setting-desc {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-switch.active {
+            background: #667eea;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personal Information Update - Design Variations</h1>
+
+        <!-- Variation 1: Inline Edit with Security Indicators -->
+        <div class="variations-grid">
+            <div class="variation">
+                <div class="variation-title">1. Inline Edit with Security Levels</div>
+
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <div class="field-value-editable">
+                            <span class="field-value">John Smith</span>
+                            <button class="edit-btn">Edit</button>
+                            <div class="security-indicator">
+                                <div class="security-dot verify"></div>
+                                <span class="security-text">Verify</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <div class="field-value-editable">
+                            <span class="field-value">john.smith@epc-assessments.co.uk</span>
+                            <div class="verification-badge verified">✓ Verified</div>
+                            <button class="edit-btn">Change</button>
+                            <div class="security-indicator">
+                                <div class="security-dot verify"></div>
+                                <span class="security-text">Verify</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-field">
+                        <span class="field-label">Phone:</span>
+                        <div class="field-value-editable">
+                            <input class="inline-input" value="+44 7700 900123" />
+                            <div class="inline-actions">
+                                <button class="save-btn">Save</button>
+                                <button class="cancel-btn">✕</button>
+                            </div>
+                            <div class="security-indicator">
+                                <div class="security-dot instant"></div>
+                                <span class="security-text">Instant</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-field">
+                        <span class="field-label">Company:</span>
+                        <div class="field-value-editable">
+                            <span class="field-value">Smith Energy Solutions Ltd</span>
+                            <button class="edit-btn secondary">Request Change</button>
+                            <div class="security-indicator">
+                                <div class="security-dot support"></div>
+                                <span class="security-text">Support</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 2: Update Request Modal -->
+            <div class="variation">
+                <div class="variation-title">2. Update Request Modal</div>
+
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+
+                    <div class="profile-field">
+                        <span class="field-label">Full Name:</span>
+                        <span class="field-value">John Smith</span>
+                    </div>
+
+                    <div class="profile-field">
+                        <span class="field-label">Email:</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="field-value">john.smith@epc-assessments.co.uk</span>
+                            <div class="verification-badge verified">✓ Verified</div>
+                        </div>
+                    </div>
+
+                    <div class="profile-field">
+                        <span class="field-label">Phone:</span>
+                        <span class="field-value">+44 7700 900123</span>
+                    </div>
+
+                    <div class="profile-field">
+                        <span class="field-label">Company:</span>
+                        <span class="field-value">Smith Energy Solutions Ltd</span>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                        <button class="btn btn-primary">Update Information</button>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="update-modal">
+                    <div class="modal-header">
+                        <div class="modal-title">Update Personal Information</div>
+                        <div class="modal-subtitle">Request changes to your account details</div>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="update-form">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Full Name
+                                    <div class="security-indicator">
+                                        <div class="security-dot verify"></div>
+                                        <span class="security-text">Requires verification</span>
+                                    </div>
+                                </label>
+                                <input class="form-input changed" value="John Robert Smith" />
+                                <div class="form-help warning">Name changes require ID verification</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Email Address
+                                    <div class="security-indicator">
+                                        <div class="security-dot verify"></div>
+                                        <span class="security-text">Email confirmation required</span>
+                                    </div>
+                                </label>
+                                <input class="form-input" value="john.smith@epc-assessments.co.uk" />
+                                <div class="form-help">Current email is verified</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Phone Number
+                                    <div class="security-indicator">
+                                        <div class="security-dot instant"></div>
+                                        <span class="security-text">Updates immediately</span>
+                                    </div>
+                                </label>
+                                <input class="form-input changed" value="+44 7700 900999" />
+                                <div class="form-help">Updates immediately</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Company Name
+                                    <div class="security-indicator">
+                                        <div class="security-dot support"></div>
+                                        <span class="security-text">Support review required</span>
+                                    </div>
+                                </label>
+                                <input class="form-input" value="Smith Energy Solutions Ltd" />
+                                <div class="form-help">Company changes require business verification</div>
+                            </div>
+                        </div>
+
+                        <div class="changes-summary">
+                            <div class="changes-title">Pending Changes</div>
+                            <div class="change-item">
+                                <span>Full Name:</span>
+                                <div>
+                                    <span class="change-from">John Smith</span> →
+                                    <span class="change-to">John Robert Smith</span>
+                                </div>
+                            </div>
+                            <div class="change-item">
+                                <span>Phone:</span>
+                                <div>
+                                    <span class="change-from">+44 7700 900123</span> →
+                                    <span class="change-to">+44 7700 900999</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-success">Submit Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 3: Smart Categorization -->
+            <div class="variation">
+                <div class="variation-title">3. Smart Update Categories</div>
+
+                <div class="profile-card">
+                    <h3>Personal Information</h3>
+
+                    <div class="update-category">
+                        <div class="category-title">
+                            <div class="security-indicator">
+                                <div class="security-dot instant"></div>
+                            </div>
+                            Instant Updates
+                        </div>
+                        <div class="category-fields">
+                            <div class="field-row">
+                                <span class="field-name">Phone</span>
+                                <span class="field-current">+44 7700 900123</span>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-name">Preferences</span>
+                                <span class="field-current">Email notifications on</span>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="update-category">
+                        <div class="category-title">
+                            <div class="security-indicator">
+                                <div class="security-dot verify"></div>
+                            </div>
+                            Requires Verification
+                        </div>
+                        <div class="category-fields">
+                            <div class="field-row">
+                                <span class="field-name">Email</span>
+                                <span class="field-current">john.smith@epc-assessments.co.uk</span>
+                                <button class="edit-btn">Change</button>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-name">Full Name</span>
+                                <span class="field-current">John Smith</span>
+                                <button class="edit-btn">Request</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="update-category">
+                        <div class="category-title">
+                            <div class="security-indicator">
+                                <div class="security-dot support"></div>
+                            </div>
+                            Support Required
+                        </div>
+                        <div class="category-fields">
+                            <div class="field-row">
+                                <span class="field-name">Company</span>
+                                <span class="field-current">Smith Energy Solutions Ltd</span>
+                                <button class="edit-btn secondary">Contact</button>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-name">Legal Name</span>
+                                <span class="field-current">John Smith</span>
+                                <button class="edit-btn secondary">Contact</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Three Tab Layout Alternative -->
+        <div style="background: white; border-radius: 16px; padding: 24px; margin-top: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center; color: #111827; margin-bottom: 24px;">Alternative: Three-Tab Layout</h2>
+
+            <div class="three-column">
+                <div class="tab-content">
+                    <div class="tab-title">Personal Details</div>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Full Name</div>
+                                <div class="setting-desc">John Smith</div>
+                            </div>
+                            <button class="edit-btn">Edit</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Email Address</div>
+                                <div class="setting-desc">john.smith@epc-assessments.co.uk ✓</div>
+                            </div>
+                            <button class="edit-btn">Change</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Phone Number</div>
+                                <div class="setting-desc">+44 7700 900123</div>
+                            </div>
+                            <button class="edit-btn">Edit</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Company Name</div>
+                                <div class="setting-desc">Smith Energy Solutions Ltd</div>
+                            </div>
+                            <button class="edit-btn secondary">Request Change</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-title">Security & Privacy</div>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Password</div>
+                                <div class="setting-desc">Last changed 3 months ago</div>
+                            </div>
+                            <button class="edit-btn">Change</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Two-Factor Authentication</div>
+                                <div class="setting-desc">Not enabled</div>
+                            </div>
+                            <button class="edit-btn">Setup</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Login History</div>
+                                <div class="setting-desc">View recent login activity</div>
+                            </div>
+                            <button class="edit-btn">View</button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Data Export</div>
+                                <div class="setting-desc">Download your account data</div>
+                            </div>
+                            <button class="edit-btn">Download</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-title">Notification Preferences</div>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Email Notifications</div>
+                                <div class="setting-desc">Lead alerts and updates</div>
+                            </div>
+                            <div class="toggle-switch active"></div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">SMS Notifications</div>
+                                <div class="setting-desc">Urgent account alerts</div>
+                            </div>
+                            <div class="toggle-switch"></div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Marketing Emails</div>
+                                <div class="setting-desc">Product updates and offers</div>
+                            </div>
+                            <div class="toggle-switch active"></div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Weekly Summary</div>
+                                <div class="setting-desc">Weekly performance report</div>
+                            </div>
+                            <div class="toggle-switch active"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 24px; padding: 16px; background: #f0f9ff; border-radius: 8px;">
+                <p style="font-size: 14px; color: #1e40af; margin-bottom: 4px;">
+                    <strong>Benefits of Three-Tab Layout:</strong>
+                </p>
+                <p style="font-size: 12px; color: #075985;">
+                    • Eliminates redundant content • Clearer organization • More valuable features • Better use of space
+                </p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Status Card Variations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #1f2937;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            min-height: 120px;
+            position: relative;
+        }
+
+        .card-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 8px 0;
+            margin-top: auto;
+        }
+
+        .card-sub {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: auto;
+            margin-bottom: 8px;
+        }
+
+        /* Good Standing States */
+        .good-standing {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        /* Payment Due States */
+        .payment-due {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        /* Overdue States */
+        .overdue {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        /* Multiple Issues */
+        .multiple-issues {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+
+        /* Action Required */
+        .action-required {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        }
+
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Status Card - All States</h1>
+
+        <div class="card-section">
+            <h2 class="section-title">Good Standing States</h2>
+            <div class="cards-grid">
+                <div class="summary-card good-standing">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Nothing Outstanding</div>
+                    <div class="card-sub">Last payment: 28/12/24</div>
+                </div>
+
+                <div class="summary-card good-standing">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Nothing Outstanding</div>
+                    <div class="card-sub">Last payment: 15/12/24</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-section">
+            <h2 class="section-title">Payment Due States</h2>
+            <div class="cards-grid">
+                <div class="summary-card payment-due">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Auto-pay Failed</div>
+                    <div class="card-sub">Grace period: 3 days left</div>
+                </div>
+
+                <div class="summary-card payment-due">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Invoice Due</div>
+                    <div class="card-sub">Due in 5 days</div>
+                </div>
+
+                <div class="summary-card payment-due">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">£247</div>
+                    <div class="card-sub">Payment pending retry</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-section">
+            <h2 class="section-title">Overdue States</h2>
+            <div class="cards-grid">
+                <div class="summary-card overdue">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Payment Overdue</div>
+                    <div class="card-sub">7 days overdue</div>
+                </div>
+
+                <div class="summary-card overdue">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">£1,247</div>
+                    <div class="card-sub">14 days overdue</div>
+                </div>
+
+                <div class="summary-card overdue">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Account Suspended</div>
+                    <div class="card-sub">Payment required</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-section">
+            <h2 class="section-title">Multiple Issues</h2>
+            <div class="cards-grid">
+                <div class="summary-card multiple-issues">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">2 Payments Due</div>
+                    <div class="card-sub">£1,847 Total Due</div>
+                </div>
+
+                <div class="summary-card multiple-issues">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">3 Invoices</div>
+                    <div class="card-sub">£2,456 Total Due</div>
+                </div>
+
+                <div class="summary-card multiple-issues">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Service Suspended</div>
+                    <div class="card-sub">Contact support</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-section">
+            <h2 class="section-title">Action Required</h2>
+            <div class="cards-grid">
+                <div class="summary-card action-required">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Update Payment</div>
+                    <div class="card-sub">Card expired</div>
+                </div>
+
+                <div class="summary-card action-required">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Payment Failed</div>
+                    <div class="card-sub">Retry payment</div>
+                </div>
+
+                <div class="summary-card action-required">
+                    <div class="card-label">Payment Status</div>
+                    <div class="card-value">Verify Account</div>
+                    <div class="card-sub">KYC required</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

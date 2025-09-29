@@ -1,0 +1,92 @@
+DBeaver vs Postico vs TablePlus - A quick review
+October 16, 2018
+
+In this post, we are going to have a quick review of DBeaver, Postico, TablePlus; and compare the pros and cons to see which is the best GUI client for your database management tasks.
+
+1. DBeaver
+DBeaver provides a powerful database client, but it’s a little bit overwhelming.
+
+Supported platforms: DBeaver works on all platforms supported by Eclipse framework, previously Windows, Linux, MacOS, Solaris, AIX, HP-UX. Starting from version 4.2, it limited its support to Windows, MacOS, and Linux only.
+
+Supported Drivers: DBeaver community version can work with any database server which has JDBC driver (which means a lot of databases): MySQL, PostgreSQL, MariaDB, SQLite, Oracle, to DB2, SQL Server, Sybase, MS Access, Teradata, Firebird, Derby, etc. The enterprise adds support for non-JDBC data sources (WMI, MongoDB, Cassandra, Redis).
+
+Pricing: DBeaver has a community version (DBeaver CE) which is free and open source. There’s also an enterprise edition (DBeaver EE) with more driver support, more advanced features and dedicated customer support for enterprises.
+
+DBeaver
+
+Pros:
+
+Cross-platform
+Multiple drivers support
+Assigning connection color
+Entity-relationship diagrams are available
+Built-in reformat SQL
+Cons:
+
+It runs on a Java virtual machine, eats up a lot of RAM while running.
+Confusing icon design and somewhat unintuitive. Sometimes you don’t know where to look for what you need.
+Autocomplete is slow, and not so smart.
+2. Postico
+Postico provides an easy to use interface, making Postgres more accessible for newcomers and specialists alike.
+
+Supported platforms: Postico is available on Mac only.
+
+Supported Drivers: Postico works well with PostgreSQL 8.0 and later. It also supports database systems derived from PostgreSQL like Amazon Redshift or Greenplum, and systems that use the PostgreSQL protocol like CockroachDB.
+
+Pricing: Postico is freemium. The free version has no trial time but it’s limited to 5 saved connections, only a single window per connection, and table filters are disabled. The license costs $39 per user.
+
+Postico
+
+Pros
+
+It has a native experience for Mac
+The interface is simple and clean
+Full-featured table designer
+Advanced filter for the paid version
+Cons:
+
+It’s Mac only
+It supports PostgreSQL only, no support for other databases.
+3. TablePlus
+With a native build and a lightweight size, TablePlus offers a fast and easy solution for managing multiple databases on Mac and Windows.
+
+Supported platforms: TablePlus is built native for each platform. It started out with a native version for Mac, then another version for Windows, and a version for Linux was introduced recently as an alpha release. It also has an iOS version.
+
+Supported Drivers: TablePlus supports a handful of relational databases: MySQL, PostgreSQL, SQLite, Microsoft SQL Server, Amazon Redshift, MariaDB, CockroachDB, Vertica, Oracle; and two popular NoSQL databases: Cassandra and Redis.
+
+Pricing: TablePlus has a free version with full set of features which you can download and use forever, but there are some usage limitations. If you use it heavily, the license costs $59 to remove all those limitations.
+
+TablePlus
+
+Pros:
+
+Native build for each platform so it’s fast, lightweight, and stable.
+Clean and simple interface.
+Multiple drivers support
+Multiple conditions data filter
+Queries history and keyword binding favorite.
+Streaming results and async loading to show queries results faster and doesn’t block the UI.
+Very quick inline editing for table data and structure, you also can edit query results directly.
+Smart query editor with highlight syntax, instant autocomplete, SQL reformat.
+Multiple carets
+A plugin system to extend the app.
+Quick support. TablePlus releases new updates regularly and responds to users’ requests almost immediately.
+Cons:
+
+It currently lacks of some advanced features such as ER Diagram, database compare tool to Diff and Sync, etc.
+
+4. Conclusion
+Go with Postico if you:
+
+Work with PostgreSQL only
+Work on macOS only
+Go with DBeaver if you:
+
+Work with all kinds of databases
+Prefer a an old-fashioned design with all function buttons on the UI.
+Go with TablePlus if you:
+
+Are a fan of native experience
+Work with multiple databases
+Want a modern design with better usability
+Want quick support & development cycle.

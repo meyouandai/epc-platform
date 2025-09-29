@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Holding Fees - Demand-Based Pricing</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        /* Post Code Analysis */
+        .postcode-analysis {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .analysis-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .analysis-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .analysis-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .postcode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .postcode-card {
+            background: white;
+            border: 2px solid;
+            border-radius: 12px;
+            padding: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .postcode-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .demand-free {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        }
+
+        .demand-low {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+        }
+
+        .demand-medium {
+            border-color: #f97316;
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+        }
+
+        .demand-high {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+        }
+
+        .demand-extreme {
+            border-color: #7c2d12;
+            background: linear-gradient(135deg, #451a03 0%, #7c2d12 100%);
+            color: white;
+        }
+
+        .postcode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .postcode-name {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .demand-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-free {
+            background: #10b981;
+            color: white;
+        }
+
+        .badge-low {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .badge-medium {
+            background: #f97316;
+            color: white;
+        }
+
+        .badge-high {
+            background: #ef4444;
+            color: white;
+        }
+
+        .badge-extreme {
+            background: #fbbf24;
+            color: #451a03;
+        }
+
+        .waitlist-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .waitlist-number {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .waitlist-text {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .holding-fee {
+            text-align: center;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+
+        .fee-amount {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .fee-period {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Pricing Summary */
+        .pricing-summary {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #0ea5e9;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .summary-header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .summary-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+        }
+
+        .summary-subtitle {
+            font-size: 14px;
+            color: #075985;
+        }
+
+        .pricing-breakdown {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: center;
+            margin: 16px 0;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .breakdown-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .breakdown-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .breakdown-line:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 16px;
+            padding-top: 12px;
+            margin-top: 8px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .breakdown-label {
+            color: #64748b;
+        }
+
+        .breakdown-value {
+            color: #0f172a;
+            font-weight: 500;
+        }
+
+        .total-badge {
+            background: #0ea5e9;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .total-amount {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .total-period {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* Account Level Benefits */
+        .account-benefits {
+            background: #f0fdf4;
+            border: 2px solid #16a34a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .benefits-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .benefits-icon {
+            width: 40px;
+            height: 40px;
+            background: #16a34a;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .benefits-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #15803d;
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .benefits-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: #166534;
+        }
+
+        .benefit-icon {
+            width: 24px;
+            height: 24px;
+            background: #16a34a;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Demand Explanation */
+        .demand-explanation {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .explanation-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #d97706;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .explanation-text {
+            font-size: 14px;
+            color: #a16207;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .demand-scale {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .scale-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .scale-free { background: #10b981; }
+        .scale-low { background: #f59e0b; }
+        .scale-medium { background: #f97316; }
+        .scale-high { background: #ef4444; }
+        .scale-extreme { background: #7c2d12; }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            border-color: #d1d5db;
+            background: #f9fafb;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+            transform: translateY(-1px);
+        }
+
+        /* Alternatives Section */
+        .alternatives {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .alternatives-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .alternative-option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .alternative-option:hover {
+            border-color: #667eea;
+            background: #f8faff;
+        }
+
+        .option-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .option-desc {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .option-savings {
+            font-size: 12px;
+            font-weight: 600;
+            color: #16a34a;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic Holding Fees - Market-Based Pricing</h1>
+
+        <!-- Main Pause Modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Pause Your Account</div>
+                <div class="modal-subtitle">Holding fees based on real market demand</div>
+            </div>
+
+            <div class="modal-body">
+                <div class="demand-explanation">
+                    <div class="explanation-title">
+                        📊 How Dynamic Pricing Works
+                    </div>
+                    <div class="explanation-text">
+                        Our holding fees reflect real market demand. Post codes with more assessors waiting cost more to reserve, while less popular areas may be free or low-cost to hold.
+                    </div>
+                    <div class="demand-scale">
+                        <div class="scale-item scale-free">FREE<br>0 waiting</div>
+                        <div class="scale-item scale-low">LOW<br>1-5 waiting</div>
+                        <div class="scale-item scale-medium">MED<br>6-15 waiting</div>
+                        <div class="scale-item scale-high">HIGH<br>16-30 waiting</div>
+                        <div class="scale-item scale-extreme">EXTREME<br>31+ waiting</div>
+                    </div>
+                </div>
+
+                <div class="postcode-analysis">
+                    <div class="analysis-header">
+                        <div class="analysis-title">Your Post Code Analysis</div>
+                        <div class="analysis-subtitle">Current demand and holding fees</div>
+                    </div>
+
+                    <div class="postcode-grid">
+                        <div class="postcode-card demand-extreme">
+                            <div class="postcode-header">
+                                <div class="postcode-name">M1</div>
+                                <div class="demand-badge badge-extreme">Extreme</div>
+                            </div>
+                            <div class="waitlist-info">
+                                <div class="waitlist-number">47</div>
+                                <div class="waitlist-text">assessors waiting</div>
+                            </div>
+                            <div class="holding-fee">
+                                <div class="fee-amount">£8/day</div>
+                                <div class="fee-period">per day to hold</div>
+                            </div>
+                        </div>
+
+                        <div class="postcode-card demand-extreme">
+                            <div class="postcode-header">
+                                <div class="postcode-name">M2</div>
+                                <div class="demand-badge badge-extreme">Extreme</div>
+                            </div>
+                            <div class="waitlist-info">
+                                <div class="waitlist-number">41</div>
+                                <div class="waitlist-text">assessors waiting</div>
+                            </div>
+                            <div class="holding-fee">
+                                <div class="fee-amount">£7/day</div>
+                                <div class="fee-period">per day to hold</div>
+                            </div>
+                        </div>
+
+                        <div class="postcode-card demand-high">
+                            <div class="postcode-header">
+                                <div class="postcode-name">M15</div>
+                                <div class="demand-badge badge-high">High</div>
+                            </div>
+                            <div class="waitlist-info">
+                                <div class="waitlist-number">23</div>
+                                <div class="waitlist-text">assessors waiting</div>
+                            </div>
+                            <div class="holding-fee">
+                                <div class="fee-amount">£4/day</div>
+                                <div class="fee-period">per day to hold</div>
+                            </div>
+                        </div>
+
+                        <div class="postcode-card demand-medium">
+                            <div class="postcode-header">
+                                <div class="postcode-name">M25</div>
+                                <div class="demand-badge badge-medium">Medium</div>
+                            </div>
+                            <div class="waitlist-info">
+                                <div class="waitlist-number">12</div>
+                                <div class="waitlist-text">assessors waiting</div>
+                            </div>
+                            <div class="holding-fee">
+                                <div class="fee-amount">£2/day</div>
+                                <div class="fee-period">per day to hold</div>
+                            </div>
+                        </div>
+
+                        <div class="postcode-card demand-low">
+                            <div class="postcode-header">
+                                <div class="postcode-name">M20</div>
+                                <div class="demand-badge badge-low">Low</div>
+                            </div>
+                            <div class="waitlist-info">
+                                <div class="waitlist-number">4</div>
+                                <div class="waitlist-text">assessors waiting</div>
+                            </div>
+                            <div class="holding-fee">
+                                <div class="fee-amount">£1/day</div>
+                                <div class="fee-period">per day to hold</div>
+                            </div>
+                        </div>
+
+                        <div class="postcode-card demand-free">
+                            <div class="postcode-header">
+                                <div class="postcode-name">M3</div>
+                                <div class="demand-badge badge-free">Free</div>
+                            </div>
+                            <div class="waitlist-info">
+                                <div class="waitlist-number">0</div>
+                                <div class="waitlist-text">assessors waiting</div>
+                            </div>
+                            <div class="holding-fee">
+                                <div class="fee-amount">FREE</div>
+                                <div class="fee-period">no holding fee</div>
+                            </div>
+                        </div>
+
+                        <!-- Remaining areas shown collapsed -->
+                        <div style="grid-column: 1/-1; text-align: center; padding: 16px; background: #f1f5f9; border-radius: 8px; color: #64748b; cursor: pointer;">
+                            <strong>+ 6 more areas</strong> (mostly free or low-demand)<br>
+                            <span style="font-size: 12px;">Click to expand all</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-summary">
+                    <div class="summary-header">
+                        <div class="summary-title">7-Day Pause Summary</div>
+                        <div class="summary-subtitle">Total cost to hold all your post codes</div>
+                    </div>
+
+                    <div class="pricing-breakdown">
+                        <div class="breakdown-left">
+                            <div class="breakdown-line">
+                                <span class="breakdown-label">High-demand areas (M1, M2, M15, M25)</span>
+                                <span class="breakdown-value">£147</span>
+                            </div>
+                            <div class="breakdown-line">
+                                <span class="breakdown-label">Low-demand areas (M20, M21, M22, M30)</span>
+                                <span class="breakdown-value">£14</span>
+                            </div>
+                            <div class="breakdown-line">
+                                <span class="breakdown-label">Free areas (M3, M4, M31, M32)</span>
+                                <span class="breakdown-value">£0</span>
+                            </div>
+                            <div class="breakdown-line">
+                                <span class="breakdown-label"><strong>Total for 7 days</strong></span>
+                                <span class="breakdown-value"><strong>£161</strong></span>
+                            </div>
+                        </div>
+                        <div class="total-badge">
+                            <div class="total-amount">£161</div>
+                            <div class="total-period">for 7 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="account-benefits">
+                    <div class="benefits-header">
+                        <div class="benefits-icon">B</div>
+                        <div class="benefits-title">Bronze Account Benefits</div>
+                    </div>
+                    <ul class="benefits-list">
+                        <li>
+                            <div class="benefit-icon">%</div>
+                            No discount on holding fees (unlock discounts with Silver+)
+                        </li>
+                        <li>
+                            <div class="benefit-icon">⏰</div>
+                            Standard 15-day maximum pause duration
+                        </li>
+                        <li>
+                            <div class="benefit-icon">🔔</div>
+                            Free alerts when held areas become available
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="alternatives">
+                    <div class="alternatives-title">💡 Money-Saving Alternatives</div>
+
+                    <div class="alternative-option">
+                        <div class="option-title">Hold Only High-Value Areas</div>
+                        <div class="option-desc">Keep M1 and M2 (your top performers), release the rest</div>
+                        <div class="option-savings">Save £56 - Only £105 for 7 days</div>
+                    </div>
+
+                    <div class="alternative-option">
+                        <div class="option-title">Optimize Coverage Instead</div>
+                        <div class="option-desc">Keep 3 best areas active, pause the rest. Stay earning with reduced costs.</div>
+                        <div class="option-savings">Save £130+ per week vs full operation</div>
+                    </div>
+
+                    <div class="alternative-option">
+                        <div class="option-title">Weekend-Only Mode</div>
+                        <div class="option-desc">Active weekends only, paused weekdays. No holding fees needed.</div>
+                        <div class="option-savings">Save 71% of normal costs</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary">
+                        🔄 Optimize Instead
+                    </button>
+                    <button class="btn btn-success">
+                        ⏸️ Pay £161 & Pause
+                    </button>
+                    <button class="btn btn-primary">
+                        ⚙️ Customize Areas
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Level Comparison -->
+        <div style="background: white; border-radius: 16px; padding: 24px; margin-top: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center; color: #111827; margin-bottom: 24px;">Account Level Holding Benefits</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="border: 2px solid #cd7f32; border-radius: 12px; padding: 20px; background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <div style="background: #cd7f32; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-weight: 700;">B</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #9a3412;">Bronze</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; font-size: 14px; color: #7c2d12;">
+                        <li style="padding: 4px 0;">• Full market rate fees</li>
+                        <li style="padding: 4px 0;">• 15-day max pause</li>
+                        <li style="padding: 4px 0;">• Basic support</li>
+                    </ul>
+                </div>
+
+                <div style="border: 2px solid #c0c0c0; border-radius: 12px; padding: 20px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <div style="background: #c0c0c0; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-weight: 700;">S</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #475569;">Silver</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; font-size: 14px; color: #334155;">
+                        <li style="padding: 4px 0; color: #16a34a; font-weight: 600;">• 25% discount on all holding fees</li>
+                        <li style="padding: 4px 0;">• 30-day max pause</li>
+                        <li style="padding: 4px 0;">• Priority support</li>
+                        <li style="padding: 4px 0;">• Free 1-day grace period</li>
+                    </ul>
+                </div>
+
+                <div style="border: 2px solid #ffd700; border-radius: 12px; padding: 20px; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <div style="background: #ffd700; color: #7c2d12; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-weight: 700;">G</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #d97706;">Gold</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; font-size: 14px; color: #92400e;">
+                        <li style="padding: 4px 0; color: #16a34a; font-weight: 600;">• 50% discount on all holding fees</li>
+                        <li style="padding: 4px 0;">• 60-day max pause</li>
+                        <li style="padding: 4px 0;">• Dedicated account manager</li>
+                        <li style="padding: 4px 0;">• Free 3-day grace period</li>
+                        <li style="padding: 4px 0;">• Holiday mode included</li>
+                    </ul>
+                </div>
+
+                <div style="border: 2px solid #e5e4e2; border-radius: 12px; padding: 20px; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <div style="background: #6366f1; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-weight: 700;">P</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #4338ca;">Platinum</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; font-size: 14px; color: #3730a3;">
+                        <li style="padding: 4px 0; color: #16a34a; font-weight: 600;">• FREE holding for up to 30 days/year</li>
+                        <li style="padding: 4px 0;">• 90-day max pause</li>
+                        <li style="padding: 4px 0;">• VIP support line</li>
+                        <li style="padding: 4px 0;">• Free 7-day grace period</li>
+                        <li style="padding: 4px 0;">• Unlimited holiday mode</li>
+                        <li style="padding: 4px 0;">• Post code buyback guarantee</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 24px; padding: 16px; background: #f0f9ff; border-radius: 8px;">
+                <p style="font-size: 14px; color: #1e40af; margin-bottom: 8px;">
+                    <strong>Upgrade now</strong> and save on holding fees immediately
+                </p>
+                <p style="font-size: 12px; color: #075985;">
+                    Silver upgrade pays for itself after just 2 pauses per year
+                </p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

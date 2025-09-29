@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessor Billing History - Admin Pattern</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #1f2937;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .status-filter {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 100px 120px 200px 120px 120px 100px;
+            gap: 16px;
+            padding: 16px 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #374151;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 100px 120px 200px 120px 120px 100px;
+            gap: 16px;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            align-items: center;
+        }
+
+        .table-row:hover {
+            background: #f9fafb;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .status-badge.paid {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.partial-refund {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-badge.refunded {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        .amount-display {
+            font-weight: 600;
+        }
+
+        .amount-refunded {
+            color: #6b7280;
+            text-decoration: line-through;
+            font-size: 12px;
+            display: block;
+        }
+
+        .net-amount {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .action-btn.primary {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .action-btn.primary:hover {
+            background: #2563eb;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .invoice-summary {
+            margin-bottom: 24px;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .invoice-number h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .amount-large {
+            font-size: 24px;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .amount-details {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .value {
+            color: #6b7280;
+        }
+
+        .breakdown-section {
+            margin-top: 24px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+
+        .breakdown-section h4 {
+            margin-bottom: 12px;
+            color: #374151;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+
+        .breakdown-item.total {
+            border-top: 1px solid #d1d5db;
+            margin-top: 8px;
+            padding-top: 8px;
+            font-weight: 600;
+        }
+
+        .breakdown-positive {
+            color: #059669;
+        }
+
+        .breakdown-negative {
+            color: #dc2626;
+        }
+
+        .leads-section {
+            margin-top: 24px;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .leads-table th,
+        .leads-table td {
+            text-align: left;
+            padding: 8px 12px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .leads-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            font-size: 12px;
+            color: #374151;
+        }
+
+        .leads-table td {
+            font-size: 14px;
+        }
+
+        .refunded-lead {
+            background: #fef2f2;
+            color: #7f1d1d;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            padding: 8px 16px;
+            border: 1px solid #3b82f6;
+            border-radius: 6px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .no-refunds {
+            color: #6b7280;
+            font-style: italic;
+            text-align: center;
+            padding: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Billing History</h1>
+            <p>View your invoice history and payment records</p>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search invoices, periods...">
+            </div>
+            <select class="status-filter">
+                <option>All Invoices</option>
+                <option>Paid</option>
+                <option>Pending</option>
+                <option>Partial Refunds</option>
+            </select>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <div>Date</div>
+                <div>Invoice ID</div>
+                <div>Period</div>
+                <div>Amount</div>
+                <div>Status</div>
+                <div>Actions</div>
+            </div>
+
+            <!-- Standard Invoice (No Refunds) -->
+            <div class="table-row">
+                <div>24 Jan 2025</div>
+                <div>INV-2025-001</div>
+                <div>1 Jan - 24 Jan 2025</div>
+                <div class="amount-display">£450</div>
+                <div><span class="status-badge paid">Paid</span></div>
+                <div><button class="action-btn primary" onclick="openModal('modal1')">View</button></div>
+            </div>
+
+            <!-- Individual Lead Refunds -->
+            <div class="table-row">
+                <div>31 Dec 2024</div>
+                <div>INV-2024-089</div>
+                <div>15 Dec - 31 Dec 2024</div>
+                <div class="amount-display">
+                    <span class="amount-refunded">£450</span>
+                    <span class="net-amount">£375</span>
+                </div>
+                <div><span class="status-badge partial-refund">Partial Refund</span></div>
+                <div><button class="action-btn primary" onclick="openModal('modal2')">View</button></div>
+            </div>
+
+            <!-- Partial Period Refund -->
+            <div class="table-row">
+                <div>30 Nov 2024</div>
+                <div>INV-2024-067</div>
+                <div>15 Nov - 30 Nov 2024</div>
+                <div class="amount-display">
+                    <span class="amount-refunded">£240</span>
+                    <span class="net-amount">£180</span>
+                </div>
+                <div><span class="status-badge partial-refund">Partial Refund</span></div>
+                <div><button class="action-btn primary" onclick="openModal('modal3')">View</button></div>
+            </div>
+
+            <!-- Full Invoice Refund -->
+            <div class="table-row">
+                <div>31 Oct 2024</div>
+                <div>INV-2024-045</div>
+                <div>15 Oct - 31 Oct 2024</div>
+                <div class="amount-display">
+                    <span class="amount-refunded">£300</span>
+                    <span class="net-amount">£0</span>
+                </div>
+                <div><span class="status-badge refunded">Refunded</span></div>
+                <div><button class="action-btn primary" onclick="openModal('modal4')">View</button></div>
+            </div>
+
+            <!-- Pending Invoice -->
+            <div class="table-row">
+                <div>15 Oct 2024</div>
+                <div>INV-2024-044</div>
+                <div>1 Oct - 15 Oct 2024</div>
+                <div class="amount-display">£225</div>
+                <div><span class="status-badge pending">Pending</span></div>
+                <div><button class="action-btn primary" onclick="openModal('modal5')">View</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 1: Standard Invoice -->
+    <div class="modal-overlay" id="modal1">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Invoice Details</h2>
+                <button class="modal-close" onclick="closeModal('modal1')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-summary">
+                    <div class="invoice-header">
+                        <div class="invoice-number">
+                            <h3>INV-2025-001</h3>
+                            <span class="status-badge paid">Paid</span>
+                        </div>
+                        <div class="invoice-amount">
+                            <div class="amount-large">£450</div>
+                            <div class="amount-details">30 leads purchased</div>
+                        </div>
+                    </div>
+                    <div class="invoice-info">
+                        <div class="info-row">
+                            <span class="label">Period:</span>
+                            <span class="value">1 Jan - 24 Jan 2025</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Invoice Date:</span>
+                            <span class="value">24 Jan 2025</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Payment Date:</span>
+                            <span class="value">24 Jan 2025</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Payment Method:</span>
+                            <span class="value">Card ending 4532</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leads-section">
+                    <h4>Lead Details (30 leads)</h4>
+                    <table class="leads-table">
+                        <thead>
+                            <tr>
+                                <th>Lead ID</th>
+                                <th>Date</th>
+                                <th>Postcode</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>250101A</td>
+                                <td>1 Jan 2025</td>
+                                <td>W1A</td>
+                                <td>£15</td>
+                                <td>Billed</td>
+                            </tr>
+                            <tr>
+                                <td>250102B</td>
+                                <td>2 Jan 2025</td>
+                                <td>WC1A</td>
+                                <td>£15</td>
+                                <td>Billed</td>
+                            </tr>
+                            <tr>
+                                <td>250103C</td>
+                                <td>3 Jan 2025</td>
+                                <td>EC1A</td>
+                                <td>£15</td>
+                                <td>Billed</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 16px; color: #6b7280;">
+                                    ... 27 more leads
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('modal1')">Close</button>
+                <button class="btn-primary">Download Invoice</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Individual Lead Refunds -->
+    <div class="modal-overlay" id="modal2">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Invoice Details</h2>
+                <button class="modal-close" onclick="closeModal('modal2')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-summary">
+                    <div class="invoice-header">
+                        <div class="invoice-number">
+                            <h3>INV-2024-089</h3>
+                            <span class="status-badge partial-refund">Partial Refund</span>
+                        </div>
+                        <div class="invoice-amount">
+                            <div class="amount-large">£375</div>
+                            <div class="amount-details">Net amount after refunds</div>
+                        </div>
+                    </div>
+                    <div class="invoice-info">
+                        <div class="info-row">
+                            <span class="label">Period:</span>
+                            <span class="value">15 Dec - 31 Dec 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Invoice Date:</span>
+                            <span class="value">31 Dec 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Payment Date:</span>
+                            <span class="value">31 Dec 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Payment Method:</span>
+                            <span class="value">Card ending 4532</span>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-section">
+                        <h4>Transaction Breakdown</h4>
+                        <div class="breakdown-item">
+                            <span>Original charges (30 leads)</span>
+                            <span class="breakdown-positive">+£450</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Lead refunds (5 leads)</span>
+                            <span class="breakdown-negative">-£75</span>
+                        </div>
+                        <div class="breakdown-item total">
+                            <span><strong>Net amount charged</strong></span>
+                            <span class="breakdown-positive"><strong>£375</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leads-section">
+                    <h4>Lead Details (30 leads, 5 refunded)</h4>
+                    <table class="leads-table">
+                        <thead>
+                            <tr>
+                                <th>Lead ID</th>
+                                <th>Date</th>
+                                <th>Postcode</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>241215A</td>
+                                <td>15 Dec 2024</td>
+                                <td>W1A</td>
+                                <td>£15</td>
+                                <td>Billed</td>
+                            </tr>
+                            <tr class="refunded-lead">
+                                <td>241216B</td>
+                                <td>16 Dec 2024</td>
+                                <td>WC1A</td>
+                                <td>£15</td>
+                                <td>Refunded</td>
+                            </tr>
+                            <tr>
+                                <td>241217C</td>
+                                <td>17 Dec 2024</td>
+                                <td>EC1A</td>
+                                <td>£15</td>
+                                <td>Billed</td>
+                            </tr>
+                            <tr class="refunded-lead">
+                                <td>241218D</td>
+                                <td>18 Dec 2024</td>
+                                <td>N1</td>
+                                <td>£15</td>
+                                <td>Refunded</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 16px; color: #6b7280;">
+                                    ... 26 more leads (3 more refunded)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('modal2')">Close</button>
+                <button class="btn-primary">Download Invoice</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Partial Period Refund -->
+    <div class="modal-overlay" id="modal3">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Invoice Details</h2>
+                <button class="modal-close" onclick="closeModal('modal3')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-summary">
+                    <div class="invoice-header">
+                        <div class="invoice-number">
+                            <h3>INV-2024-067</h3>
+                            <span class="status-badge partial-refund">Partial Refund</span>
+                        </div>
+                        <div class="invoice-amount">
+                            <div class="amount-large">£180</div>
+                            <div class="amount-details">Net amount after refunds</div>
+                        </div>
+                    </div>
+                    <div class="invoice-info">
+                        <div class="info-row">
+                            <span class="label">Period:</span>
+                            <span class="value">15 Nov - 30 Nov 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Invoice Date:</span>
+                            <span class="value">30 Nov 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Payment Date:</span>
+                            <span class="value">30 Nov 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Payment Method:</span>
+                            <span class="value">Card ending 4532</span>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-section">
+                        <h4>Transaction Breakdown</h4>
+                        <div class="breakdown-item">
+                            <span>Original charges (16 leads)</span>
+                            <span class="breakdown-positive">+£240</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Partial period refund</span>
+                            <span class="breakdown-negative">-£60</span>
+                        </div>
+                        <div class="breakdown-item total">
+                            <span><strong>Net amount charged</strong></span>
+                            <span class="breakdown-positive"><strong>£180</strong></span>
+                        </div>
+                        <div style="margin-top: 12px; padding: 8px; background: #fef3c7; border-radius: 4px; font-size: 14px;">
+                            <strong>Note:</strong> Refund applied due to system outage affecting service availability during this period.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leads-section">
+                    <h4>Lead Details (16 leads)</h4>
+                    <div class="no-refunds">
+                        All individual leads were delivered successfully. Refund applied at period level due to service issues.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('modal3')">Close</button>
+                <button class="btn-primary">Download Invoice</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Full Invoice Refund -->
+    <div class="modal-overlay" id="modal4">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Invoice Details</h2>
+                <button class="modal-close" onclick="closeModal('modal4')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-summary">
+                    <div class="invoice-header">
+                        <div class="invoice-number">
+                            <h3>INV-2024-045</h3>
+                            <span class="status-badge refunded">Refunded</span>
+                        </div>
+                        <div class="invoice-amount">
+                            <div class="amount-large">£0</div>
+                            <div class="amount-details">Fully refunded</div>
+                        </div>
+                    </div>
+                    <div class="invoice-info">
+                        <div class="info-row">
+                            <span class="label">Period:</span>
+                            <span class="value">15 Oct - 31 Oct 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Invoice Date:</span>
+                            <span class="value">31 Oct 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Refund Date:</span>
+                            <span class="value">5 Nov 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Refund Method:</span>
+                            <span class="value">Credit to card ending 4532</span>
+                        </div>
+                    </div>
+
+                    <div class="breakdown-section">
+                        <h4>Transaction Breakdown</h4>
+                        <div class="breakdown-item">
+                            <span>Original charges (20 leads)</span>
+                            <span class="breakdown-positive">+£300</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Full invoice refund</span>
+                            <span class="breakdown-negative">-£300</span>
+                        </div>
+                        <div class="breakdown-item total">
+                            <span><strong>Net amount charged</strong></span>
+                            <span><strong>£0</strong></span>
+                        </div>
+                        <div style="margin-top: 12px; padding: 8px; background: #fef2f2; border-radius: 4px; font-size: 14px;">
+                            <strong>Reason:</strong> Invoice fully refunded due to data quality issues identified during this period.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leads-section">
+                    <h4>Lead Details (20 leads - all refunded)</h4>
+                    <div class="no-refunds">
+                        All leads from this period were refunded due to data quality issues.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('modal4')">Close</button>
+                <button class="btn-secondary">Download Refund Receipt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 5: Pending Invoice -->
+    <div class="modal-overlay" id="modal5">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Invoice Details</h2>
+                <button class="modal-close" onclick="closeModal('modal5')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-summary">
+                    <div class="invoice-header">
+                        <div class="invoice-number">
+                            <h3>INV-2024-044</h3>
+                            <span class="status-badge pending">Pending</span>
+                        </div>
+                        <div class="invoice-amount">
+                            <div class="amount-large">£225</div>
+                            <div class="amount-details">15 leads purchased</div>
+                        </div>
+                    </div>
+                    <div class="invoice-info">
+                        <div class="info-row">
+                            <span class="label">Period:</span>
+                            <span class="value">1 Oct - 15 Oct 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Invoice Date:</span>
+                            <span class="value">15 Oct 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Due Date:</span>
+                            <span class="value">14 Nov 2024</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Days Overdue:</span>
+                            <span class="value" style="color: #dc2626; font-weight: 600;">73 days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leads-section">
+                    <h4>Lead Details (15 leads)</h4>
+                    <table class="leads-table">
+                        <thead>
+                            <tr>
+                                <th>Lead ID</th>
+                                <th>Date</th>
+                                <th>Postcode</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>241001A</td>
+                                <td>1 Oct 2024</td>
+                                <td>SW1</td>
+                                <td>£15</td>
+                                <td>Outstanding</td>
+                            </tr>
+                            <tr>
+                                <td>241002B</td>
+                                <td>2 Oct 2024</td>
+                                <td>SW3</td>
+                                <td>£15</td>
+                                <td>Outstanding</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 16px; color: #6b7280;">
+                                    ... 13 more leads
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('modal5')">Close</button>
+                <button class="btn-primary">Pay Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

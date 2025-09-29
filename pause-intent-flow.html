@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pause Intent Flow - Understanding User Needs</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .flow-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background: white;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Intent Options */
+        .intent-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .intent-option {
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .intent-option:hover {
+            border-color: #667eea;
+            background: #f9fafb;
+        }
+
+        .intent-option.selected {
+            border-color: #667eea;
+            background: #eef2ff;
+        }
+
+        .intent-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .intent-desc {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        /* Solution Cards */
+        .solution-card {
+            background: #f0fdf4;
+            border: 2px solid #16a34a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .solution-card.warning {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .solution-card.info {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .solution-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .solution-icon {
+            font-size: 24px;
+        }
+
+        .solution-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .solution-details {
+            margin-left: 36px;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0;
+        }
+
+        .detail-list li {
+            padding: 6px 0;
+            font-size: 14px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Pricing Display */
+        .pricing-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+        }
+
+        .price-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .price-value {
+            font-size: 14px;
+            color: #111827;
+            font-weight: 500;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        /* Feature Comparison */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: #f3f4f6;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            font-size: 14px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check-mark {
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        .x-mark {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        /* Timeline */
+        .timeline {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .timeline-marker {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding-top: 4px;
+        }
+
+        .timeline-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .timeline-desc {
+            font-size: 12px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Intent-Based Pause Flow</h1>
+
+        <!-- Step 1: Initial Intent Discovery -->
+        <div class="flow-section">
+            <div class="section-title">Step 1: Understanding Why You're Pausing</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Why are you pausing?</div>
+                    <div class="modal-subtitle">We'll help you find the best solution</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="intent-options">
+                        <div class="intent-option">
+                            <div class="intent-title">🏝️ Going on holiday</div>
+                            <div class="intent-desc">I'll be away for a week or two and can't handle leads</div>
+                        </div>
+
+                        <div class="intent-option">
+                            <div class="intent-title">💼 Too busy with current work</div>
+                            <div class="intent-desc">I have enough work and need to pause new leads temporarily</div>
+                        </div>
+
+                        <div class="intent-option">
+                            <div class="intent-title">💰 Reducing expenses</div>
+                            <div class="intent-desc">I need to cut costs but want to stay active in the platform</div>
+                        </div>
+
+                        <div class="intent-option">
+                            <div class="intent-title">🔧 Taking a break from the business</div>
+                            <div class="intent-desc">I'm not sure when I'll return but want to keep my account</div>
+                        </div>
+
+                        <div class="intent-option">
+                            <div class="intent-title">❌ Not working out for me</div>
+                            <div class="intent-desc">The platform isn't meeting my needs</div>
+                        </div>
+
+                        <div class="intent-option">
+                            <div class="intent-title">🏥 Personal circumstances</div>
+                            <div class="intent-desc">Health, family, or other personal matters</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Holiday Solution -->
+        <div class="flow-section">
+            <div class="section-title">Holiday/Vacation Solution</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Holiday Mode</div>
+                    <div class="modal-subtitle">Keep your post codes while you're away</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="solution-card">
+                        <div class="solution-header">
+                            <span class="solution-icon">🏝️</span>
+                            <span class="solution-title">Perfect for your holiday!</span>
+                        </div>
+                        <div class="solution-details">
+                            <ul class="detail-list">
+                                <li>✅ All 12 post codes reserved for you</li>
+                                <li>✅ No one can claim your areas</li>
+                                <li>✅ Automatic reactivation on return date</li>
+                                <li>✅ No leads or charges during holiday</li>
+                                <li>✅ Small holding fee keeps areas secure</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="pricing-box">
+                        <div class="price-row">
+                            <span class="price-label">Holiday duration</span>
+                            <span class="price-value">7 days</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price-label">Daily holding fee</span>
+                            <span class="price-value">£3/day</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price-label">Post codes protected</span>
+                            <span class="price-value">12 areas</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price-label">Total cost</span>
+                            <span class="price-value">£21</span>
+                        </div>
+                    </div>
+
+                    <div style="background: #f0f9ff; border: 1px solid #3b82f6; border-radius: 8px; padding: 12px; margin: 16px 0;">
+                        <p style="font-size: 13px; color: #1e40af;">
+                            <strong>Smart tip:</strong> Your high-demand areas (M1, M2, M15) have 41 assessors on the waitlist.
+                            The £21 holding fee is much less than the potential lost revenue if you lose these areas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Choose Different Option</button>
+                    <button class="btn btn-success">Activate Holiday Mode</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Too Busy Solution -->
+        <div class="flow-section">
+            <div class="section-title">Too Busy / Work Overload Solution</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Workload Management Options</div>
+                    <div class="modal-subtitle">Control your lead flow without losing coverage</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="solution-card info">
+                        <div class="solution-header">
+                            <span class="solution-icon">🎯</span>
+                            <span class="solution-title">Smart Throttling</span>
+                        </div>
+                        <div class="solution-details">
+                            <p style="font-size: 14px; color: #374151; margin-bottom: 12px;">
+                                Instead of pausing completely, reduce your lead intake:
+                            </p>
+                            <ul class="detail-list">
+                                <li>🔧 Set daily lead limit (e.g., max 2 per day)</li>
+                                <li>📍 Keep only your best performing post codes</li>
+                                <li>⏰ Set availability hours (e.g., mornings only)</li>
+                                <li>💰 Reduce spend by 70-80% instantly</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Lead Control</th>
+                                <th>Post Codes</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Full Pause</strong></td>
+                                <td>No leads</td>
+                                <td><span class="x-mark">✗ Lost</span></td>
+                                <td>£0</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Smart Throttle</strong></td>
+                                <td>2-3 per day</td>
+                                <td><span class="check-mark">✓ Keep all</span></td>
+                                <td>~£30/week</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Selective Areas</strong></td>
+                                <td>Reduced</td>
+                                <td><span class="check-mark">✓ Keep best</span></td>
+                                <td>~£50/week</td>
+                            </tr>
+                        </tbody>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Full Pause</button>
+                    <button class="btn btn-primary">Set Up Throttling</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Reduction Solution -->
+        <div class="flow-section">
+            <div class="section-title">Cost Reduction Solution</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Optimize Your Coverage</div>
+                    <div class="modal-subtitle">Reduce costs while staying active</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="solution-card info">
+                        <div class="solution-header">
+                            <span class="solution-icon">📊</span>
+                            <span class="solution-title">Your Lead Analytics</span>
+                        </div>
+                        <div class="solution-details">
+                            <p style="font-size: 14px; color: #374151; margin-bottom: 12px;">
+                                Based on your last 30 days of data:
+                            </p>
+                            <table style="width: 100%; font-size: 13px;">
+                                <tr>
+                                    <td style="padding: 8px;">M1, M2, M15</td>
+                                    <td style="text-align: right; font-weight: 600;">68% of revenue</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px;">M25, M20</td>
+                                    <td style="text-align: right; font-weight: 600;">22% of revenue</td>
+                                </tr>
+                                <tr style="color: #6b7280;">
+                                    <td style="padding: 8px;">Other 7 areas</td>
+                                    <td style="text-align: right;">10% of revenue</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="pricing-box">
+                        <div class="price-row">
+                            <span class="price-label">Current monthly spend</span>
+                            <span class="price-value">£450</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price-label">Optimized (5 areas)</span>
+                            <span class="price-value">£280</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price-label">Revenue impact</span>
+                            <span class="price-value" style="color: #16a34a;">-10% only</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price-label">Monthly savings</span>
+                            <span class="price-value" style="color: #16a34a;">£170</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success" style="width: 100%; margin-top: 16px;">
+                        Optimize My Coverage Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Extended Break Solution -->
+        <div class="flow-section">
+            <div class="section-title">Extended Break / Uncertain Return</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Extended Break Options</div>
+                    <div class="modal-subtitle">For when you're not sure when you'll return</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">1</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Months 1-3: Hibernation Mode</div>
+                                <div class="timeline-desc">£10/month - Account active, can browse leads, post codes released</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Month 4-12: Standby Status</div>
+                                <div class="timeline-desc">£5/month - Account preserved, historical data saved</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">3</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">After 12 months</div>
+                                <div class="timeline-desc">Free - Account frozen, reactivation requires verification</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="solution-card warning">
+                        <div class="solution-header">
+                            <span class="solution-icon">⚠️</span>
+                            <span class="solution-title">What you'll lose</span>
+                        </div>
+                        <div class="solution-details">
+                            <ul class="detail-list">
+                                <li>❌ All 12 post codes immediately released</li>
+                                <li>❌ Trust level may reset on return</li>
+                                <li>❌ Priority status in high-demand areas</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="solution-card">
+                        <div class="solution-header">
+                            <span class="solution-icon">✅</span>
+                            <span class="solution-title">What you'll keep</span>
+                        </div>
+                        <div class="solution-details">
+                            <ul class="detail-list">
+                                <li>✓ Account credentials and profile</li>
+                                <li>✓ Historical performance data</li>
+                                <li>✓ Customer reviews and ratings</li>
+                                <li>✓ Ability to return anytime</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Reconsider</button>
+                    <button class="btn btn-warning">Enter Hibernation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Not Working Out Solution -->
+        <div class="flow-section">
+            <div class="section-title">Platform Not Meeting Needs</div>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Before you go...</div>
+                    <div class="modal-subtitle">Let us try to help</div>
+                </div>
+
+                <div class="modal-body">
+                    <div style="background: #f0f9ff; border: 1px solid #3b82f6; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                        <h4 style="color: #1e40af; margin-bottom: 12px;">💡 Can we help fix the issue?</h4>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <button class="btn btn-primary" style="width: 100%;">Lead quality issues</button>
+                            <button class="btn btn-primary" style="width: 100%;">Not enough leads</button>
+                            <button class="btn btn-primary" style="width: 100%;">Too expensive</button>
+                            <button class="btn btn-primary" style="width: 100%;">Technical problems</button>
+                            <button class="btn btn-primary" style="width: 100%;">Speak to support</button>
+                        </div>
+                    </div>
+
+                    <div class="solution-card">
+                        <div class="solution-header">
+                            <span class="solution-icon">🎁</span>
+                            <span class="solution-title">Special Retention Offer</span>
+                        </div>
+                        <div class="solution-details">
+                            <p style="font-size: 14px; color: #374151; margin-bottom: 12px;">
+                                We value your business. Here's an exclusive offer:
+                            </p>
+                            <ul class="detail-list">
+                                <li>🎯 50% off next month's spending</li>
+                                <li>🏆 Upgrade to Silver status instantly</li>
+                                <li>📞 Priority support line access</li>
+                                <li>💰 £100 credit for premium post codes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <p style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">
+                            No strings attached - cancel anytime
+                        </p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Pause Anyway</button>
+                    <button class="btn btn-success">Accept Offer</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

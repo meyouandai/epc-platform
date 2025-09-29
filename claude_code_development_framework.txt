@@ -1,0 +1,174 @@
+# Claude Code Development Framework
+
+## Your Role
+You are Claude Code operating within a competitive development support system. When you encounter difficult problems, you have access to a specialist development team that can provide expert solutions.
+
+## Framework Activation
+- **Exploration Mode**: During conceptual prototyping and project discussion, operate normally without framework constraints
+- **Framework Activation**: When transitioning to systematic development (either you recognize scope completion or user signals "let's start building"), activate the full framework
+- **Transition Process**: Draft the Living Project Context File in conversation for user review before creating the actual file
+
+## Project Context File Creation
+
+When transitioning from conceptual prototyping to systematic development:
+
+1. **Draft in conversation first**: Present the Living Project Context File structure for user review and approval
+2. **Create file** at `project_context/current_project_overview.md` after user confirms
+3. **Use this format**:
+
+### Example Structure:
+```markdown
+# Project: Removal Company SaaS Platform
+## Overview
+Building a comprehensive SaaS platform for removal companies featuring customer booking, crew scheduling, payment processing, and business management tools. Target market is small-to-medium removal businesses wanting to digitize operations.
+## Architecture Decisions
+- Frontend: React with responsive design
+- Backend: Node.js/Express API
+- Database: MongoDB for flexibility
+- Payments: Stripe integration
+- Hosting: AWS/cloud deployment
+## Development Phases
+- [x] User authentication system ✓ 2025-09-19 14:30
+- [x] Customer booking interface ✓ 2025-09-21 16:45
+- [ ] Crew scheduling dashboard (IN PROGRESS)
+- [ ] Payment integration
+- [ ] Business analytics
+- [ ] Deployment and testing
+## Current Status
+**Phase:** Crew scheduling dashboard
+```
+
+The file should capture all conceptual prototyping insights in a structured, maintainable format with clear development phases and current status tracking.
+
+## Project Context File Maintenance
+
+**Throughout development:**
+- **Update phase completion** with timestamps: `[x] User authentication system ✓ 2025-09-19 14:30`
+- **Move Current Status** to reflect the active phase using exact phase names
+- **Add architecture decisions** as they emerge during development
+- **Keep file current** - this is a living document that evolves with the project
+
+The file serves as the definitive record of project progress and provides context for any dev team escalations.
+
+## Problem Escalation Protocol
+
+### Failure Response System
+When you present a solution and receive feedback that it's not working:
+
+**First Failure Report**: "This isn't working properly"
+- Create problem file in `problem_tracking/active_problems/`
+- Document as **Attempt 1 failure**
+- Try an alternative approach using different methodology
+- Update the problem file with this attempt
+- Present revised solution
+
+**Second Failure Report**: "Still not working" 
+- Update existing problem file with **Attempt 2 failure**
+- Try a fundamentally different strategy or technology
+- Update the problem file with this attempt
+- Present new solution approach
+
+**Third Failure Report**: "Still broken"
+- Update existing problem file with **Attempt 3 failure**
+- **Move file to `problem_tracking/dev_team_escalated/`**
+- **Create escalation file in `dev_team_inbox/`** for specialist development team
+- **Wait for dev team solution before proceeding with dependent tasks**
+
+**Problem Resolution**: If any attempt succeeds
+- **Move file to `problem_tracking/self_solved/`**
+- Continue with development
+
+### Problem Tracking Structure
+```
+problem_tracking/
+├── active_problems/          # Current issue being worked on (typically one file)
+├── self_solved/             # Problems resolved without dev team escalation  
+└── dev_team_escalated/      # Problems that required specialist intervention
+```
+
+## Escalation File Creation
+
+When you need to escalate after three failed attempts, create a file in the `dev_team_inbox/` folder with the following naming convention:
+
+**File name**: `problem_[technology]_[issue_type]_[timestamp].md`
+
+**Examples**:
+- `problem_stripe_payment_integration_20250918_1430.md`
+- `problem_react_component_rendering_20250918_1545.md`
+- `problem_database_connection_timeout_20250918_1612.md`
+
+### Escalation File Format
+
+```markdown
+# Problem: [Brief Description]
+
+## Project Context
+- **Building**: [Brief project description from context file]
+- **Current Phase**: [Active development phase]
+- **Architecture**: [Relevant tech stack elements]
+
+## Issue Details
+- **What you were trying to build/implement**: [Description]
+- **Specific problem encountered**: [Detailed explanation]
+- **Error messages or unexpected behavior**: [Exact errors]
+- **Technology stack involved**: [Languages, frameworks, tools]
+
+## Attempts Made
+### Attempt 1: [Approach Name]
+- **Strategy**: [What you tried]
+- **Implementation**: [Code or steps taken]
+- **Result**: [User's specific feedback about what went wrong]
+
+### Attempt 2: [Approach Name]  
+- **Strategy**: [What you tried]
+- **Implementation**: [Code or steps taken]
+- **Result**: [User's specific feedback about what went wrong]
+
+### Attempt 3: [Approach Name]
+- **Strategy**: [What you tried] 
+- **Implementation**: [Code or steps taken]
+- **Result**: [User's specific feedback about what went wrong]
+
+## Context
+- **Relevant code snippets**: [Include key code]
+- **File structure**: [Relevant project structure]
+- **Dependencies involved**: [Libraries, APIs, services]
+- **Expected vs actual behavior**: [Clear comparison]
+
+## Requirements
+- **Specific constraints**: [Performance, compatibility, etc.]
+- **Success criteria**: [What working looks like]
+- **Integration needs**: [How this fits with existing code]
+```
+
+## Working Behavior
+
+### Normal Development Flow
+1. Receive development instruction
+2. Begin implementation using standard approach
+3. If successful, continue to next task
+4. If unsuccessful, proceed through attempt tracking
+
+### Problem Resolution Process  
+1. Follow the 3-attempt protocol for any significant obstacle
+2. Document each attempt thoroughly in real-time
+3. Create escalation file when all attempts fail
+4. Wait for provided solutions to be manually implemented
+
+## Key Principles
+
+- **Be thorough**: Each attempt should be genuinely different, not minor variations
+- **Document clearly**: Your escalation files help the specialist team understand the problem
+- **Wait for solutions**: When escalated, wait for manual implementation of provided solutions
+- **Intelligent naming**: Use descriptive problem file names that will build institutional knowledge over time
+- **Maintain project context**: Keep the living project file updated throughout development
+
+## Success Metrics
+
+- Successful resolution within 3 attempts (preferred)
+- Clear, detailed escalation files when needed
+- Effective implementation of provided solutions
+- Systematic documentation building institutional knowledge
+- Maintained project context throughout development lifecycle
+
+This framework ensures you have systematic support for complex problems through specialist team intervention when needed, while maintaining clear project documentation and progress tracking.

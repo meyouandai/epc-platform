@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Services Selection UX</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .variation {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .variation-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .variation-subtitle {
+            color: #64748b;
+            margin-bottom: 32px;
+            font-size: 16px;
+        }
+
+        /* Pattern 1: Category Tabs with Service Cards */
+        .tab-navigation {
+            display: flex;
+            gap: 4px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #64748b;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #1e293b;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .service-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .service-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .service-card.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .service-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .service-description {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .service-price {
+            color: #059669;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .checkbox-indicator {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .service-card.selected .checkbox-indicator {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .service-card.selected .checkbox-indicator::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Pattern 2: Grouped Toggle Lists */
+        .service-groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .service-group {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .group-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+        }
+
+        .group-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .toggle-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-info {
+            flex: 1;
+        }
+
+        .toggle-title {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .toggle-subtitle {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .toggle-switch.active {
+            background: #3b82f6;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Pattern 3: Wizard Steps */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .step.active .step-number {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #10b981;
+            color: white;
+        }
+
+        .step-line {
+            width: 80px;
+            height: 2px;
+            background: #e2e8f0;
+            margin: 0 16px;
+        }
+
+        .step.completed .step-line {
+            background: #10b981;
+        }
+
+        .wizard-content {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .wizard-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .wizard-subtitle {
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        .service-checklist {
+            display: grid;
+            gap: 12px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .checklist-item.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .checklist-item.selected .checkbox {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .checklist-item.selected .checkbox::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Pattern 4: Drag & Drop Service Builder */
+        .service-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .available-services {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            border: 2px dashed #cbd5e0;
+        }
+
+        .selected-services {
+            background: #eff6ff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 2px solid #3b82f6;
+        }
+
+        .service-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .service-pill:hover {
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .service-pill.selected {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .service-pill .remove-btn {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        /* Pattern 5: Feature Matrix */
+        .feature-matrix {
+            overflow-x: auto;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .matrix-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .feature-toggle {
+            width: 40px;
+            height: 20px;
+            background: #d1d5db;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .feature-toggle.active {
+            background: #10b981;
+        }
+
+        .feature-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+
+        .feature-toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        .summary-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Pattern 1: Category Tabs with Service Cards -->
+        <div class="variation">
+            <h2 class="variation-title">Pattern 1: Category Tabs with Service Cards</h2>
+            <p class="variation-subtitle">Visual card-based selection with clear categorization</p>
+
+            <div class="tab-navigation">
+                <button class="tab-btn active">Certificates</button>
+                <button class="tab-btn">Assessments</button>
+                <button class="tab-btn">Supporting Services</button>
+                <button class="tab-btn">Consultation</button>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card selected" style="position: relative;">
+                    <div class="checkbox-indicator"></div>
+                    <div class="service-header">
+                        <div class="service-icon" style="background: #dbeafe; color: #1d4ed8;">🏠</div>
+                        <div class="service-title">Domestic EPC Certificate</div>
+                    </div>
+                    <div class="service-description">Energy performance certificates for residential properties under 1000m²</div>
+                    <div class="service-price">From £45</div>
+                </div>
+
+                <div class="service-card" style="position: relative;">
+                    <div class="checkbox-indicator"></div>
+                    <div class="service-header">
+                        <div class="service-icon" style="background: #fef3c7; color: #d97706;">🏢</div>
+                        <div class="service-title">Commercial EPC Certificate</div>
+                    </div>
+                    <div class="service-description">Energy performance certificates for commercial and industrial buildings</div>
+                    <div class="service-price">From £120</div>
+                </div>
+
+                <div class="service-card selected" style="position: relative;">
+                    <div class="checkbox-indicator"></div>
+                    <div class="service-header">
+                        <div class="service-icon" style="background: #ecfdf5; color: #059669;">📊</div>
+                        <div class="service-title">Display Energy Certificates</div>
+                    </div>
+                    <div class="service-description">DEC certificates for public buildings over 1000m²</div>
+                    <div class="service-price">From £80</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern 2: Grouped Toggle Lists -->
+        <div class="variation">
+            <h2 class="variation-title">Pattern 2: Grouped Toggle Lists</h2>
+            <p class="variation-subtitle">Clean toggle interface organized by service categories</p>
+
+            <div class="service-groups">
+                <div class="service-group">
+                    <div class="group-header">
+                        <div class="group-icon" style="background: #3b82f6;">📋</div>
+                        <div class="group-title">Energy Performance Certificates</div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Domestic EPC Certificate</div>
+                            <div class="toggle-subtitle">Residential properties under 1000m²</div>
+                        </div>
+                        <div class="toggle-switch active"></div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Commercial EPC Certificate</div>
+                            <div class="toggle-subtitle">Commercial and industrial buildings</div>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Display Energy Certificates</div>
+                            <div class="toggle-subtitle">Public buildings over 1000m²</div>
+                        </div>
+                        <div class="toggle-switch active"></div>
+                    </div>
+                </div>
+
+                <div class="service-group">
+                    <div class="group-header">
+                        <div class="group-icon" style="background: #10b981;">🔍</div>
+                        <div class="group-title">Energy Assessments</div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">SAP Calculations</div>
+                            <div class="toggle-subtitle">Standard Assessment Procedure calculations</div>
+                        </div>
+                        <div class="toggle-switch active"></div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Energy Audits</div>
+                            <div class="toggle-subtitle">Comprehensive energy efficiency reviews</div>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Retrofit Advice</div>
+                            <div class="toggle-subtitle">Energy improvement recommendations</div>
+                        </div>
+                        <div class="toggle-switch active"></div>
+                    </div>
+                </div>
+
+                <div class="service-group">
+                    <div class="group-header">
+                        <div class="group-icon" style="background: #f59e0b;">🛠️</div>
+                        <div class="group-title">Supporting Services</div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Floor Plans</div>
+                            <div class="toggle-subtitle">Detailed property layout drawings</div>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Photography</div>
+                            <div class="toggle-subtitle">Professional property photography</div>
+                        </div>
+                        <div class="toggle-switch active"></div>
+                    </div>
+
+                    <div class="toggle-item">
+                        <div class="toggle-info">
+                            <div class="toggle-title">Carbon Monoxide Testing</div>
+                            <div class="toggle-subtitle">Safety testing for gas appliances</div>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern 3: Wizard Steps -->
+        <div class="variation">
+            <h2 class="variation-title">Pattern 3: Step-by-Step Service Builder</h2>
+            <p class="variation-subtitle">Guided wizard for building your service portfolio</p>
+
+            <div class="step-indicator">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                </div>
+            </div>
+
+            <div class="wizard-content">
+                <h3 class="wizard-title">Step 2: Energy Assessment Services</h3>
+                <p class="wizard-subtitle">Select the assessment services you can provide to complement your certificates</p>
+
+                <div class="service-checklist">
+                    <div class="checklist-item selected">
+                        <div class="checkbox"></div>
+                        <div>
+                            <div class="toggle-title">SAP Calculations</div>
+                            <div class="toggle-subtitle">Standard Assessment Procedure for energy efficiency ratings</div>
+                        </div>
+                    </div>
+
+                    <div class="checklist-item">
+                        <div class="checkbox"></div>
+                        <div>
+                            <div class="toggle-title">Energy Audits</div>
+                            <div class="toggle-subtitle">Comprehensive property energy efficiency reviews</div>
+                        </div>
+                    </div>
+
+                    <div class="checklist-item selected">
+                        <div class="checkbox"></div>
+                        <div>
+                            <div class="toggle-title">Commercial Energy Audits</div>
+                            <div class="toggle-subtitle">Specialized audits for commercial properties</div>
+                        </div>
+                    </div>
+
+                    <div class="checklist-item">
+                        <div class="checkbox"></div>
+                        <div>
+                            <div class="toggle-title">Retrofit Advice</div>
+                            <div class="toggle-subtitle">Expert guidance on energy improvements</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-secondary">← Previous</button>
+                <button class="btn btn-primary">Next Step →</button>
+            </div>
+        </div>
+
+        <!-- Pattern 4: Drag & Drop Service Builder -->
+        <div class="variation">
+            <h2 class="variation-title">Pattern 4: Interactive Service Builder</h2>
+            <p class="variation-subtitle">Drag and drop services to build your offering portfolio</p>
+
+            <div class="service-builder">
+                <div class="available-services">
+                    <h3 style="margin-bottom: 16px; color: #64748b;">Available Services</h3>
+                    <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Click to add services to your profile</p>
+
+                    <div class="service-pill">🏢 Commercial EPC Certificate</div>
+                    <div class="service-pill">🔍 Energy Audits</div>
+                    <div class="service-pill">📐 Floor Plans</div>
+                    <div class="service-pill">🛡️ Carbon Monoxide Testing</div>
+                    <div class="service-pill">💰 Grant Assistance</div>
+                    <div class="service-pill">♻️ Green Deal Advice</div>
+                </div>
+
+                <div class="selected-services">
+                    <h3 style="margin-bottom: 16px; color: #1e293b;">Your Service Portfolio <span class="summary-badge">5 services selected</span></h3>
+                    <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">These services will appear on your public profile</p>
+
+                    <div class="service-pill selected">🏠 Domestic EPC Certificate <button class="remove-btn">×</button></div>
+                    <div class="service-pill selected">📊 Display Energy Certificates <button class="remove-btn">×</button></div>
+                    <div class="service-pill selected">📊 SAP Calculations <button class="remove-btn">×</button></div>
+                    <div class="service-pill selected">📷 Photography <button class="remove-btn">×</button></div>
+                    <div class="service-pill selected">💡 Energy Efficiency Advice <button class="remove-btn">×</button></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern 5: Feature Matrix -->
+        <div class="variation">
+            <h2 class="variation-title">Pattern 5: Service Feature Matrix</h2>
+            <p class="variation-subtitle">Comprehensive overview with delivery options and pricing</p>
+
+            <div class="feature-matrix">
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Service</th>
+                            <th style="width: 15%;">Offer Service</th>
+                            <th style="width: 15%;">Same Day</th>
+                            <th style="width: 15%;">Online Booking</th>
+                            <th style="width: 25%;">Starting Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 20px;">🏠</span>
+                                    <div>
+                                        <div style="font-weight: 500;">Domestic EPC Certificate</div>
+                                        <div style="color: #64748b; font-size: 14px;">Residential properties</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><div class="feature-toggle active"></div></td>
+                            <td><div class="feature-toggle active"></div></td>
+                            <td><div class="feature-toggle active"></div></td>
+                            <td>
+                                <input type="text" value="£45" style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 8px; width: 80px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 20px;">🏢</span>
+                                    <div>
+                                        <div style="font-weight: 500;">Commercial EPC Certificate</div>
+                                        <div style="color: #64748b; font-size: 14px;">Commercial buildings</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><div class="feature-toggle"></div></td>
+                            <td><div class="feature-toggle"></div></td>
+                            <td><div class="feature-toggle"></div></td>
+                            <td>
+                                <input type="text" placeholder="£120" style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 8px; width: 80px;" disabled>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 20px;">📊</span>
+                                    <div>
+                                        <div style="font-weight: 500;">SAP Calculations</div>
+                                        <div style="color: #64748b; font-size: 14px;">Energy assessments</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><div class="feature-toggle active"></div></td>
+                            <td><div class="feature-toggle"></div></td>
+                            <td><div class="feature-toggle active"></div></td>
+                            <td>
+                                <input type="text" value="£80" style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 8px; width: 80px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 20px;">📷</span>
+                                    <div>
+                                        <div style="font-weight: 500;">Photography</div>
+                                        <div style="color: #64748b; font-size: 14px;">Property photography</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><div class="feature-toggle active"></div></td>
+                            <td><div class="feature-toggle active"></div></td>
+                            <td><div class="feature-toggle"></div></td>
+                            <td>
+                                <input type="text" value="£25" style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 8px; width: 80px;">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 20px; padding: 16px; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 500; margin-bottom: 4px;">Service Portfolio Summary</div>
+                <div style="color: #64748b; font-size: 14px;">3 services active • Same-day available for 2 services • Online booking for 2 services</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 40px; color: #64748b;">
+            <p><strong>Each pattern serves different needs:</strong></p>
+            <p>• Card-based for visual appeal and clear pricing</p>
+            <p>• Toggle lists for quick scanning and selection</p>
+            <p>• Wizard for guided setup experience</p>
+            <p>• Builder for flexible portfolio creation</p>
+            <p>• Matrix for comprehensive service management</p>
+        </div>
+    </div>
+
+    <script>
+        // Add basic interactivity for demonstration
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('selected');
+            });
+        });
+
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
+
+        document.querySelectorAll('.checklist-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('selected');
+            });
+        });
+
+        document.querySelectorAll('.feature-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
+
+        document.querySelectorAll('.service-pill:not(.selected)').forEach(pill => {
+            pill.addEventListener('click', () => {
+                pill.classList.add('selected');
+                pill.innerHTML += ' <button class="remove-btn">×</button>';
+            });
+        });
+    </script>
+</body>
+</html>

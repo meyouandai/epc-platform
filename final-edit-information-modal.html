@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Edit Information Modal - EPC Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: rgba(0,0,0,0.5);
+            padding: 20px;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .close-button:hover {
+            color: #1a1a1a;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-instant {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-verify {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-support {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input:disabled {
+            background: #f9fafb;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .companies-house-section {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .companies-house-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .companies-house-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0c4a6e;
+        }
+
+        .companies-house-text {
+            font-size: 13px;
+            color: #075985;
+            line-height: 1.5;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 32px 0;
+        }
+
+        .support-section {
+            background: #fefbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .support-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .support-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .support-text {
+            font-size: 13px;
+            color: #92400e;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+        }
+
+        .btn-support {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-support:hover {
+            background: #d97706;
+        }
+
+        .verification-flow {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .flow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-number {
+            background: #667eea;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .readonly-field {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .readonly-field input {
+            flex: 1;
+        }
+
+        .auto-populated {
+            font-size: 12px;
+            color: #059669;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Edit Personal Information</div>
+            <div class="modal-subtitle">Update your profile details</div>
+            <button class="close-button">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Instant Changes Section -->
+            <div class="section-title">
+                <span>⚡</span>
+                Instant Changes
+            </div>
+            <p class="help-text">These changes are applied immediately after saving.</p>
+
+            <div class="form-group">
+                <label>
+                    Trading/Business Name
+                    <span class="badge badge-instant">Instant</span>
+                </label>
+                <input type="text" value="Smith Energy Solutions" placeholder="Enter your trading name">
+            </div>
+
+            <!-- Self-Service Verification Section -->
+            <div class="section-title">
+                <span>📱</span>
+                Self-Service Changes
+            </div>
+            <p class="help-text">These changes require verification via SMS or email, but are processed automatically.</p>
+
+            <div class="form-group">
+                <label>
+                    Full Name
+                    <span class="badge badge-verify">SMS Verify</span>
+                </label>
+                <input type="text" value="John Smith" placeholder="Enter your full name">
+                <div class="verification-flow">
+                    <div class="flow-step">
+                        <div class="flow-number">1</div>
+                        <span>SMS code sent to your registered phone</span>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">2</div>
+                        <span>Enter verification code to confirm change</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Phone Number
+                    <span class="badge badge-verify">Email + SMS</span>
+                </label>
+                <input type="tel" value="+44 7700 900123" placeholder="Enter your phone number">
+                <div class="verification-flow">
+                    <div class="flow-step">
+                        <div class="flow-number">1</div>
+                        <span>Verification email sent to confirm identity</span>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">2</div>
+                        <span>SMS code sent to new number to verify ownership</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Email Address
+                    <span class="badge badge-verify">SMS + Email</span>
+                </label>
+                <input type="email" value="john.smith@epc-assessments.co.uk" placeholder="Enter your email address">
+                <div class="verification-flow">
+                    <div class="flow-step">
+                        <div class="flow-number">1</div>
+                        <span>SMS code sent to your phone to confirm identity</span>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-number">2</div>
+                        <span>Verification email sent to new address</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Auto-Populated Company Data -->
+            <div class="section-title">
+                <span>🏢</span>
+                Company Information
+            </div>
+
+            <div class="companies-house-section">
+                <div class="companies-house-header">
+                    <span>🇬🇧</span>
+                    <span class="companies-house-title">Companies House Integration</span>
+                </div>
+                <p class="companies-house-text">
+                    For limited companies, this information is automatically populated from Companies House and cannot be edited here.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Company Number
+                    <span class="badge badge-support">Support</span>
+                </label>
+                <div class="readonly-field">
+                    <input type="text" value="12345678" disabled>
+                    <span class="auto-populated">Auto-populated</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Company Name
+                    <span class="badge badge-support">Support</span>
+                </label>
+                <div class="readonly-field">
+                    <input type="text" value="Smith Energy Solutions Limited" disabled>
+                    <span class="auto-populated">Auto-populated</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Registered Address
+                    <span class="badge badge-support">Support</span>
+                </label>
+                <div class="readonly-field">
+                    <input type="text" value="123 Energy Street, Business Park, Manchester, M1 2AB" disabled>
+                    <span class="auto-populated">Auto-populated</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    VAT Number
+                    <span class="badge badge-support">Support</span>
+                </label>
+                <div class="readonly-field">
+                    <input type="text" value="GB123456789" disabled>
+                    <span class="auto-populated">HMRC Verified</span>
+                </div>
+            </div>
+
+            <!-- Support Required Section -->
+            <div class="support-section">
+                <div class="support-header">
+                    <span>📞</span>
+                    <span class="support-title">Need to Change Company Details?</span>
+                </div>
+                <p class="support-text">
+                    Company information changes require legal verification. Contact our support team with your requirements and supporting documents.
+                </p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary">Cancel</button>
+            <button class="btn btn-support">Contact Support</button>
+            <button class="btn btn-primary">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.querySelectorAll('input:not([disabled])').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#667eea';
+            });
+
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#d1d5db';
+            });
+        });
+
+        document.querySelector('.close-button').addEventListener('click', function() {
+            document.body.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

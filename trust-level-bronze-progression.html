@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bronze Level Progression - Corrected Logic</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f3f4f6;
+        }
+
+        .demo-section {
+            margin: 40px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .demo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #374151;
+        }
+
+        .cards-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .trust-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px 20px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .trust-level {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .bronze { color: #cd7f32; }
+
+        .current-status {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .benefit-text {
+            font-size: 12px;
+            color: #059669;
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        .next-level {
+            font-size: 11px;
+            color: #6366f1;
+            margin: 6px 0;
+        }
+
+        .trust-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .manage-btn, .learn-more-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid;
+            text-align: center;
+        }
+
+        .manage-btn {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .learn-more-btn {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+
+        .threshold-highlight {
+            font-weight: 600;
+            color: #111827;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bronze Level Progression - Corrected Logic</h1>
+
+    <div class="demo-section">
+        <div class="demo-title">BRONZE PROGRESSION - From Beginner to Silver Ready</div>
+        <div class="cards-row">
+
+            <!-- Step 1: Brand New User (Start) -->
+            <div class="trust-card">
+                <div class="stat-label">Account Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status"><span class="threshold-highlight">£50 limit</span></div>
+                <div class="trust-actions">
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+
+            <!-- Step 2: After X Payments (Earned £150) -->
+            <div class="trust-card">
+                <div class="stat-label">Account Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status"><span class="threshold-highlight">£100 limit</span></div>
+                <div class="benefit-text">✓ £150 limit available</div>
+                <div class="trust-actions">
+                    <button class="manage-btn">Manage Limit</button>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+
+            <!-- Step 3: After Y Payments (Earned £300) -->
+            <div class="trust-card">
+                <div class="stat-label">Account Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status"><span class="threshold-highlight">£200 limit</span></div>
+                <div class="benefit-text">✓ £300 limit available</div>
+                <div class="trust-actions">
+                    <button class="manage-btn">Manage Limit</button>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Bronze Ready for Silver -->
+            <div class="trust-card">
+                <div class="stat-label">Account Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status"><span class="threshold-highlight">£450 limit</span></div>
+                <div class="benefit-text">✓ £600 limit available</div>
+                <div class="benefit-text">✓ Silver benefits available</div>
+                <div class="trust-actions">
+                    <button class="manage-btn">Manage Limit</button>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SILVER LEVEL STARTS -->
+    <div class="demo-section">
+        <div class="demo-title">SILVER LEVEL - New Member to Gold Ready</div>
+        <div class="cards-row">
+
+            <!-- Step 5: New Silver Member -->
+            <div class="trust-card">
+                <div class="stat-label">Account Level</div>
+                <div class="trust-level silver" style="color: #c0c0c0;">Silver</div>
+                <div class="current-status"><span class="threshold-highlight">£600 limit</span></div>
+                <div class="benefit-text">✓ £800 limit available</div>
+                <div class="trust-actions">
+                    <button class="manage-btn">Manage Limit</button>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+
+            <!-- Step 6: Silver Ready for Gold -->
+            <div class="trust-card">
+                <div class="stat-label">Account Level</div>
+                <div class="trust-level silver" style="color: #c0c0c0;">Silver</div>
+                <div class="current-status"><span class="threshold-highlight">£750 limit</span></div>
+                <div class="benefit-text">✓ Gold benefits available: Monthly billing</div>
+                <div class="trust-actions">
+                    <button class="manage-btn">Manage Limit</button>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+
+            <!-- Step 7: Gold Member -->
+            <div class="trust-card">
+                <div class="stat-label">Account Level</div>
+                <div class="trust-level gold" style="color: #ffd700;">Gold</div>
+                <div class="current-status">Monthly billing active</div>
+                <div class="trust-actions">
+                    <button class="manage-btn">Manage Limit</button>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- KEY INSIGHTS -->
+    <div class="demo-section">
+        <div class="demo-title">KEY INSIGHTS FROM CORRECTED LOGIC</div>
+        <div style="padding: 20px; background: #f8fafc; border-radius: 8px;">
+
+            <div style="margin: 16px 0;">
+                <strong style="color: #059669;">✓ Clean Progression Logic:</strong>
+                <ul style="margin: 8px 0; padding-left: 20px; color: #6b7280;">
+                    <li>£50 start - only "Learn More" button (no options yet)</li>
+                    <li>"Manage Limit" appears when user has earned eligibility</li>
+                    <li>No payment count clutter - eligibility is what matters</li>
+                    <li>Simple limit display with clear benefits</li>
+                </ul>
+            </div>
+
+            <div style="margin: 16px 0;">
+                <strong style="color: #0066cc;">💡 Perfect Risk Management:</strong>
+                <ul style="margin: 8px 0; padding-left: 20px; color: #6b7280;">
+                    <li>Maximum £50 exposure for bad actors</li>
+                    <li>Good users sprint past £50 quickly</li>
+                    <li>Self-correcting system - hate low limits = prove trustworthiness faster</li>
+                    <li>Natural filter for legitimate vs fraudulent users</li>
+                </ul>
+            </div>
+
+            <div style="margin: 16px 0;">
+                <strong style="color: #7c3aed;">🎯 User Experience Benefits:</strong>
+                <ul style="margin: 8px 0; padding-left: 20px; color: #6b7280;">
+                    <li>"Try before commit" - test leads for £50 or less</li>
+                    <li>No upfront costs - only charged when limit reached</li>
+                    <li>Progressive disclosure - buttons appear when relevant</li>
+                    <li>Clear pathway to better terms through good behavior</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

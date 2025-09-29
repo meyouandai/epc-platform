@@ -1,0 +1,397 @@
+import React from 'react';
+import { ChevronDown } from 'lucide-react';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
+function PostcodeSelector() {
+  const [selectedPostcodes, setSelectedPostcodes] = React.useState(new Set());
+  const [pausedCities, setPausedCities] = React.useState(new Set());
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [openSections, setOpenSections] = React.useState({});
+
+  // Consolidated regions data
+  const regions = {
+    "West Midlands": {
+      "Birmingham": [
+        { code: "B1", price: 4 }, { code: "B2", price: 4 }, { code: "B3", price: 3 },
+        { code: "B4", price: 3 }, { code: "B5", price: 5 }, { code: "B6", price: 3 },
+        { code: "B7", price: 3 }, { code: "B8", price: 4 }, { code: "B9", price: 3 }
+      ],
+      "Coventry": [
+        { code: "CV1", price: 3 }, { code: "CV2", price: 3 }, { code: "CV3", price: 4 },
+        { code: "CV4", price: 4 }, { code: "CV5", price: 3 }, { code: "CV6", price: 3 }
+      ],
+      "Wolverhampton": [
+        { code: "WV1", price: 3 }, { code: "WV2", price: 3 }, { code: "WV3", price: 3 }
+      ]
+    },
+    "Greater London": {
+      "Central London": [
+        { code: "EC1", price: 6 }, { code: "EC2", price: 6 }, { code: "EC3", price: 5 },
+        { code: "EC4", price: 5 }, { code: "WC1", price: 5 }, { code: "WC2", price: 5 }
+      ],
+      "North London": [
+        { code: "N1", price: 5 }, { code: "N2", price: 4 }, { code: "N3", price: 4 },
+        { code: "N4", price: 4 }, { code: "N5", price: 5 }, { code: "N6", price: 4 }
+      ],
+      "East London": [
+        { code: "E1", price: 4 }, { code: "E2", price: 4 }, { code: "E3", price: 4 }
+      ]
+    },
+    "Yorkshire": {
+      "Leeds": [
+        { code: "LS1", price: 4 }, { code: "LS2", price: 4 }, { code: "LS3", price: 3 },
+        { code: "LS4", price: 3 }, { code: "LS5", price: 3 }, { code: "LS6", price: 3 }
+      ],
+      "Sheffield": [
+        { code: "S1", price: 4 }, { code: "S2", price: 3 }, { code: "S3", price: 3 },
+        { code: "S4", price: 3 }, { code: "S5", price: 3 }, { code: "S6", price: 3 }
+      ],
+      "York": [
+        { code: "YO1", price: 4 }, { code: "YO10", price: 3 }, { code: "YO31", price: 3 }
+      ]
+    },
+    "North West": {
+      "Manchester": [
+        { code: "M1", price: 4 }, { code: "M2", price: 4 }, { code: "M3", price: 4 },
+        { code: "M4", price: 3 }, { code: "M5", price: 3 }, { code: "M6", price: 3 }
+      ],
+      "Liverpool": [
+        { code: "L1", price: 4 }, { code: "L2", price: 4 }, { code: "L3", price: 4 },
+        { code: "L4", price: 3 }, { code: "L5", price: 3 }, { code: "L6", price: 3 }
+      ],
+      "Preston": [
+        { code: "PR1", price: 3 }, { code: "PR2", price: 3 }, { code: "PR3", price: 3 }
+      ]
+    },
+    "South East": {
+      "Brighton": [
+        { code: "BN1", price: 4 }, { code: "BN2", price: 4 }, { code: "BN3", price: 4 }
+      ],
+      "Portsmouth": [
+        { code: "PO1", price: 3 }, { code: "PO2", price: 3 }, { code: "PO3", price: 3 }
+      ],
+      "Southampton": [
+        { code: "SO14", price: 3 }, { code: "SO15", price: 3 }, { code: "SO16", price: 3 }
+      ]
+    }
+  };
+
+  // Handle search and auto-expand
+  React.useEffect(() => {
+    if (!searchTerm) {
+      setOpenSections({});
+      return;
+    }
+
+    const searchLower = searchTerm.toLowerCase();
+    const newOpenSections = { ...openSections };
+
+    Object.entries(regions).forEach(([county, cities]) => {
+      const countyMatch = county.toLowerCase().includes(searchLower);
+      
+      Object.entries(cities).forEach(([city, postcodes]) => {
+        const exactPostcodeMatch = postcodes.some(({code}) => 
+          code.toLowerCase() === searchLower
+        );
+        const cityMatch = city.toLowerCase().includes(searchLower);
+
+        if (countyMatch) {
+          newOpenSections[county] = true;
+        } else if (cityMatch || exactPostcodeMatch) {
+          newOpenSections[county] = true;
+          newOpenSections[`${county}-${city}`] = true;
+        }
+      });
+    });
+
+    setOpenSections(newOpenSections);
+  }, [searchTerm]);
+
+  const filterRegions = () => {
+    if (!searchTerm) return regions;
+
+    const searchLower = searchTerm.toLowerCase();
+    const filtered = {};
+
+    Object.entries(regions).forEach(([county, cities]) => {
+      const filteredCities = {};
+      
+      Object.entries(cities).forEach(([city, postcodes]) => {
+        if (
+          city.toLowerCase().includes(searchLower) ||
+          county.toLowerCase().includes(searchLower) ||
+          postcodes.some(({code}) => code.toLowerCase().includes(searchLower))
+        ) {
+          filteredCities[city] = postcodes;
+        }
+      });
+      
+      if (Object.keys(filteredCities).length > 0) {
+        filtered[county] = filteredCities;
+      }
+    });
+
+    return filtered;
+  };
+
+  const toggleSection = (id) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const handleSelectAllPostcodes = (county, city, postcodes) => {
+    const newSelected = new Set(selectedPostcodes);
+    const allSelected = postcodes.every(({code}) => selectedPostcodes.has(code));
+
+    postcodes.forEach(({code}) => {
+      if (allSelected) {
+        newSelected.delete(code);
+      } else {
+        newSelected.add(code);
+      }
+    });
+
+    setSelectedPostcodes(newSelected);
+  };
+
+  const getCountyIndicator = (county) => {
+    let activeCount = 0;
+    let totalSelected = 0;
+    
+    Object.keys(regions[county]).forEach(city => {
+      const cityKey = `${county}-${city}`;
+      const isPaused = pausedCities.has(cityKey);
+      
+      regions[county][city].forEach(({code}) => {
+        if (selectedPostcodes.has(code)) {
+          totalSelected++;
+          if (!isPaused) {
+            activeCount++;
+          }
+        }
+      });
+    });
+    
+    if (totalSelected === 0) return null;
+    
+    return {
+      count: activeCount > 0 ? activeCount : totalSelected,
+      isPaused: activeCount === 0
+    };
+  };
+
+  const getCitySelectedCount = (county, city) => {
+    return regions[county][city].filter(({code}) => 
+      selectedPostcodes.has(code)
+    ).length;
+  };
+
+  const getTotalActivePostcodes = () => {
+    let count = 0;
+    Object.keys(regions).forEach(county => {
+      Object.keys(regions[county]).forEach(city => {
+        const cityKey = `${county}-${city}`;
+        if (!pausedCities.has(cityKey)) {
+          count += getCitySelectedCount(county, city);
+        }
+      });
+    });
+    return count;
+  };
+
+  const getTotalPausedPostcodes = () => {
+    let count = 0;
+    Object.keys(regions).forEach(county => {
+      Object.keys(regions[county]).forEach(city => {
+        const cityKey = `${county}-${city}`;
+        if (pausedCities.has(cityKey)) {
+          count += getCitySelectedCount(county, city);
+        }
+      });
+    });
+    return count;
+  };
+
+  return (
+    <div className="max-w-4xl p-6">
+      <div className="mb-6">
+        <h1 className="text-xl font-semibold">Post Codes</h1>
+        <p className="text-sm text-gray-500 mt-1">Select the post codes where you want to receive leads</p>
+      </div>
+
+      <div className="relative mb-6">
+        <div className="flex gap-4">
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              value={searchTerm}
+              placeholder="Search post codes or cities..."
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full p-2 pr-8 border rounded-md"
+            />
+            {searchTerm && (
+              <button 
+                onClick={() => setSearchTerm('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                ×
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="bg-white rounded-lg border p-4">
+          <div className="text-sm text-gray-600">Active Post Codes</div>
+          <div className="text-2xl font-semibold text-green-600">{getTotalActivePostcodes()}</div>
+        </div>
+        <div className="bg-white rounded-lg border p-4">
+          <div className="text-sm text-gray-600">Paused Post Codes</div>
+          <div className="text-2xl font-semibold text-orange-600">{getTotalPausedPostcodes()}</div>
+        </div>
+      </div>
+      
+      <div className="bg-white rounded-lg border">
+        {Object.entries(filterRegions()).map(([county, cities]) => (
+          <Collapsible 
+            key={county} 
+            open={openSections[county]}
+            className="border-b last:border-b-0"
+          >
+            <CollapsibleTrigger 
+              className="w-full text-left"
+              onClick={() => toggleSection(county)}
+            >
+              <div className="flex items-center p-4 bg-white hover:bg-gray-100">
+                <ChevronDown className="w-4 h-4 text-gray-500 mr-2" />
+                <span className="font-medium">{county}</span>
+                {getCountyIndicator(county) && (
+                  <span className={`ml-2 text-sm px-2 py-0.5 rounded-full ${
+                    getCountyIndicator(county).isPaused
+                      ? 'bg-orange-50 text-orange-700'
+                      : 'bg-blue-50 text-blue-700'
+                  }`}>
+                    {getCountyIndicator(county).count}
+                  </span>
+                )}
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent>
+              <div className="pl-6">
+                {Object.entries(cities).map(([city, postcodes]) => {
+                  const cityKey = `${county}-${city}`;
+                  const isPaused = pausedCities.has(cityKey);
+                  const selectedCount = getCitySelectedCount(county, city);
+                  
+                  return (
+                    <Collapsible 
+                      key={city}
+                      open={openSections[cityKey]}
+                    >
+                      <CollapsibleTrigger 
+                        className="w-full text-left"
+                        onClick={() => toggleSection(cityKey)}
+                      >
+                        <div className="flex items-center p-3 bg-white hover:bg-gray-100">
+                          <ChevronDown className="w-4 h-4 text-gray-500 mr-2" />
+                          <span>{city}</span>
+                          {selectedCount > 0 && (
+                            <span className={`ml-2 text-sm px-2 py-0.5 rounded-full ${
+                              isPaused 
+                                ? 'bg-orange-50 text-orange-700'
+                                : 'bg-blue-50 text-blue-700'
+                            }`}>
+                              {selectedCount}
+                            </span>
+                          )}
+                        </div>
+                      </CollapsibleTrigger>
+
+                      <CollapsibleContent>
+                        <div className="pl-12 py-2 flex items-center gap-4">
+                          <button 
+                            onClick={() => handleSelectAllPostcodes(county, city, postcodes)}
+                            className="text-sm text-blue-600 hover:text-blue-800"
+                          >
+                            {selectedCount === postcodes.length ? 'Deselect all' : 'Select all'}
+                          </button>
+                          {selectedCount > 0 && (
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const newPaused = new Set(pausedCities);
+                                if (isPaused) {
+                                  newPaused.delete(cityKey);
+                                } else {
+                                  newPaused.add(cityKey);
+                                }
+                                setPausedCities(newPaused);
+                              }}
+                              className={`text-sm ${
+                                isPaused 
+                                  ? 'text-orange-600 hover:text-orange-800'
+                                  : 'text-gray-600 hover:text-gray-800'
+                              }`}
+                            >
+                              {isPaused ? 'Resume' : 'Pause'}
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="p-3 pl-12 flex flex-wrap gap-2">
+                          {postcodes.map(({code, price}) => (
+                            <button
+                              key={code}
+                              onClick={() => {
+                                const newSelected = new Set(selectedPostcodes);
+                                if (newSelected.has(code)) {
+                                  newSelected.delete(code);
+                                } else {
+                                  newSelected.add(code);
+                                }
+                                setSelectedPostcodes(newSelected);
+                              }}
+                              className={`
+                                inline-flex items-center gap-2
+                                px-3 py-1.5 text-sm rounded-full border
+                                ${selectedPostcodes.has(code)
+                                  ? isPaused
+                                    ? 'border-orange-200 bg-orange-50 text-orange-700'
+                                    : 'border-blue-200 bg-blue-50 text-blue-700'
+                                  : 'border-gray-200 text-gray-700'
+                                }
+                              `}
+                            >
+                              <span>{code}</span>
+                              <span className="text-gray-500">£{price}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  );
+                })}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      <PostcodeSelector />
+    </div>
+  );
+}

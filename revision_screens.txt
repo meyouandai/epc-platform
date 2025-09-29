@@ -1,0 +1,279 @@
+hello okay so yeah this is the login screen that you created for us
+um straight away you can see that it's not got our logo uh company's not epc certificates online
+um it is your local surveyor so if possible what i need to do is change
+that over but what i've done as well is i've got a word document that i'm going to send you as well
+so you'll have the video um screen recording but then you'll also have this word document
+so you can kind of go along and see um what i meant by the things that i'm saying so yep for
+this one what it's got is company logo isn't ours so it needs our company logo and it also needs to
+be a bit more modern it looks outdated i'd say so i've attached a um a screenshot of another website
+so i'm not saying copy this design but i'm just giving you as a guiding guidelines for you to see
+what kind of login screen we're looking for rather than being a basic one where it to be a bit more
+modern a bit more up-to-date a bit more um nicer aesthetics so what i'd say as well is we also need
+a page for agents to create an account so currently there isn't anywhere for them to do that so we need
+to have a page where they can do that and i'm not too sure if it would be on this part or if it would be
+a total separate page um i think a separate page would make sense and it's just a link that i can give
+people or there could be a link on the website and that takes into like a registration form rather than
+a login form so yeah that's what i'm thinking to do that makes more sense so the form will just have
+these in here so you'll have the word document later on and you will um this is what they would be
+entering in so their first name last name etc and then they'll create um or sorry set a password and
+then create an account but the issue is once they complete it they need to receive a message to thank
+them saying that they will be granted access to the platform shortly so we're the ones that will
+approve them um after they've sent their documents etc so anyway yeah so that's sorted there
+so i'm going to log in and just show you quickly so what we've got here is we've got the navigation menu
+um i wanted to make some changes over there so we want the company logo instead of happily
+and then i want the pages to be in the following order so we've got dashboards agents coverage leads
+payments profile and then create account i think the only difference here was i wanted to switch
+payments around with profile and then i wanted to add the create account page underneath so scrolling
+down now what we've got is the dashboard so here we've got the dashboard that you created with the
+metrics however it was okay but i wanted to be a little bit more um provide a little bit more insights
+from the data that we already have so on here we can see what we've got just square metric cards
+and we've got total leads total revenue total overdue new assessors active assessors and total districts
+i'm just going to show you over here actually how it looks so the um cards don't need to be this big
+to be honest um you can make them so much smaller so it's literally could just be like that big um
+and then we've got the period so we can change the period just to see
+the different leads we've had the total revenue we've had how much is overdue how much new assessors
+have come on board how many assessors we currently have and how many districts we've currently have so
+the data that you were doing for us um getting that was already there so it's not extra work and
+what i would say is just remove the coverage alerts as well so we don't need the coverage alerts or the
+payment alerts and again i put these notes in here just so you can see and what else have i said
+um admin profile we don't need a photo and we don't need um the full screen button so you can remove that
+okay so now we're going to move on to the agent screen so on the agent screen this is
+where we can search for the different agents so we come on the page you can see um
+nothing will be showing until we search for an agent so there's no reason for us to just be looking
+at agents unless we want to come over here click new and then start um
+sorry click pending and then start looking at the people who are pending for us to go in and approve
+so we need to be able to come in here and then click approve so i've not created the button to do that
+yet because i wasn't sure how we would connect it i don't know what database that goes in or how that works
+so if you can just clear that up um so yeah anyway what we've got on this page is the um
+we would have the agent search results from when we typed in the name so let's say we typed in drew
+drew would then pop up you could then see drew's details phone number company name email how long
+he's been a member the areas that he's covering lead statistics billing outstanding um his due date
+and when he's last paid or sorry what he last paid so those are those deals that we want here edit
+details will take us over into drew's profile where we can make any edits that we need payment history
+will show us any payments that he's made and then deactivate account would be if he is no longer um
+paying us to be a member same again with the other people in the list we can see same details again
+we've got these buttons here to click and then here we can see the status of the agent so we can see
+that dawn is inactive we've manually made her and deactivated her account she might now want to
+come back we're not too sure why he left yet could be because of money could because she wasn't paying
+and now she's paid the bill so yeah we can go in and activate her account and then that should start
+um that should allow her to now get access back to her account for her to start selecting the postcodes
+that she wants to um what do you call it she wants to be shown in so what we've got there we're going
+to try and get through this as quick as possible we've got coverages the coverages is quite straightforward
+similar to how it is with the um postcode search page what we've got is you come on here you've got
+the categories so you've got the county level then you've got the city level and then in each city
+level we can see how many assessors we've got in each one pretty straightforward don't think i need
+to explain more of that one we've got the color key here in the word document so we don't need the
+color key on the page it's just for you to kind of understand what each of the color um codes meant
+or color keys meant okay so what we've got next we've got the leads so here this is the leads one
+for the admin dashboard um admin portal so we can come in here and we can search leads so let's say
+we have a name called john john should pop up now we have to search it okay so we can search it and
+then see the leads we can also remove a lead if it's a fake lead um if you wanted to just have a quick
+browse we can come in here and see top postcodes in a um city or city area like london you can see
+how many of these they've got you can see these cover indicators as they will let us know
+how many assessors we've got if you've got four assessors it would be full coverage if we've got
+two to three it will be needs coverage and if we've got one it will say urgent we've also got the
+trend data showing us what the um increase was from the leads that we had the day before
+obviously we can change the period and those would be reflective of what the amount was versus the
+periods that we selected you can also come down to the actual leads that are coming in you can see the
+dates that they came in the most recent will be at the top the postcode district that it came in will
+be here and then we can also see these um indicators or circles which indicate how many assessors the
+leads got sent to yes we do want four assessors to be there all the time however there may be some
+points in time when we are when we don't have four so what do we do do we turn them off maybe not we
+might still run them with two people and see what we can do um we can click on an actual lead and then
+you can see the full address of the um person who searched the contact number and then you can see
+who was assigned to get the lead so we've got two assessors there that matches that if we click on one
+before we should have four assessors so we can easily see that that has four assessors it would have their
+names and that is basically that one
+so what we've got next let me just make sure lead coverage and we also mean to delete fake leads so
+please can you add a delete lead button which updates the assessor if you've received it and paid
+so yeah so what i'm saying is when you click on here you should have like a delete lead button and then a
+confirmation after you click it saying are you sure you want to delete this lead and then with a box to
+give a reason so we are kind of making sure that we're not clicking accidentally and then when we
+are going to delete it we are putting in a valid reason okay so what we've got next we've got payment
+screen so over here this is the admin payment screen you can see total due that's how much we are due to
+come in for from the last 30 days total paid this is how much has been paid in the last 30 we've got
+active invoices this is for people who haven't reached their threshold or haven't had their
+invoice period come to an end yet and then we've got overdue amounts and we also can see how many
+invoices this amounts made up of so this is quite useful for us because it helps us to have a quick
+snapshot of everything and see what's going on um
+down the page we've got quick filters so if you just want to see who's active we can just click
+that and it should just show who's active if you want to see due we can just see who's due if you
+want to see overdue you can just see overdue and paid you can see just paid so i think what we want
+is for these to only show for the last 30 days i think and then they get archived because i think if
+we're going to be having so much invoices for people it's just going to get clogged up over here
+if you have it in this kind of um higher level format whereas if you just have it in the basic raw data
+as basic as possible can be similar to how kind of these forms were to be honest you know this these
+kind of data is really just raw data not really much going on just some tables um and then what
+i'm saying is after 30 to 60 days um i would like to move over the invoices over there and then if i
+want to view them i can go and click view archive and that's where they would be okay
+so what we've got anyway so yeah let me just explain here so we've got the invoice we can click
+on the invoice so we can click on the invoice and we can go and see what's on the invoice we can also
+go and click on the assessor name and that would take over take us over to their um agent profile
+um we can see the threshold and then we can see the status of when it was paid and the status to
+quickly show that it has been paid we've got other people who haven't reached the threshold so that's
+where the shown is active we've got um somebody who's due to make a payment that's why they're in
+orange sorry yellow and we can also tick here so then click paid and that will update and go in green
+and then we've also got um this one here they're overdue they're due to make the payment on the 26th
+i haven't made it yet um however they've made it today and now i can go and pay it sorry select it
+as paid so that's that one sorted as well um what we've got next
+okay so we've got admin profile so admin profile quick pretty straightforward don't really need
+much first name last name email address and then and the just then just then the option to
+update our password if we need to so that's quite straightforward
+make sure i'm adding anything right okay so now we've got the create account page this is the page
+for the admin to create an account for other admins and agents so here you can see admin if i wanted
+to create a user john smith email address password and that's one also i wanted to add these so you can
+see the password that you're typing in and i want it to when i click one it then opens or makes both of
+the boxes visible okay then you've got the assessor page similar kind of page just different fields that
+need to be entered in for the assessor this one you'd enter in there company name as optional phone number
+accreditation number accreditation company and that would be that okay and then even when we create
+the account for agents they don't immediately get access we have to still approve them after we've got
+their documents and id so that's fine hopefully that makes sense too so now let's move on to the
+the agents dashboard pretty straightforward four cards total leads active postcodes payment due with
+the date that it's due and then any overdue payments with the date that they were meant to be paid
+really straightforward and we can also change the leads data to see what the person had yesterday what
+they had over the last 30 days and then they can also do a date range so i think that's sorted for
+that oh yeah so the padding you don't need that much padding around the um boxes similar to the
+dashboard in the admin it can be just that size maybe and four of them that size okay so let's now go on to
+the leads section so this is the leads that the assessor will see so bear in mind they're not going
+to be using this quite often i don't think because they are meant to be getting a text message and an
+email anytime a lead comes in however if they want to or need to they can easily come here they can type in
+john and then they can see the lead for john they can click on john they can see when it came in they
+can see the postcode they can see the full address in here and if you can add that in based on the
+data that comes in from when the person types in the lead they can see the price that we're charging
+for the lead um and then just the basic other information so i'd like to add a clear button x button
+to clear this so instead of them having to backspace out they can just click the x button and then that
+will clear the um search results for the leads and let's say they wanted to now look for someone's
+postcode so they've got g1 1xw straight away they can see that that's popped up same with the last one
+they've got the information that they can see in here this i button here is to say that there's
+additional information so if you can do a hover um status when they hover over there to let them know
+not that it's too important but it's just a nice little addition and then we've got the price again
+and we also have um yeah i think that's it for that one and what we've got here is we've got leads
+over from 30 days can be found in the archive leads and i don't think it makes sense for them to be
+having months and months and months worth of leads or on here i think like on this page what we would
+have had is just pages and pages and pages and just to me doesn't make sense having it here it
+makes sense giving them what they need for 30 days and then after the 30 days getting them to be
+archived so they're not just always having to be processed when you come to this page
+okay and again they can look at the leads of what they got yesterday look at the lead they got over
+the last seven days or look at the leads they got over the last 30 days if they wanted to look through
+and they couldn't remember who they saw or what the name they were looking for or if they just wanted
+to just see actually how many did they get and how many did they close or go and do work for
+okay what we got next
+okay so i was just showing you here how the leads look when they're expanded
+we've got that okay so now we've got the postcodes so this is where they will add in the postcodes that
+they want to um working so here we can see they've got zero active postcodes and zero pause postcodes
+so let's say they want to go and work in birmingham so it's similar to the um screen that you've done
+for some reason i can't get access into the ad agent um account so i've not been able to use
+um i'm not being able to bring that up now to use it as an example to show you why i've created
+this design because it's basically just your one so what we've got is the postcodes for birmingham
+i can click on birmingham straight away updates to show that we've now got one postcode selected
+so they want to do b2 b4 b6 that's fine they want to do one in coventry that's fine and then i want
+to do two in wolverhampton so now we can see we've got two three six so we can see six postcodes are
+covered in west midlands and then we can see up here six active postcodes so when they come here
+from not being on this page they can automatically see straight away they've got six active postcodes and
+they know where those postcodes are but let's say they are busy and they won't be able to do
+wolverhampton for the next few weeks or months and instead of turning it off or deselecting
+they just want to pause them so they can go and pause them wolverhampton will now change to be paused
+and then it will show that they've got two paused postcodes so they'll no longer now receive any
+um leads for those postcodes because they've technically turned them off but rather than them
+having to click and click and click and click to turn off we've made it easy for them for just for
+them to just click on pause and then when they're ready again to come back and just click on resume so
+now they're no longer paused and they've added those two back to adding postcodes but let's say they don't
+know where york is no i won't do york let's say they don't know where preston is and there was around
+that area what they can do they can type in preston and then preston will now show the postcodes for
+that area just from typing in the word here's the clear button that i wanted you to add on the other
+search box so can we just do that click exit then clears it and then let's say they knew
+a postcode in liverpool that they wanted to go and do they can type in l
+two and then liverpool postcodes will pop up so it's just another quick way for them to just get
+to what they want to do select in liverpool wonderful pausing liverpool wonderful quite
+straightforward quite easy um and really useful for the end user
+so again i've just put the screenshots of it expanded just to show you here so now we've got
+the um what do you call it the billing page for the agent so we can see the current period we can see the
+spend so far and then the limit press show that they've got set and then we can see how many leads
+they've got in this period we've got total due and we've also got outstanding balance and how many
+invoices the outstanding balance is from so here what we've got on the page is the different invoices
+the date period we've got how many leads are in that invoice we've got the amount we've got the
+status of the invoice and then we've also got a download button for them to download the invoice
+really pretty straightforward with this one um not really much for them to understand they come here
+they can see their invoice they can see their period date for the invoice they know how many leads was
+in the invoice they know how much it was they know whether they've paid haven't paid or when they need
+to pay and then they've got a download button to download the invoice if they need to
+okay so moving on we've got the agent profile this is where they can upload their photo enter in a bit
+about the company you want to limit it to 500 characters if you don't want people to be writing
+too much then we've got the company status so these things here aren't
+aren't changed by them but it will be shown on the website when the customer views them but it's
+just for them to see and understand where they're at what they need to do so they've verified all these
+different things over here they're not back registered and then they also can change their display name
+on the customer end to either their full name their business name or their business name and their name
+so really easy really straightforward um page is pretty self-explanatory of what's on here
+we've got the different services that they can go and tick that they want to do or are doing
+and then we also have the additional cert offerings that they give again they tip them to show that they
+do them they can upload their photos here and they're allowed to upload a max of 10 photos once they've
+done that they can click on save and that will save the profile and then if you can just get a
+confirmation box just to say saved or that has saved your profile just a quick message just to give them
+reassurance that what they've done has been saved
+okay what we've got next we've got agent account and pretty straightforward
+um i haven't created the agent account that this was a duplicate of the
+sorry i have created the agent account page i thought i hadn't
+you know i'm messing up i'm tired it's 3am in the morning here um i was right i haven't created a
+um agent account page i've created a create an account for an agent but i haven't created a
+account page for the agent so with the agent once they've got an account they'll be able to come into
+the account section the name last name email address phone number um company name accreditation
+number accreditation company i think these apart from the email address and phone number should be all
+um fields that can't be changed by them they should be locked and then if they need to they just need
+to reach out to us to make a request for a change highly unlikely that people will need to change
+but obviously some people change their names some people get married some people change businesses
+so in those instances we're happy to change but we need to get them to request permission
+and then they're free to change their password if they need to
+okay what's next okay so now we're getting on to the landing page so what have we got currently the
+landing page looks like this that takes too long as you know it's not as long as it was before it's
+much quicker than it was but what we're suggesting is to have a landing page like this but then have the
+form like this so when they come to the page we've got the box saying enter your postcode to then get
+the list of assessors entering the postcode instead of it taking them to another page the form now appears
+here from the drop down they select the postcode they select if it's a residential or commercial they
+choose the bedrooms they're adding any additional text if they need to click on continue now the form
+changes on the page they don't have to go anywhere they can still see the postcode that they're
+searching for they can enter in their name entering their post email address
+and entering their phone number what they need to do though is tick this box just to confirm that they
+agree to um their details being shared with verified assessors in the area and then they go and click on
+get assessor details when they click that they then get taken to the search results page so this is where
+we're at now on the search results page we're going to have the four assessors as we only have four
+we'll have their name and business name if they want or just business name as they've selected it
+we'll have the services what we offer or what they offer um and then they'll have a from price
+they'll have a phone number they'll have their email visible and they'll have a view profile button
+really straightforward really clean really minimal aesthetics nothing too confusing for the customer
+to do when they get here and then we've also got at the top of the page just an explanation of
+what actually happens view so each assessor is verified and experience click view profile to learn more
+about the services and book your assessment really easy really user friendly um and that's wonderful
+so um as you mentioned at the start these assessors are now meant to be getting emails every time they
+are shown in this way we haven't spoke about that process yet you haven't told us what we need to do
+in terms of do we need to buy anything is it mailchimp is it another process do we need to get the sim card
+or the automation to send the sms so if possible can you just go over that as well um please
+okay so now what the um user's doing on here sorry the customer's doing is having a look
+they see this guy here they like the name of energy certs so what they can do is go and call them with
+the one two email them with the one two or they're not too sure yet so they want to go view profile
+so they can click view profile it will then take them over to their energy sorry to the assessor's
+profile page have a photo of them have the name of the business if they wanted it name and business
+if they wanted it or just the name if that's what they chose we'll have the postcode that they're
+covering sorry it will have the postcode that the customer searched in as the main postcode and then
+it will also say and surrounding areas we'll have the number email from price these things here such
+as services what we offer about us and then the information that was on the company profile will
+be pulled over to this page and will be visible for the customer to see and know that the assessor has
+had all these things checked by us to give them the comfort trust and reassurance that they are
+rarefied and reputable companies who are going to be doing the assessments bottom of the page we've got
+a portfolio section for images that the assessor wants to put up they can swipe through and then
+they can click on them if they want to enlarge them and also swipe through at this level so i think
+let me just check to the assessor page assessor page profile page okay yeah so i think that is
+everything there um hopefully i've made it clear enough for you to see everything um appreciate all the
+help that you've been giving us so far um i'm just looking forward to just getting it finished now
+getting it over the line getting you guys paid and then we can move forward happy days for everyone
+so thank you very much um dowd and the rest of the team hopefully we can just get this sorted now
+and we've removed any miscommunication along the way because i've done this video and i will also send
+you over the word document and you can also ask me any questions if there's any gaps from my explanation
+my demonstration and what you need to do for me and i'm also available to send you over any code for
+any of the pages so i made this in react so i don't know if that's what you've used but anything that you
+do use if you aren't using what i've created in and you need me to go and create it i can go and create it
+for you and then you can just plug it in if you're unable to do it for me um i'm not a developer i'm
+not a website developer i'm not a software developer but i've managed to do this with um claude as you
+can see so it's not too difficult for me to go and do whatever you don't want to do just to get us
+um having the website look how we want here so yeah thank you and i'll speak to you soon
+you

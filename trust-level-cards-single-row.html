@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust Level Cards - Single Row Layout</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f3f4f6;
+        }
+
+        .billing-overview {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .billing-period-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .billing-period-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .billing-period-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .period-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+        }
+
+        .period-stat-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px 24px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value-large {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .stat-value-medium {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 12px;
+            color: #059669;
+        }
+
+        .stat-sublabel {
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .bronze { color: #cd7f32; }
+        .silver { color: #c0c0c0; }
+        .gold { color: #ffd700; }
+
+        .threshold-highlight {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .eligibility {
+            font-size: 13px;
+            color: #059669;
+            background: #ecfdf5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 8px 0;
+            border-left: 3px solid #10b981;
+        }
+
+        .next-step {
+            font-size: 12px;
+            color: #6366f1;
+            margin: 8px 0;
+        }
+
+        .trust-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .manage-btn, .learn-more-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid;
+            text-align: center;
+        }
+
+        .manage-btn {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .manage-btn:hover {
+            background: #059669;
+        }
+
+        .learn-more-btn {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+
+        .learn-more-btn:hover {
+            background: #dbeafe;
+        }
+
+        .demo-section {
+            margin: 40px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .demo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #374151;
+        }
+
+        @media (max-width: 768px) {
+            .period-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="billing-overview">
+        <h1>Billing Page - Trust Level Cards in Row Layout</h1>
+
+        <!-- SCENARIO 1: NEW USER - NO OPTIONS YET -->
+        <div class="demo-section">
+            <div class="demo-title">New User - Day 1 (No options available yet)</div>
+
+            <div class="billing-period-card">
+                <div class="billing-period-title">This Billing Period</div>
+                <div class="billing-period-subtitle">28 Nov 2024 - 28 Dec 2024 (or £50 reached, whichever first)</div>
+
+                <div class="period-stats">
+                    <!-- Spending Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Your Spending</div>
+                        <div class="stat-value-large">£12</div>
+                        <div class="stat-sublabel">of £50 threshold</div>
+                    </div>
+
+                    <!-- Leads Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Leads Purchased</div>
+                        <div class="stat-value-medium">3</div>
+                        <div class="stat-sublabel">this period</div>
+                    </div>
+
+                    <!-- Trust Level Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Trust Level</div>
+                        <div class="stat-value-large bronze">Bronze</div>
+                        <div class="stat-sublabel">
+                            <span class="threshold-highlight">£50 threshold</span> • £0 total spent
+                        </div>
+                        <div class="next-step">Complete your first payment to unlock higher limits</div>
+                        <div class="trust-actions">
+                            <button class="learn-more-btn">How do thresholds work?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCENARIO 2: FIRST UPGRADE AVAILABLE -->
+        <div class="demo-section">
+            <div class="demo-title">After 2nd Payment - First "Manage Limit" Appears</div>
+
+            <div class="billing-period-card">
+                <div class="billing-period-title">This Billing Period</div>
+                <div class="billing-period-subtitle">28 Nov 2024 - 28 Dec 2024 (or £50 reached, whichever first)</div>
+
+                <div class="period-stats">
+                    <!-- Spending Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Your Spending</div>
+                        <div class="stat-value-large">£23</div>
+                        <div class="stat-sublabel">of £50 threshold</div>
+                    </div>
+
+                    <!-- Leads Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Leads Purchased</div>
+                        <div class="stat-value-medium">7</div>
+                        <div class="stat-sublabel">this period</div>
+                    </div>
+
+                    <!-- Trust Level Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Trust Level</div>
+                        <div class="stat-value-large bronze">Bronze</div>
+                        <div class="stat-sublabel">
+                            <span class="threshold-highlight">£50 threshold</span> • £100 total spent
+                        </div>
+                        <div class="eligibility">✓ Eligible for £150 threshold</div>
+                        <div class="trust-actions">
+                            <button class="manage-btn">Manage Limit</button>
+                            <button class="learn-more-btn">Benefits of higher limits</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCENARIO 3: UPGRADED TO HIGHER LIMIT -->
+        <div class="demo-section">
+            <div class="demo-title">User Chose £300 Threshold</div>
+
+            <div class="billing-period-card">
+                <div class="billing-period-title">This Billing Period</div>
+                <div class="billing-period-subtitle">28 Nov 2024 - 28 Dec 2024 (or £300 reached, whichever first)</div>
+
+                <div class="period-stats">
+                    <!-- Spending Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Your Spending</div>
+                        <div class="stat-value-large">£127</div>
+                        <div class="stat-sublabel">of £300 threshold</div>
+                    </div>
+
+                    <!-- Leads Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Leads Purchased</div>
+                        <div class="stat-value-medium">23</div>
+                        <div class="stat-sublabel">this period</div>
+                    </div>
+
+                    <!-- Trust Level Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Trust Level</div>
+                        <div class="stat-value-large bronze">Bronze</div>
+                        <div class="stat-sublabel">
+                            <span class="threshold-highlight">£300 threshold</span> • £225 total spent
+                        </div>
+                        <div class="next-step">1 more payment needed to unlock £450 threshold</div>
+                        <div class="trust-actions">
+                            <button class="manage-btn">Manage Limit</button>
+                            <button class="learn-more-btn">Payment history</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCENARIO 4: SILVER LEVEL READY -->
+        <div class="demo-section">
+            <div class="demo-title">Ready for Silver Level</div>
+
+            <div class="billing-period-card">
+                <div class="billing-period-title">This Billing Period</div>
+                <div class="billing-period-subtitle">28 Nov 2024 - 28 Dec 2024 (or £450 reached, whichever first)</div>
+
+                <div class="period-stats">
+                    <!-- Spending Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Your Spending</div>
+                        <div class="stat-value-large">£234</div>
+                        <div class="stat-sublabel">of £450 threshold</div>
+                    </div>
+
+                    <!-- Leads Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Leads Purchased</div>
+                        <div class="stat-value-medium">41</div>
+                        <div class="stat-sublabel">this period</div>
+                    </div>
+
+                    <!-- Trust Level Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Trust Level</div>
+                        <div class="stat-value-large bronze">Bronze</div>
+                        <div class="stat-sublabel">
+                            <span class="threshold-highlight">£450 threshold</span> • Perfect payment record
+                        </div>
+                        <div class="eligibility">✓ Eligible for £600+ thresholds or Silver level</div>
+                        <div class="trust-actions">
+                            <button class="manage-btn">Upgrade to Silver</button>
+                            <button class="learn-more-btn">Compare Bronze vs Silver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCENARIO 5: SILVER LEVEL -->
+        <div class="demo-section">
+            <div class="demo-title">Silver Level User</div>
+
+            <div class="billing-period-card">
+                <div class="billing-period-title">This Billing Period</div>
+                <div class="billing-period-subtitle">28 Nov 2024 - 28 Dec 2024 (or £750 reached, whichever first)</div>
+
+                <div class="period-stats">
+                    <!-- Spending Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Your Spending</div>
+                        <div class="stat-value-large">£345</div>
+                        <div class="stat-sublabel">of £750 threshold</div>
+                    </div>
+
+                    <!-- Leads Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Leads Purchased</div>
+                        <div class="stat-value-medium">67</div>
+                        <div class="stat-sublabel">this period</div>
+                    </div>
+
+                    <!-- Trust Level Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Trust Level</div>
+                        <div class="stat-value-large silver">Silver</div>
+                        <div class="stat-sublabel">
+                            <span class="threshold-highlight">£750 threshold</span> • Established user
+                        </div>
+                        <div class="eligibility">✓ Eligible for £1000 threshold or monthly billing</div>
+                        <div class="trust-actions">
+                            <button class="manage-btn">Manage Limit</button>
+                            <button class="learn-more-btn">What is monthly billing?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCENARIO 6: GOLD LEVEL -->
+        <div class="demo-section">
+            <div class="demo-title">Gold Level - Monthly Billing</div>
+
+            <div class="billing-period-card">
+                <div class="billing-period-title">This Billing Period</div>
+                <div class="billing-period-subtitle">Monthly billing • Invoice due 28 Dec 2024</div>
+
+                <div class="period-stats">
+                    <!-- Spending Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">This Month</div>
+                        <div class="stat-value-large">£523</div>
+                        <div class="stat-sublabel">outstanding balance</div>
+                    </div>
+
+                    <!-- Leads Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Leads Purchased</div>
+                        <div class="stat-value-medium">89</div>
+                        <div class="stat-sublabel">this month</div>
+                    </div>
+
+                    <!-- Trust Level Card -->
+                    <div class="period-stat-card">
+                        <div class="stat-label">Trust Level</div>
+                        <div class="stat-value-large gold">Gold</div>
+                        <div class="stat-sublabel">
+                            Monthly billing active • Up to £900 credit available
+                        </div>
+                        <div class="next-step">Professional invoicing, maximum flexibility</div>
+                        <div class="trust-actions">
+                            <button class="manage-btn">Account Settings</button>
+                            <button class="learn-more-btn">Switch to auto-pay</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

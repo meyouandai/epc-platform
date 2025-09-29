@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Options Comparison - EPC Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .option-card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+        }
+
+        .option-card.recommended {
+            border-color: #667eea;
+        }
+
+        .option-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.essential {
+            background: #10b981;
+            color: white;
+        }
+
+        .badge.useful {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .badge.optional {
+            background: #6b7280;
+            color: white;
+        }
+
+        .badge.remove {
+            background: #ef4444;
+            color: white;
+        }
+
+        .setting-item {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-item.essential {
+            background: #f0fdf4;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #bbf7d0;
+        }
+
+        .setting-item.useful {
+            background: #fffbeb;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #fed7aa;
+        }
+
+        .setting-item.optional {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .setting-item.remove {
+            background: #fef2f2;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #fecaca;
+        }
+
+        .preference-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            cursor: pointer;
+        }
+
+        .preference-description {
+            margin-top: 8px;
+            margin-left: 30px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .setting-title {
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .setting-desc {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .control-preview {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .preference-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .preference-input {
+            width: 100px;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-left: auto;
+        }
+
+        .toggle {
+            width: 44px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle.on {
+            background: #667eea;
+        }
+
+        .toggle::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle.on::after {
+            transform: translateX(20px);
+        }
+
+        .number-input {
+            width: 100px;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .section-divider {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            margin: 40px 0;
+            border-radius: 1px;
+        }
+
+        .alternatives {
+            margin-top: 40px;
+            padding: 24px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .alternatives h2 {
+            font-size: 20px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .alt-option {
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+        }
+
+        .alt-option h4 {
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .alt-option p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Settings Page Options Analysis</h1>
+            <p>Visual comparison of different setting options for the EPC assessor platform</p>
+        </div>
+
+        <div class="comparison-grid">
+            <!-- Option 1: Minimal Lead-Focused -->
+            <div class="option-card recommended">
+                <h3>Option 1: Minimal Lead-Focused <span class="badge essential">RECOMMENDED</span></h3>
+
+                <div class="setting-item essential">
+                    <div class="setting-title">Lead Notifications</div>
+                    <div class="setting-desc">How would you like to receive new lead alerts?</div>
+                    <div class="control-preview" style="margin-top: 12px;">
+                        <label class="preference-label">
+                            <input type="checkbox" checked>
+                            <span>Email</span>
+                        </label>
+                        <label class="preference-label" style="margin-left: 24px;">
+                            <input type="checkbox">
+                            <span>SMS</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item useful">
+                    <div class="setting-title">Daily Spending Limit</div>
+                    <div class="setting-desc">Maximum amount to spend on leads per day</div>
+                    <div class="control-preview">
+                        <span>£</span>
+                        <input type="number" value="50" class="number-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 2: Extended Notifications -->
+            <div class="option-card">
+                <h3>Option 2: Extended Notifications <span class="badge useful">MODERATE</span></h3>
+
+                <div class="setting-item essential">
+                    <div class="setting-title">Lead Notifications</div>
+                    <div class="setting-desc">Receive alerts when new leads match your postcodes</div>
+                    <div class="control-preview" style="margin-top: 12px;">
+                        <label class="preference-label">
+                            <input type="checkbox" checked>
+                            <span>Email</span>
+                        </label>
+                        <label class="preference-label" style="margin-left: 24px;">
+                            <input type="checkbox">
+                            <span>SMS</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item useful">
+                    <div class="setting-title">System Notifications</div>
+                    <div class="setting-desc">Account updates, payment confirmations, issues</div>
+                    <div class="control-preview" style="margin-top: 12px;">
+                        <label class="preference-label">
+                            <input type="checkbox" checked>
+                            <span>Email</span>
+                        </label>
+                        <label class="preference-label" style="margin-left: 24px;">
+                            <input type="checkbox">
+                            <span>SMS (urgent only)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item useful">
+                    <div class="setting-title">Daily Spending Limit</div>
+                    <div class="setting-desc">Budget control</div>
+                    <div class="control-preview">
+                        <span>£</span>
+                        <input type="number" value="50" class="number-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 3: Full Feature Set -->
+            <div class="option-card">
+                <h3>Option 3: Full Feature Set <span class="badge optional">CLUTTERED</span></h3>
+
+                <div class="setting-item essential">
+                    <div class="setting-title">Email Notifications</div>
+                    <div class="setting-desc">All email communications</div>
+                    <div class="control-preview">
+                        <div class="toggle on"></div>
+                    </div>
+                </div>
+
+                <div class="setting-item essential">
+                    <div class="setting-title">SMS Notifications</div>
+                    <div class="setting-desc">Text message alerts</div>
+                    <div class="control-preview">
+                        <div class="toggle"></div>
+                    </div>
+                </div>
+
+                <div class="setting-item remove">
+                    <div class="setting-title">Auto-renew Post Codes</div>
+                    <div class="setting-desc">Automatically renew expiring areas</div>
+                    <div class="control-preview">
+                        <div class="toggle on"></div>
+                        <span style="font-size: 12px; color: #ef4444;">Unclear feature</span>
+                    </div>
+                </div>
+
+                <div class="setting-item useful">
+                    <div class="setting-title">Daily Spending Limit</div>
+                    <div class="setting-desc">Budget control</div>
+                    <div class="control-preview">
+                        <span>£</span>
+                        <input type="number" value="50" class="number-input">
+                    </div>
+                </div>
+
+                <div class="setting-item remove">
+                    <div class="setting-title">Partner Offers</div>
+                    <div class="setting-desc">Marketing emails from partners</div>
+                    <div class="control-preview">
+                        <div class="toggle"></div>
+                        <span style="font-size: 12px; color: #ef4444;">Not core function</span>
+                    </div>
+                </div>
+
+                <div class="setting-item remove">
+                    <div class="setting-title">Industry Updates</div>
+                    <div class="setting-desc">EPC regulation changes</div>
+                    <div class="control-preview">
+                        <div class="toggle on"></div>
+                        <span style="font-size: 12px; color: #ef4444;">Blog content</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 4: Granular Control -->
+            <div class="option-card">
+                <h3>Option 4: Granular Control <span class="badge useful">DETAILED</span></h3>
+
+                <div class="setting-item essential">
+                    <div class="setting-title">New Lead Alerts</div>
+                    <div class="setting-desc">Instant notifications when leads match your postcodes</div>
+                    <div class="control-preview" style="margin-top: 12px;">
+                        <label class="preference-label">
+                            <input type="checkbox" checked>
+                            <span>Email</span>
+                        </label>
+                        <label class="preference-label" style="margin-left: 24px;">
+                            <input type="checkbox">
+                            <span>SMS</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item useful">
+                    <div class="setting-title">Lead Summary Reports</div>
+                    <div class="setting-desc">Periodic summaries of your lead activity</div>
+                    <div class="control-preview">
+                        <select style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 4px;">
+                            <option>Daily</option>
+                            <option>Weekly</option>
+                            <option>Monthly</option>
+                            <option>Never</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item useful">
+                    <div class="setting-title">Account Notifications</div>
+                    <div class="setting-desc">Payment confirmations, spending limits reached</div>
+                    <div class="control-preview" style="margin-top: 12px;">
+                        <label class="preference-label">
+                            <input type="checkbox" checked>
+                            <span>Email</span>
+                        </label>
+                        <label class="preference-label" style="margin-left: 24px;">
+                            <input type="checkbox">
+                            <span>SMS (urgent)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item useful">
+                    <div class="setting-title">Spending Controls</div>
+                    <div class="setting-desc">Set limits to manage your budget</div>
+                    <div class="control-preview">
+                        <div style="display: flex; gap: 20px; margin-top: 8px;">
+                            <div>
+                                <label style="font-size: 13px; color: #6b7280;">Daily: £</label>
+                                <input type="number" value="50" class="number-input" style="width: 80px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 13px; color: #6b7280;">Weekly: £</label>
+                                <input type="number" value="300" class="number-input" style="width: 80px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="alternatives">
+            <h2>Alternative Approaches</h2>
+
+            <div class="alt-option">
+                <h4>Approach A: Lead Delivery Method</h4>
+                <p><strong>Single question:</strong> "How would you like to receive new leads?" with options for Email only, SMS only, or Both. Keeps it simple and focused on core function.</p>
+            </div>
+
+            <div class="alt-option">
+                <h4>Approach B: Notification Categories</h4>
+                <p><strong>Group by purpose:</strong> Lead Delivery, Account Alerts, System Messages. Each category can have email/SMS toggles.</p>
+            </div>
+
+            <div class="alt-option">
+                <h4>Approach C: Smart Defaults</h4>
+                <p><strong>Minimal settings:</strong> Default to email for everything, only show SMS toggle for urgent items. Reduces cognitive load.</p>
+            </div>
+
+            <div class="alt-option">
+                <h4>Approach D: No Settings Page</h4>
+                <p><strong>Zero configuration:</strong> Email for leads (required), SMS opt-in during onboarding, spending limits in billing section only.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity to toggles
+        document.querySelectorAll('.toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('on');
+            });
+        });
+    </script>
+</body>
+</html>

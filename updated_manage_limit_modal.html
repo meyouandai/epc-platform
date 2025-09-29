@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updated Manage Limit Modal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .modal-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-button:hover {
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .current-status {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .status-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            background: #10b981;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .options-section {
+            margin: 24px 0;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .limit-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .limit-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .limit-card:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .limit-card.selected {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .limit-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f9fafb;
+        }
+
+        .limit-card.disabled:hover {
+            border-color: #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .limit-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .limit-description {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .limit-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-current {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-locked {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-new {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .help-text {
+            background: #f0f9ff;
+            border-left: 3px solid #3b82f6;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #1e3a8a;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 32px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+        }
+
+        @media (max-width: 480px) {
+            .limit-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .limit-amount {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-wrapper">
+        <div class="modal-header">
+            <div class="modal-title">Manage Your Spending Limit</div>
+            <div class="modal-subtitle">Choose your preferred payment threshold</div>
+            <button class="close-button">×</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="current-status">
+                <div class="status-row">
+                    <span class="status-label">Current Limit</span>
+                    <span class="status-value">£100</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Progress to Next Tier</span>
+                    <span class="status-value">£100 of £200</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%"></div>
+                </div>
+            </div>
+
+            <div class="options-section">
+                <div class="section-label">Available Limits</div>
+
+                <div class="limit-cards-grid">
+                    <div class="limit-card">
+                        <div class="limit-amount">£50</div>
+                        <div class="limit-description">Starter level</div>
+                    </div>
+
+                    <div class="limit-card selected">
+                        <div class="limit-amount">£100</div>
+                        <div class="limit-description">Building trust</div>
+                        <div class="limit-badge badge-current">Current</div>
+                    </div>
+
+                    <div class="limit-card disabled">
+                        <div class="limit-amount">£150</div>
+                        <div class="limit-description">Building trust</div>
+                        <div class="limit-badge badge-locked">Locked</div>
+                    </div>
+
+                    <div class="limit-card disabled">
+                        <div class="limit-amount">£200</div>
+                        <div class="limit-description">Building trust</div>
+                        <div class="limit-badge badge-locked">Locked</div>
+                    </div>
+
+                    <div class="limit-card disabled">
+                        <div class="limit-amount">£250</div>
+                        <div class="limit-description">Building trust</div>
+                        <div class="limit-badge badge-locked">Locked</div>
+                    </div>
+
+                    <div class="limit-card disabled">
+                        <div class="limit-amount">£300</div>
+                        <div class="limit-description">Established level</div>
+                        <div class="limit-badge badge-locked">Locked</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-text">
+                💡 Progress continues regardless of limit changes. Downgrading doesn't reset your eligibility.
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary">Cancel</button>
+            <button class="btn btn-primary">Keep Current Limit</button>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.limit-card:not(.disabled)').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selected from all cards
+                document.querySelectorAll('.limit-card').forEach(c => c.classList.remove('selected'));
+                // Add selected to clicked card
+                this.classList.add('selected');
+                
+                // Update button text based on selection
+                const amount = this.querySelector('.limit-amount').textContent;
+                const button = document.querySelector('.btn-primary');
+                const currentAmount = document.querySelector('.status-value').textContent;
+                
+                if (amount === currentAmount) {
+                    button.textContent = 'Keep Current Limit';
+                } else {
+                    button.textContent = `Update to ${amount}`;
+                }
+            });
+        });
+
+        // Close button functionality
+        document.querySelector('.close-button').addEventListener('click', function() {
+            console.log('Modal would close');
+        });
+    </script>
+</body>
+</html>

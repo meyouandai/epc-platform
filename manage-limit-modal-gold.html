@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Member - Manage Limit Modal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .modal-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .modal-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #78350f;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #92400e;
+            margin-top: 4px;
+        }
+
+        .modal-body {
+            padding: 24px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .current-status {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            font-size: 14px;
+            color: #78350f;
+        }
+
+        .status-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #451a03;
+        }
+
+        .options-section {
+            margin: 24px 0;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .limit-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .limit-option:hover {
+            border-color: #fbbf24;
+            background: #fef3c7;
+        }
+
+        .limit-option.selected {
+            border-color: #f59e0b;
+            background: #fef3c7;
+        }
+
+        .radio-dot {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .limit-option.selected .radio-dot {
+            border-color: #f59e0b;
+        }
+
+        .limit-option.selected .radio-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #f59e0b;
+            border-radius: 50%;
+        }
+
+        .limit-info {
+            flex: 1;
+        }
+
+        .limit-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .limit-description {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .limit-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .badge-current {
+            background: #fde68a;
+            color: #78350f;
+        }
+
+        .badge-special {
+            background: #ddd6fe;
+            color: #5b21b6;
+        }
+
+        .billing-option {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border: 2px solid #8b5cf6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .billing-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .billing-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #5b21b6;
+            margin-bottom: 8px;
+        }
+
+        .billing-description {
+            font-size: 14px;
+            color: #6b21a8;
+            margin-bottom: 12px;
+        }
+
+        .billing-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .feature-pill {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #5b21b6;
+            font-weight: 500;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-primary {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .version-label {
+            background: #f59e0b;
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 20px 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #fbbf24;
+            border-color: #fbbf24;
+            color: white;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-container">
+        <h1>Gold Member - All Options Available</h1>
+        <p class="intro">This shows how the modal looks when all limits are unlocked at Gold level</p>
+
+        <div class="modal-grid">
+
+            <!-- VERSION 1: Long Scrollable List -->
+            <div class="modal-wrapper">
+                <div class="version-label">Full List - All Options Visible</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Account Settings</div>
+                    <div class="modal-subtitle">Gold Member - Maximum Flexibility</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Account Level</span>
+                            <span class="status-value" style="color: #fbbf24;">Gold</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Current Setup</span>
+                            <span class="status-value">£1000 Auto-pay</span>
+                        </div>
+                    </div>
+
+                    <div class="billing-option">
+                        <div class="billing-title">🏆 Switch to Monthly Billing</div>
+                        <div class="billing-description">Professional invoicing with NET 30 payment terms</div>
+                        <div class="billing-features">
+                            <span class="feature-pill">Up to £1500 credit</span>
+                            <span class="feature-pill">Monthly invoices</span>
+                            <span class="feature-pill">Better cash flow</span>
+                        </div>
+                    </div>
+
+                    <div class="options-section">
+                        <div class="section-label">Auto-pay Limits (Current System)</div>
+
+                        <!-- All Bronze Limits -->
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£50</div>
+                                <div class="limit-description">Starter limit - most frequent payments</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£100</div>
+                                <div class="limit-description">Early Bronze limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£150</div>
+                                <div class="limit-description">Mid Bronze limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£250</div>
+                                <div class="limit-description">Advanced Bronze limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£500</div>
+                                <div class="limit-description">Top Bronze / Entry Silver</div>
+                            </div>
+                        </div>
+
+                        <!-- Silver Limits -->
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£750</div>
+                                <div class="limit-description">Mid Silver limit</div>
+                            </div>
+                        </div>
+
+                        <!-- Gold Limits -->
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1000</div>
+                                <div class="limit-description">Entry Gold limit</div>
+                            </div>
+                            <div class="limit-badge badge-current">Current</div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1250</div>
+                                <div class="limit-description">Higher Gold limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1500</div>
+                                <div class="limit-description">Maximum auto-pay limit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Update Settings</button>
+                </div>
+            </div>
+
+            <!-- VERSION 2: Grouped by Tiers -->
+            <div class="modal-wrapper">
+                <div class="version-label">Grouped by Account Tiers</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Account Settings</div>
+                    <div class="modal-subtitle">Gold Member</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Current Setup</span>
+                            <span class="status-value">£1000 Auto-pay</span>
+                        </div>
+                    </div>
+
+                    <div class="billing-option">
+                        <div class="billing-title">💳 Monthly Billing Available</div>
+                        <div class="billing-description">Switch to professional invoicing</div>
+                    </div>
+
+                    <!-- Gold Options -->
+                    <div class="options-section">
+                        <div class="section-label">Gold Limits (Your Level)</div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1000</div>
+                            </div>
+                            <div class="limit-badge badge-current">Current</div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1250</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1500</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Silver Options -->
+                    <div class="options-section">
+                        <div class="section-label">Silver Limits</div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£500</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£750</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bronze Options -->
+                    <div class="options-section">
+                        <div class="section-label">Bronze Limits</div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£50 - £250</div>
+                                <div class="limit-description">Various Bronze limits available</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Update Settings</button>
+                </div>
+            </div>
+
+            <!-- VERSION 3: Smart Defaults with "Show All" -->
+            <div class="modal-wrapper">
+                <div class="version-label">Smart Defaults (Recommended)</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Account Settings</div>
+                    <div class="modal-subtitle">Gold Member</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Current Setup</span>
+                            <span class="status-value">£1000 Auto-pay</span>
+                        </div>
+                    </div>
+
+                    <div class="billing-option">
+                        <div class="billing-title">🎯 Recommended: Monthly Billing</div>
+                        <div class="billing-description">Most Gold members prefer monthly invoicing for better cash flow</div>
+                        <div class="billing-features">
+                            <span class="feature-pill">NET 30 terms</span>
+                            <span class="feature-pill">Up to £1500 credit</span>
+                        </div>
+                    </div>
+
+                    <div class="options-section">
+                        <div class="section-label">Suggested Limits</div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£750</div>
+                                <div class="limit-description">Lower limit, more control</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1000</div>
+                                <div class="limit-description">Your current limit</div>
+                            </div>
+                            <div class="limit-badge badge-current">Current</div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1250</div>
+                                <div class="limit-description">Fewer payment interruptions</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1500</div>
+                                <div class="limit-description">Maximum convenience</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="#" style="color: #3b82f6; font-size: 14px; text-decoration: none;">Show all 9 available limits ↓</a>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Update Settings</button>
+                </div>
+            </div>
+
+            <!-- VERSION 4: Tabbed Interface -->
+            <div class="modal-wrapper">
+                <div class="version-label">Tabbed Interface</div>
+
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Account Settings</div>
+                    <div class="modal-subtitle">Gold Member</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="tabs">
+                        <div class="tab active">Auto-pay</div>
+                        <div class="tab">Monthly Billing</div>
+                    </div>
+
+                    <div class="current-status">
+                        <div class="status-row">
+                            <span class="status-label">Current</span>
+                            <span class="status-value">£1000 Auto-pay</span>
+                        </div>
+                    </div>
+
+                    <div class="options-section">
+                        <div class="section-label">Quick Select</div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£500</div>
+                                <div class="limit-description">Lower limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option selected">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1000</div>
+                                <div class="limit-description">Current</div>
+                            </div>
+                            <div class="limit-badge badge-current">✓</div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">£1500</div>
+                                <div class="limit-description">Higher limit</div>
+                            </div>
+                        </div>
+
+                        <div class="limit-option">
+                            <div class="radio-dot"></div>
+                            <div class="limit-info">
+                                <div class="limit-amount">Custom</div>
+                                <div class="limit-description">Choose from all 9 options</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 40px; padding: 20px; background: white; border-radius: 12px;">
+            <h2 style="margin-bottom: 20px;">Analysis: The Problem with Too Many Options</h2>
+
+            <p style="color: #374151; margin-bottom: 16px;">
+                <strong>Version 1 (Full List):</strong> 9 options is overwhelming. Users will likely experience choice paralysis.
+            </p>
+
+            <p style="color: #374151; margin-bottom: 16px;">
+                <strong>Version 2 (Grouped):</strong> Better organization but still shows all options. The grouping helps but doesn't solve the core problem.
+            </p>
+
+            <p style="color: #374151; margin-bottom: 16px;">
+                <strong>Version 3 (Smart Defaults) ⭐:</strong> Best approach - shows relevant options (nearby limits + upgrade path) with ability to see more if needed. Most users won't need Bronze limits at Gold level.
+            </p>
+
+            <p style="color: #374151; margin-bottom: 16px;">
+                <strong>Version 4 (Tabbed):</strong> Clean separation of billing types, with simplified quick-select options.
+            </p>
+
+            <h3 style="margin: 20px 0 12px 0;">Recommendation:</h3>
+            <p style="color: #374151;">
+                Use <strong>Smart Defaults approach</strong> - show 3-4 relevant limits based on current level, with an expandable option for power users who need specific amounts. This prevents overwhelming Gold users with Bronze £50-£150 limits they'll never use.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

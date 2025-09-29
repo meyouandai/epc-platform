@@ -1,0 +1,631 @@
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ChevronDown, ChevronRight, MapPin, ArrowUp, ArrowDown, AlertTriangle } from 'lucide-react';
+
+const getTrendPeriod = (dateRange) => {
+    switch(dateRange) {
+      case 'today':
+        return 'vs yesterday';
+      case 'week':
+        return 'vs previous 7 days';
+      case 'month':
+        return 'vs last month';
+      case 'custom':
+        return 'trend';
+      default:
+        return '';
+    }
+  };
+
+  const StatusIndicator = (props) => {
+    const { assessors, leads } = props;
+    
+    console.log(`Checking postcode - Leads: ${leads}, Assessors: ${assessors}`);
+    
+    if (leads > 20 && assessors < 2) {
+      return (
+        <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800 inline-block">
+          Urgent: Need Assessors
+        </span>
+      );
+    }
+    if (leads > 15 && assessors < 3) {
+      return (
+        <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 inline-block">
+          Needs Coverage
+        </span>
+      );
+    }
+    if (assessors >= 4) {
+      return (
+        <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800 inline-block">
+          Full Coverage
+        </span>
+      );
+    }
+    return null;
+  };
+  
+  const PeakTimeIndicator = ({ peakTimes }) => {
+    // Find the highest value among morning, afternoon, and evening
+    const timeSlots = {
+      "09:00-12:00": peakTimes.morning,
+      "12:00-17:00": peakTimes.afternoon,
+      "17:00-20:00": peakTimes.evening
+    };
+  
+    const peakTimeSlot = Object.entries(timeSlots).reduce((a, b) => 
+      timeSlots[a] > timeSlots[b[0]] ? a : b[0]
+    );
+    return (
+      <div className="text-xs text-gray-500">
+        Peak time: {peakHour}
+      </div>
+    );
+  };
+
+  const formatTimestamp = (date) => {
+    const now = new Date();
+    const diff = now - date;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+  
+    if (minutes < 60) {
+      return `${minutes}m ago`;
+    } else if (hours < 24) {
+      return `${hours}h ago`;
+    } else if (days === 1) {
+      return `Yesterday at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    } else {
+      return date.toLocaleDateString('en-GB', { 
+        day: 'numeric', 
+        month: 'short'
+      }) + ` at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+  };
+  
+  const generateLeads = (postcode, num) => {
+    return Array.from({ length: num }, (_, i) => ({
+      timestamp: new Date(Date.now() - 1000 * 60 * (Math.random() * 60 * 24 * 7)),
+      postcode: `${postcode}${Math.floor(Math.random() * 9) + 1}`,
+      assessors: Array.from({ length: Math.floor(Math.random() * 4) + 1 }, (_, i) => 
+        `Assessor ${Math.floor(Math.random() * 50) + 1}`
+      )
+    })).sort((a, b) => b.timestamp - a.timestamp);
+  };
+
+  const BASE_MOCK_DATA = {
+    "Greater London": {
+    totalLeads: 285,
+    trend: { value: 15.5 },
+    cities: {
+      "Central London": {
+        totalLeads: 95,
+        trend: { value: 12.3 },
+        postcodeCoverage: [
+          { code: "EC1", leads: 35, assessors: 4, trend: 5 },
+          { code: "WC1", leads: 28, assessors: 2, trend: -2 },
+          { code: "SW1", leads: 22, assessors: 1, trend: 8 },
+          { code: "W1", leads: 18, assessors: 2, trend: -1 },
+          { code: "E1", leads: 15, assessors: 1, trend: 3 }
+        ],
+        recentLeads: generateLeads("EC", 8)
+      },
+      "North London": {
+        totalLeads: 75,
+        trend: { value: -5.2 },
+        postcodeCoverage: [
+          { code: "N1", leads: 25, assessors: 3, trend: 3 },
+          { code: "N4", leads: 20, assessors: 2, trend: -4 },
+          { code: "N16", leads: 18, assessors: 1, trend: 2 },
+          { code: "N7", leads: 16, assessors: 2, trend: 5 },
+          { code: "N2", leads: 14, assessors: 1, trend: -2 }
+        ],
+        recentLeads: generateLeads("N", 6)
+      }
+    }
+},
+    "Greater Manchester": {
+      totalLeads: 225,
+      trend: { value: -3.2 },
+      cities: {
+        "Manchester": {
+          totalLeads: 95,
+          trend: { value: -2.5 },
+          postcodeCoverage: [
+            { code: "M1", leads: 32, assessors: 4, trend: -5 },
+            { code: "M2", leads: 28, assessors: 2, trend: -2 },
+            { code: "M3", leads: 25, assessors: 1, trend: 4 },
+            { code: "M4", leads: 20, assessors: 2, trend: -3 },
+            { code: "M5", leads: 18, assessors: 1, trend: 2 }
+          ],
+          recentLeads: generateLeads("M", 8)
+        },
+        "Bolton": {
+          totalLeads: 45,
+          trend: { value: -4.8 },
+          postcodeCoverage: [
+            { code: "BL1", leads: 20, assessors: 2, trend: -6 },
+            { code: "BL2", leads: 18, assessors: 2, trend: -3 },
+            { code: "BL3", leads: 16, assessors: 1, trend: 2 },
+            { code: "BL4", leads: 15, assessors: 2, trend: -2 },
+            { code: "BL5", leads: 12, assessors: 1, trend: 4 }
+          ],
+          recentLeads: generateLeads("BL", 4)
+        }
+      }
+    },
+
+    "West Midlands": {
+      totalLeads: 195,
+      trend: { value: 8.5 },
+      cities: {
+        "Birmingham": {
+          totalLeads: 85,
+          trend: { value: 10.2 },
+          postcodeCoverage: [
+            { code: "B1", leads: 30, assessors: 4, trend: 6 },
+            { code: "B2", leads: 25, assessors: 2, trend: -3 },
+            { code: "B3", leads: 22, assessors: 1, trend: 8 },
+            { code: "B4", leads: 18, assessors: 2, trend: 4 },
+            { code: "B5", leads: 16, assessors: 1, trend: -2 }
+          ],
+          recentLeads: generateLeads("B", 8)
+        },
+        "Coventry": {
+          totalLeads: 65,
+          trend: { value: 6.8 },
+          postcodeCoverage: [
+            { code: "CV1", leads: 28, assessors: 3, trend: 5 },
+            { code: "CV2", leads: 22, assessors: 2, trend: -4 },
+            { code: "CV3", leads: 19, assessors: 1, trend: 7 },
+            { code: "CV4", leads: 16, assessors: 2, trend: 3 },
+            { code: "CV5", leads: 15, assessors: 1, trend: -1 }
+          ],
+          recentLeads: generateLeads("CV", 6)
+        }
+      }
+    }
+  };
+  
+
+  const TopPostcodes = (props) => {
+  const { cityData, dateRange } = props;
+
+  return (
+    <div className="space-y-2">
+      <h3 className="text-sm font-medium text-gray-600">
+        Top Postcodes
+      </h3>
+      {cityData.postcodeCoverage
+        .sort((a, b) => b.leads - a.leads)
+        .slice(0, 5)
+        .map((postcode) => (
+          <div key={postcode.code} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+            <div className="flex items-center space-x-3">
+              <div>
+                <span className="font-medium">{postcode.code}</span>
+                <span className="text-sm text-gray-600 ml-2">{postcode.leads} leads</span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4 min-w-[200px] justify-end">
+              <StatusIndicator 
+                assessors={postcode.assessors} 
+                leads={postcode.leads} 
+              />
+              <div className={`text-sm ${postcode.trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {postcode.trend > 0 ? '+' : ''}{postcode.trend}%
+              </div>
+            </div>
+          </div>
+        ))}
+    </div>
+  );
+};
+
+const RegionalDashboard = () => {
+    const [expandedRegions, setExpandedRegions] = useState(new Set());
+    const [expandedCities, setExpandedCities] = useState(new Set());
+    const [expandedLeads, setExpandedLeads] = useState(new Set());
+    const [dateRange, setDateRange] = useState('today');
+    const [refresh, setRefresh] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [selectedLeads, setSelectedLeads] = useState(new Set());
+    const [showSearchResults, setShowSearchResults] = useState(false);
+
+    useEffect(() => {
+        setRefresh(prev => !prev);
+    }, []);
+
+    // Add this new function
+    const getData = () => {
+        const period = getTrendPeriod(dateRange);
+        const data = {};
+        
+        Object.entries(BASE_MOCK_DATA).forEach(([region, regionData]) => {
+            data[region] = {
+                ...regionData,
+                trend: { ...regionData.trend, period }
+            };
+            
+            if (regionData.cities) {
+                data[region].cities = {};
+                Object.entries(regionData.cities).forEach(([city, cityData]) => {
+                    data[region].cities[city] = {
+                        ...cityData,
+                        trend: { ...cityData.trend, period }
+                    };
+                });
+            }
+        });
+        
+        return data;
+    };
+
+    // Your existing toggle functions remain the same
+    const toggleRegion = (region) => {
+        const newExpanded = new Set(expandedRegions);
+        if (newExpanded.has(region)) {
+            newExpanded.delete(region);
+        } else {
+            newExpanded.add(region);
+        }
+        setExpandedRegions(newExpanded);
+    };
+
+    const toggleCity = (city) => {
+        const newExpanded = new Set(expandedCities);
+        if (newExpanded.has(city)) {
+            newExpanded.delete(city);
+        } else {
+            newExpanded.add(city);
+        }
+        setExpandedCities(newExpanded);
+    };
+
+    const toggleLead = (leadId) => {
+        const newExpanded = new Set(expandedLeads);
+        if (newExpanded.has(leadId)) {
+            newExpanded.delete(leadId);
+        } else {
+            newExpanded.add(leadId);
+        }
+        setExpandedLeads(newExpanded);
+    };
+
+    const handleSearch = () => {
+        if (!searchQuery.trim()) return;
+        
+        // Mock search results for now
+        const results = Object.entries(BASE_MOCK_DATA).flatMap(([region, regionData]) => 
+            Object.entries(regionData.cities).flatMap(([city, cityData]) => 
+                cityData.recentLeads.filter(lead => 
+                    lead.postcode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    lead.address?.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+            )
+        );
+        
+        setSearchResults(results);
+        setShowSearchResults(true);
+    };
+
+    const handleLeadSelection = (leadId) => {
+        const newSelected = new Set(selectedLeads);
+        if (newSelected.has(leadId)) {
+            newSelected.delete(leadId);
+        } else {
+            newSelected.add(leadId);
+        }
+        setSelectedLeads(newSelected);
+    };
+
+    // Get the data with current trend period
+    const data = getData();
+
+  return (
+    <div className="w-full max-w-6xl mx-auto p-4 space-y-4">
+      <div className="flex justify-between items-center mb-6">
+  <div className="text-2xl font-bold">Lead Distribution</div>
+  <div className="flex space-x-4">
+  <div className="relative">
+  <label className="absolute text-xs text-gray-500 left-3 top-1">
+    Period
+  </label>
+  <div className="relative">
+  <label className="absolute text-xs text-gray-500 left-3 top-1">
+    Period
+  </label>
+  <select 
+    className="border rounded-md px-3 pt-5 pb-2 appearance-none"
+    value={dateRange}
+    onChange={(e) => setDateRange(e.target.value)}
+  >
+    <option value="today">Today</option>
+    <option value="week">Last 7 Days</option>
+    <option value="month">This Month</option>
+    <option value="custom">Custom Range</option>
+  </select>
+</div>
+</div>
+    {/* Add this new Link ⬇️ */}
+    <Link 
+      href="/coverage" 
+      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+    >
+      View Coverage
+    </Link>
+    <Link 
+      href="/assessors" 
+      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+    >
+      Manage Assessors
+    </Link>
+  </div>
+</div>
+
+<div className="relative">  {/* Added wrapper div */}
+  <div className="flex gap-3 items-center bg-white p-3 rounded-lg border">
+    <input
+      type="text"
+      placeholder="Search leads by customer name, postcode or address..."
+      className="flex-1 px-3 py-2 border rounded-md"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+    />
+    <button 
+      className="px-4 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      onClick={handleSearch}
+    >
+      Search
+    </button>
+  </div>
+
+  {/* Add this results panel right after the search input div */}
+  {showSearchResults && (
+    <div className="absolute top-full left-0 right-0 mt-2 bg-white border rounded-lg shadow-lg z-50">
+      <div className="p-4 border-b flex justify-between items-center">
+  <div className="flex items-center gap-3">
+    <input
+      type="checkbox"
+      checked={searchResults.length > 0 && selectedLeads.size === searchResults.length}
+      onChange={(e) => {
+        if (e.target.checked) {
+          // Select all leads
+          const allLeadIds = searchResults.map(lead => lead.id);
+          setSelectedLeads(new Set(allLeadIds));
+        } else {
+          // Deselect all leads
+          setSelectedLeads(new Set());
+        }
+      }}
+      className="h-4 w-4 rounded border-gray-300"
+    />
+    <span className="text-lg">Search Results ({searchResults.length})</span>
+  </div>
+  <div className="flex gap-2">
+    <button 
+      className="px-4 py-2 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 disabled:opacity-50"
+      disabled={selectedLeads.size === 0}
+    >
+      Remove Selected ({selectedLeads.size})
+    </button>
+    <button 
+      className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+      onClick={() => {
+        setShowSearchResults(false);
+        setSelectedLeads(new Set());
+      }}
+    >
+      Close
+    </button>
+  </div>
+</div>
+<div className="max-h-[400px] overflow-y-auto">
+  {searchResults.map((lead) => (
+    <div 
+      key={lead.id}
+      className="p-4 border-b last:border-0 hover:bg-gray-50"
+    >
+      <div className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          checked={selectedLeads.has(lead.id)}
+          onChange={(e) => {
+            const newSelected = new Set(selectedLeads);
+            if (e.target.checked) {
+              // Select just this lead
+              newSelected.add(lead.id);
+            } else {
+              // Deselect just this lead
+              newSelected.delete(lead.id);
+            }
+            setSelectedLeads(newSelected);
+          }}
+          className="mt-1 h-4 w-4 rounded border-gray-300"
+        />
+        <div>
+          <div className="text-lg font-medium">{lead.postcode}</div>
+          <div className="text-gray-500">
+            Received: {formatTimestamp(lead.timestamp)}
+          </div>
+          <div className="text-gray-600">
+            Assigned to: {lead.assessors.join(', ')}
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+    </div>
+  )}
+</div>
+
+      <div className="space-y-4">
+      {Object.entries(data).map(([region, regionData]) => {
+  const isRegionExpanded = expandedRegions.has(region);
+
+  return (
+    <div key={region} className="border rounded-lg">
+      <div 
+        className="p-4 cursor-pointer hover:bg-gray-50"
+        onClick={() => toggleRegion(region)}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            {isRegionExpanded ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+            <span className="text-xl font-medium">{region}</span> {/* Updated size */}
+          </div>
+          <div className="flex items-center space-x-6">
+            <div className="text-sm">
+              <div className="font-medium">{regionData.totalLeads} leads</div>
+            </div>
+            <div className={`flex items-center ${regionData.trend.value > 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {regionData.trend.value > 0 ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
+              <span>{Math.abs(regionData.trend.value)}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+              {isRegionExpanded && (
+                <div className="p-4 bg-gray-50">
+                  <div className="space-y-4">
+                    {Object.entries(regionData.cities).map(([city, cityData]) => {
+                      const isCityExpanded = expandedCities.has(city);
+
+                      return (
+                        <div key={city} className="border rounded-lg bg-white">
+                          <div 
+                            className="p-3 cursor-pointer hover:bg-gray-50"
+                            onClick={() => toggleCity(city)}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4">
+                                {isCityExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                                <span className="font-medium">{city}</span>
+                              </div>
+                              <div className="flex items-center space-x-6">
+                                <div className="text-sm">
+                                  <div className="font-medium">{cityData.totalLeads} leads</div>
+                                </div>
+                                <div className={`flex items-center ${cityData.trend.value > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                  {cityData.trend.value > 0 ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
+                                  <span>{Math.abs(cityData.trend.value)}% {cityData.trend.period}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {isCityExpanded && (
+                            <div className="p-3 border-t">
+                              <div className="space-y-8">
+                              <div className="space-y-2">
+                              <TopPostcodes 
+                                    cityData={cityData} 
+                                    dateRange={dateRange}
+                                />
+                            </div>
+
+                                <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+  <h3 className="text-sm font-medium text-gray-600">Recent Leads</h3>
+  <button 
+    className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+    onClick={() => console.log('View all leads clicked')}
+  >
+    View all leads
+  </button>
+</div>
+                                  
+                                  {cityData.recentLeads.map((lead, index) => {
+                                    const isLeadExpanded = expandedLeads.has(`${city}-${index}`);
+                                    
+                                    return (
+                                      <div key={index} className="bg-gray-50 rounded-lg">
+                                        <div 
+                                          className="p-3 cursor-pointer hover:bg-gray-100 rounded-lg flex justify-between items-center"
+                                          onClick={() => toggleLead(`${city}-${index}`)}
+                                        >
+                                          <div className="flex items-center space-x-4">
+                                            {isLeadExpanded ? 
+                                              <ChevronDown className="w-4 h-4" /> : 
+                                              <ChevronRight className="w-4 h-4" />
+                                            }
+                                            <div className="flex items-center space-x-2">
+                                              <MapPin className="w-4 h-4 text-gray-400" />
+                                              <span>{lead.postcode}</span>
+                                            </div>
+                                            <span className="text-sm text-gray-500">
+                                              {formatTimestamp(lead.timestamp)}
+                                            </span>
+                                          </div>
+                                          <div className="flex items-center space-x-4">
+                                            <div className="flex -space-x-2">
+                                              {lead.assessors.map((assessor, i) => (
+                                                <div 
+                                                  key={i}
+                                                  className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs font-medium"
+                                                  title={assessor}
+                                                >
+                                                  {assessor.charAt(0)}
+                                                </div>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        
+                                        {isLeadExpanded && (
+                                          <div className="p-3 border-t">
+                                            <div className="space-y-2">
+                                              <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                  <div className="text-sm text-gray-500">Full Address</div>
+                                                  <div className="font-medium">123 Sample Street, {lead.postcode}</div>
+                                                </div>
+                                                <div>
+                                                  <div className="text-sm text-gray-500">Contact Details</div>
+                                                  <div className="font-medium">John Doe • +44 123 456 7890</div>
+                                                </div>
+                                              </div>
+                                              <div>
+                                                <div className="text-sm text-gray-500">Assigned Assessors</div>
+                                                <div className="flex flex-wrap gap-2 mt-1">
+                                                  {lead.assessors.map((assessor, i) => (
+                                                    <div 
+                                                      key={i}
+                                                      className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                                                    >
+                                                      {assessor}
+                                                    </div>
+                                                  ))}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                          )}</div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+  
+  export default RegionalDashboard;

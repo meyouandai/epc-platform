@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Limit - Simple Cards Like Billing Page</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        /* Use the actual billing card styles */
+        .period-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .period-stat-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px 20px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .period-stat-card:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .period-stat-card.selected {
+            border-color: #10b981;
+            background: #ecfdf5;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+        }
+
+        .period-stat-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f9fafb;
+        }
+
+        .period-stat-card.locked:hover {
+            border-color: #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value-large {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .stat-sublabel {
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-current {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-locked {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .progress-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #0c4a6e;
+            font-weight: 500;
+        }
+
+        .modal-footer {
+            padding: 20px 32px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-info {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .footer-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+        }
+
+        .variation-demo {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .demo-label {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #3b82f6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .special-option {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border: 2px solid #8b5cf6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .special-option:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .special-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #5b21b6;
+            margin-bottom: 4px;
+        }
+
+        .special-description {
+            font-size: 13px;
+            color: #6b21a8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Limit Modal - Actual Card Style</h1>
+    <p class="intro">Using the real billing page card styles (.period-stat-card)</p>
+
+    <!-- VARIATION 1: Bronze User -->
+    <div class="variation-demo">
+        <div class="demo-label">Bronze User - 5 Options</div>
+        <div class="modal-overlay" style="position: relative; background: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Spending Limit</div>
+                    <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="progress-info">
+                        <div class="progress-text">You've spent £150 of £300 needed for next tier</div>
+                    </div>
+
+                    <div class="period-stats">
+                        <div class="period-stat-card">
+                            <div class="stat-label">£50 Limit</div>
+                            <div class="stat-value-large">£50</div>
+                            <div class="stat-sublabel">More frequent payments</div>
+                        </div>
+
+                        <div class="period-stat-card">
+                            <div class="stat-label">£100 Limit</div>
+                            <div class="stat-value-large">£100</div>
+                            <div class="stat-sublabel">Previously used</div>
+                        </div>
+
+                        <div class="period-stat-card selected">
+                            <div class="card-badge badge-current">Current</div>
+                            <div class="stat-label">£150 Limit</div>
+                            <div class="stat-value-large">£150</div>
+                            <div class="stat-sublabel">Your current setting</div>
+                        </div>
+
+                        <div class="period-stat-card locked">
+                            <div class="card-badge badge-locked">Locked</div>
+                            <div class="stat-label">£250 Limit</div>
+                            <div class="stat-value-large">£250</div>
+                            <div class="stat-sublabel">Need £150 more spend</div>
+                        </div>
+
+                        <div class="period-stat-card locked">
+                            <div class="card-badge badge-locked">Locked</div>
+                            <div class="stat-label">£500 Limit</div>
+                            <div class="stat-value-large">£500</div>
+                            <div class="stat-sublabel">Future unlock</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="footer-info">Changes take effect immediately</div>
+                    <div class="footer-buttons">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Keep £150</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VARIATION 2: Silver User -->
+    <div class="variation-demo">
+        <div class="demo-label">Silver User - Smart Selection</div>
+        <div class="modal-overlay" style="position: relative; background: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Spending Limit</div>
+                    <div class="modal-subtitle">Silver Member</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="progress-info">
+                        <div class="progress-text">Silver Member - £750 and £1000 limits available</div>
+                    </div>
+
+                    <div class="period-stats">
+                        <div class="period-stat-card">
+                            <div class="stat-label">Lower Option</div>
+                            <div class="stat-value-large">£250</div>
+                            <div class="stat-sublabel">More control</div>
+                        </div>
+
+                        <div class="period-stat-card selected">
+                            <div class="card-badge badge-current">Current</div>
+                            <div class="stat-label">Silver Entry</div>
+                            <div class="stat-value-large">£500</div>
+                            <div class="stat-sublabel">Your current setting</div>
+                        </div>
+
+                        <div class="period-stat-card">
+                            <div class="stat-label">Silver Mid</div>
+                            <div class="stat-value-large">£750</div>
+                            <div class="stat-sublabel">Fewer interruptions</div>
+                        </div>
+
+                        <div class="period-stat-card locked">
+                            <div class="card-badge badge-locked">Locked</div>
+                            <div class="stat-label">Top Silver</div>
+                            <div class="stat-value-large">£1000</div>
+                            <div class="stat-sublabel">Need more spend at £750</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="footer-info">Gold membership available at £2000 total spending</div>
+                    <div class="footer-buttons">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Update Limit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VARIATION 3: Gold User - Smart Options -->
+    <div class="variation-demo">
+        <div class="demo-label">Gold User - Featured Monthly Billing</div>
+        <div class="modal-overlay" style="position: relative; background: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title">Manage Your Account Settings</div>
+                    <div class="modal-subtitle">Gold Member - Maximum Flexibility</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="special-option">
+                        <div class="special-title">💳 Switch to Monthly Billing</div>
+                        <div class="special-description">Professional NET 30 invoicing - up to £1500 credit</div>
+                    </div>
+
+                    <div style="text-align: center; margin: 20px 0; color: #6b7280; font-size: 14px; font-weight: 500;">
+                        Or choose an auto-pay limit:
+                    </div>
+
+                    <div class="period-stats">
+                        <div class="period-stat-card">
+                            <div class="stat-label">Silver Max</div>
+                            <div class="stat-value-large">£750</div>
+                            <div class="stat-sublabel">Lower option</div>
+                        </div>
+
+                        <div class="period-stat-card selected">
+                            <div class="card-badge badge-current">Current</div>
+                            <div class="stat-label">Gold Entry</div>
+                            <div class="stat-value-large">£1000</div>
+                            <div class="stat-sublabel">Standard Gold</div>
+                        </div>
+
+                        <div class="period-stat-card">
+                            <div class="stat-label">Gold Mid</div>
+                            <div class="stat-value-large">£1250</div>
+                            <div class="stat-sublabel">Higher limit</div>
+                        </div>
+
+                        <div class="period-stat-card">
+                            <div class="stat-label">Gold Max</div>
+                            <div class="stat-value-large">£1500</div>
+                            <div class="stat-sublabel">Maximum auto-pay</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="#" style="color: #3b82f6; font-size: 14px; text-decoration: none;">Show all 9 limit options →</a>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="footer-info">Gold members enjoy maximum flexibility</div>
+                    <div class="footer-buttons">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Update Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VARIATION 4: Compact for Many Options -->
+    <div class="variation-demo">
+        <div class="demo-label">All Options - Compact Layout</div>
+        <div class="modal-overlay" style="position: relative; background: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title">All Available Limits</div>
+                    <div class="modal-subtitle">Complete selection for power users</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="period-stats" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+                        <div class="period-stat-card" style="min-height: 120px; padding: 16px;">
+                            <div class="stat-label" style="font-size: 12px;">Bronze</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£50</div>
+                        </div>
+
+                        <div class="period-stat-card" style="min-height: 120px; padding: 16px;">
+                            <div class="stat-label" style="font-size: 12px;">Bronze</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£100</div>
+                        </div>
+
+                        <div class="period-stat-card" style="min-height: 120px; padding: 16px;">
+                            <div class="stat-label" style="font-size: 12px;">Bronze</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£150</div>
+                        </div>
+
+                        <div class="period-stat-card" style="min-height: 120px; padding: 16px;">
+                            <div class="stat-label" style="font-size: 12px;">Bronze</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£250</div>
+                        </div>
+
+                        <div class="period-stat-card" style="min-height: 120px; padding: 16px;">
+                            <div class="stat-label" style="font-size: 12px;">Silver</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£500</div>
+                        </div>
+
+                        <div class="period-stat-card selected" style="min-height: 120px; padding: 16px;">
+                            <div class="card-badge badge-current">✓</div>
+                            <div class="stat-label" style="font-size: 12px;">Silver</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£750</div>
+                        </div>
+
+                        <div class="period-stat-card" style="min-height: 120px; padding: 16px;">
+                            <div class="stat-label" style="font-size: 12px;">Gold</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£1000</div>
+                        </div>
+
+                        <div class="period-stat-card" style="min-height: 120px; padding: 16px;">
+                            <div class="stat-label" style="font-size: 12px;">Gold</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£1250</div>
+                        </div>
+
+                        <div class="period-stat-card" style="min-height: 120px; padding: 16px;">
+                            <div class="stat-label" style="font-size: 12px;">Gold</div>
+                            <div class="stat-value-large" style="font-size: 24px;">£1500</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="footer-info">All 9 options visible - might be overwhelming</div>
+                    <div class="footer-buttons">
+                        <button class="btn btn-secondary">Cancel</button>
+                        <button class="btn btn-primary">Confirm Selection</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; padding: 24px; background: white; border-radius: 12px;">
+        <h2 style="margin-bottom: 16px;">Analysis - Using Real Card Style</h2>
+
+        <p style="color: #374151; line-height: 1.6; margin-bottom: 16px;">
+            <strong>Much better!</strong> Using the actual `.period-stat-card` styles makes the modal feel consistent with the billing page. The simple gray cards with clean typography work well for this use case.
+        </p>
+
+        <p style="color: #374151; line-height: 1.6; margin-bottom: 16px;">
+            <strong>Variation 3 (Gold User)</strong> is still the best approach - featured monthly billing with contextual auto-pay options below. The cards feel familiar and the selection is clear.
+        </p>
+
+        <p style="color: #374151; line-height: 1.6;">
+            <strong>Variation 4</strong> shows that even with compact cards, 9 options creates choice paralysis. Smart contextual selection (Variation 3) is definitely the way to go.
+        </p>
+    </div>
+</body>
+</html>

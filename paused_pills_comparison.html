@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paused Postcode Pills Comparison</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f9fafb;
+            padding: 40px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1f2937;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section h2 {
+            color: #374151;
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+
+        .pills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .postcode-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 20px;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .postcode-pill:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .pill-price {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        /* Current Implementation */
+        .current-paused {
+            border-color: #fed7aa;
+            background: #fff7ed;
+            color: #9a3412;
+        }
+
+        /* Orange Options */
+        .orange-1 {
+            border-color: #f97316;
+            background: #f97316;
+            color: white;
+        }
+
+        .orange-2 {
+            border-color: #ea580c;
+            background: #ea580c;
+            color: white;
+        }
+
+        .orange-3 {
+            border-color: #dc2626;
+            background: #dc2626;
+            color: white;
+        }
+
+        .orange-4 {
+            border-color: #fb923c;
+            background: #fb923c;
+            color: white;
+        }
+
+        .orange-5 {
+            border-color: #f59e0b;
+            background: #f59e0b;
+            color: white;
+        }
+
+        .orange-6 {
+            border-color: #d97706;
+            background: #d97706;
+            color: white;
+        }
+
+        .orange-7 {
+            border-color: #ff6b35;
+            background: #ff6b35;
+            color: white;
+        }
+
+        .orange-8 {
+            border-color: #ff8c42;
+            background: #ff8c42;
+            color: white;
+        }
+
+        .orange-9 {
+            border-color: #ff9500;
+            background: #ff9500;
+            color: white;
+        }
+
+        .orange-10 {
+            border-color: #f97316;
+            background: #fff7ed;
+            color: #9a3412;
+            border-width: 2px;
+        }
+
+        .orange-11 {
+            border-color: #f97316;
+            background: #fef3c7;
+            color: #92400e;
+            border-width: 2px;
+        }
+
+        .orange-12 {
+            border-color: #f97316;
+            background: #fde68a;
+            color: #78350f;
+            border-width: 2px;
+        }
+
+        .color-info {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #6b7280;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .comparison-item {
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .comparison-item h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        /* Active pill for comparison */
+        .active-pill {
+            border-color: #1db954;
+            background: #1db954;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Paused Postcode Pills Comparison</h1>
+
+        <div class="section">
+            <h2>Current Implementation</h2>
+            <div class="pills-container">
+                <div class="postcode-pill current-paused">
+                    <span>B1</span>
+                    <span class="pill-price">£4</span>
+                </div>
+                <div class="postcode-pill current-paused">
+                    <span>CV2</span>
+                    <span class="pill-price">£3</span>
+                </div>
+                <div class="postcode-pill current-paused">
+                    <span>WV3</span>
+                    <span class="pill-price">£3</span>
+                </div>
+                <div class="postcode-pill current-paused">
+                    <span>EC1V</span>
+                    <span class="pill-price">£5</span>
+                </div>
+            </div>
+            <div class="color-info">
+                Background: #fff7ed | Border: #fed7aa | Text: #9a3412
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Solid Orange Options</h2>
+            <div class="pills-container">
+                <div class="postcode-pill orange-1">
+                    <span>B1</span>
+                    <span class="pill-price">£4</span>
+                </div>
+                <div class="postcode-pill orange-2">
+                    <span>CV2</span>
+                    <span class="pill-price">£3</span>
+                </div>
+                <div class="postcode-pill orange-3">
+                    <span>WV3</span>
+                    <span class="pill-price">£3</span>
+                </div>
+                <div class="postcode-pill orange-4">
+                    <span>EC1V</span>
+                    <span class="pill-price">£5</span>
+                </div>
+                <div class="postcode-pill orange-5">
+                    <span>LS2</span>
+                    <span class="pill-price">£4</span>
+                </div>
+                <div class="postcode-pill orange-6">
+                    <span>M1</span>
+                    <span class="pill-price">£4</span>
+                </div>
+            </div>
+            <div class="color-info">
+                #f97316 | #ea580c | #dc2626 | #fb923c | #f59e0b | #d97706
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Brand Orange Options</h2>
+            <div class="pills-container">
+                <div class="postcode-pill orange-7">
+                    <span>B1</span>
+                    <span class="pill-price">£4</span>
+                </div>
+                <div class="postcode-pill orange-8">
+                    <span>CV2</span>
+                    <span class="pill-price">£3</span>
+                </div>
+                <div class="postcode-pill orange-9">
+                    <span>WV3</span>
+                    <span class="pill-price">£3</span>
+                </div>
+            </div>
+            <div class="color-info">
+                #ff6b35 (Reddit Orange) | #ff8c42 (Warm Orange) | #ff9500 (iOS Orange)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Border-Based Options (#f97316 border)</h2>
+            <div class="pills-container">
+                <div class="postcode-pill orange-10">
+                    <span>B1</span>
+                    <span class="pill-price">£4</span>
+                </div>
+                <div class="postcode-pill orange-11">
+                    <span>CV2</span>
+                    <span class="pill-price">£3</span>
+                </div>
+                <div class="postcode-pill orange-12">
+                    <span>WV3</span>
+                    <span class="pill-price">£3</span>
+                </div>
+            </div>
+            <div class="color-info">
+                Border: #f97316 | Backgrounds: #fff7ed | #fef3c7 | #fde68a
+            </div>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="comparison-item">
+                <h3>Active vs Paused (#f97316 solid)</h3>
+                <div class="pills-container">
+                    <div class="postcode-pill active-pill">
+                        <span>B1</span>
+                        <span class="pill-price">£4</span>
+                    </div>
+                    <div class="postcode-pill orange-1">
+                        <span>B2</span>
+                        <span class="pill-price">£4</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-item">
+                <h3>Active vs Paused (Current)</h3>
+                <div class="pills-container">
+                    <div class="postcode-pill active-pill">
+                        <span>B1</span>
+                        <span class="pill-price">£4</span>
+                    </div>
+                    <div class="postcode-pill current-paused">
+                        <span>B2</span>
+                        <span class="pill-price">£4</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-item">
+                <h3>Active vs Paused (#ea580c solid)</h3>
+                <div class="pills-container">
+                    <div class="postcode-pill active-pill">
+                        <span>B1</span>
+                        <span class="pill-price">£4</span>
+                    </div>
+                    <div class="postcode-pill orange-2">
+                        <span>B2</span>
+                        <span class="pill-price">£4</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-item">
+                <h3>Active vs Paused (#fb923c solid)</h3>
+                <div class="pills-container">
+                    <div class="postcode-pill active-pill">
+                        <span>B1</span>
+                        <span class="pill-price">£4</span>
+                    </div>
+                    <div class="postcode-pill orange-4">
+                        <span>B2</span>
+                        <span class="pill-price">£4</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

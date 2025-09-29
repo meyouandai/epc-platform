@@ -1,0 +1,93 @@
+Compiled with problems:
+×
+ERROR in src/components/admin/LeadsManagement.tsx:25:16
+TS2552: Cannot find name 'RecentAdminLead'. Did you mean 'RecentLead'?
+    23 |   areaName: string;
+    24 |   topPostcodes: PostcodeLeadData[];
+  > 25 |   recentLeads: RecentAdminLead[];
+       |                ^^^^^^^^^^^^^^^
+    26 |   totalLeads: number;
+    27 |   totalRevenue: number;
+    28 |   missedRevenue: number;
+ERROR in src/components/admin/LeadsManagement.tsx:555:53
+TS7006: Parameter 'assessor' implicitly has an 'any' type.
+    553 |                               {lead.assessors.length === 4 ? (
+    554 |                                 // Show all 4 when exactly 4 assessors
+  > 555 |                                 lead.assessors.map((assessor, idx) => (
+        |                                                     ^^^^^^^^
+    556 |                                   <div
+    557 |                                     key={assessor.id}
+    558 |                                     className="assessor-circle"
+ERROR in src/components/admin/LeadsManagement.tsx:555:63
+TS7006: Parameter 'idx' implicitly has an 'any' type.
+    553 |                               {lead.assessors.length === 4 ? (
+    554 |                                 // Show all 4 when exactly 4 assessors
+  > 555 |                                 lead.assessors.map((assessor, idx) => (
+        |                                                               ^^^
+    556 |                                   <div
+    557 |                                     key={assessor.id}
+    558 |                                     className="assessor-circle"
+ERROR in src/components/admin/LeadsManagement.tsx:571:68
+TS7006: Parameter 'assessor' implicitly has an 'any' type.
+    569 |                                 // Show first 3 + overflow for more than 4
+    570 |                                 <>
+  > 571 |                                   {lead.assessors.slice(0, 3).map((assessor, idx) => (
+        |                                                                    ^^^^^^^^
+    572 |                                     <div
+    573 |                                       key={assessor.id}
+    574 |                                       className="assessor-circle"
+ERROR in src/components/admin/LeadsManagement.tsx:571:78
+TS7006: Parameter 'idx' implicitly has an 'any' type.
+    569 |                                 // Show first 3 + overflow for more than 4
+    570 |                                 <>
+  > 571 |                                   {lead.assessors.slice(0, 3).map((assessor, idx) => (
+        |                                                                              ^^^
+    572 |                                     <div
+    573 |                                       key={assessor.id}
+    574 |                                       className="assessor-circle"
+ERROR in src/components/admin/LeadsManagement.tsx:597:56
+TS7006: Parameter 'assessor' implicitly has an 'any' type.
+    595 |                                 // Show filled circles + empty dotted circles for missing slots
+    596 |                                 <>
+  > 597 |                                   {lead.assessors.map((assessor, idx) => (
+        |                                                        ^^^^^^^^
+    598 |                                     <div
+    599 |                                       key={assessor.id}
+    600 |                                       className="assessor-circle"
+ERROR in src/components/admin/LeadsManagement.tsx:597:66
+TS7006: Parameter 'idx' implicitly has an 'any' type.
+    595 |                                 // Show filled circles + empty dotted circles for missing slots
+    596 |                                 <>
+  > 597 |                                   {lead.assessors.map((assessor, idx) => (
+        |                                                                  ^^^
+    598 |                                     <div
+    599 |                                       key={assessor.id}
+    600 |                                       className="assessor-circle"
+ERROR in src/components/admin/LeadsManagement.tsx:642:55
+TS7006: Parameter 'assessor' implicitly has an 'any' type.
+    640 |                                 <span className="label">Assessors</span>
+    641 |                                 <div className="assessor-pills">
+  > 642 |                                   {lead.assessors.map(assessor => (
+        |                                                       ^^^^^^^^
+    643 |                                     <div key={assessor.id} className="assessor-pill">
+    644 |                                       {assessor.name}
+    645 |                                       {assessor.company && <span className="company"> ({assessor.company})</span>}
+ERROR in src/components/assessor/AssessorPublicProfile.tsx:245:23
+TS7053: Element implicitly has an 'any' type because expression of type 'string | number | symbol' can't be used to index type '{ domesticEPC: boolean; commercialEPC: boolean; displayEnergyCertificates: boolean; } | { sapCalculations: boolean; floorPlans: boolean; photography: boolean; carbonMonoxide: boolean; } | { ...; }'.
+  No index signature with a parameter of type 'string' was found on type '{ domesticEPC: boolean; commercialEPC: boolean; displayEnergyCertificates: boolean; } | { sapCalculations: boolean; floorPlans: boolean; photography: boolean; carbonMonoxide: boolean; } | { ...; }'.
+    243 |         [category]: {
+    244 |           ...prev.services[category as keyof typeof prev.services],
+  > 245 |           [service]: !prev.services[category as keyof typeof prev.services][service as keyof typeof prev.services.certificates]
+        |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    246 |         }
+    247 |       }
+    248 |     }));
+ERROR in src/components/assessor/AssessorPublicProfile.tsx:245:115
+TS2339: Property 'certificates' does not exist on type '{ energyCertificates: { domesticEPC: boolean; commercialEPC: boolean; displayEnergyCertificates: boolean; }; propertyServices: { sapCalculations: boolean; floorPlans: boolean; photography: boolean; carbonMonoxide: boolean; }; energyConsulting: { ...; }; }'.
+    243 |         [category]: {
+    244 |           ...prev.services[category as keyof typeof prev.services],
+  > 245 |           [service]: !prev.services[category as keyof typeof prev.services][service as keyof typeof prev.services.certificates]
+        |                                                                                                                   ^^^^^^^^^^^^
+    246 |         }
+    247 |       }
+    248 |     }));

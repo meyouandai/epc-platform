@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Note Display Variations</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px;
+            background: #f3f4f6;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #111827;
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: #374151;
+            margin: 40px 0 20px 0;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+        .modal {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+        .credit-details {
+            margin-top: 24px;
+            padding: 16px;
+            background: #fef2f2;
+            border-radius: 6px;
+            border: 1px solid #fecaca;
+        }
+        .credit-details h4 {
+            margin-bottom: 12px;
+            color: #991b1b;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #fecaca;
+        }
+        .lead-card {
+            background: white;
+            border-radius: 4px;
+            padding: 8px;
+            border: 1px solid #fecaca;
+            margin-bottom: 8px;
+        }
+        .lead-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 2px 0;
+        }
+        .lead-row span:first-child {
+            color: #6b7280;
+        }
+        .reason-box {
+            margin-top: 12px;
+            padding: 8px;
+            background: #fee2e2;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .status-box {
+            margin-top: 12px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .status-applied {
+            background: #dcfce7;
+        }
+        .status-available {
+            background: #fef3c7;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+        th {
+            text-align: left;
+            padding: 8px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #fecaca;
+            font-size: 13px;
+        }
+        .collapsed-summary {
+            background: white;
+            border: 1px solid #fecaca;
+            border-radius: 4px;
+            padding: 8px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .expand-btn {
+            color: #dc2626;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        .pro-con {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 16px;
+        }
+        .pro {
+            color: #059669;
+        }
+        .con {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Credit Note Display Variations</h1>
+
+        <!-- Single Lead Credit -->
+        <h2>Option 1: Single Lead (Current Design)</h2>
+        <div class="modal">
+            <div class="modal-header">
+                <h3>CN-2025-001</h3>
+                <div style="text-align: right;">
+                    <div style="font-size: 24px; font-weight: 700; color: #dc2626;">-£15</div>
+                    <div style="font-size: 14px; color: #6b7280;">1 lead credit</div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="credit-details">
+                    <h4>Credit Details</h4>
+                    <div class="info-row">
+                        <span>Original invoice:</span>
+                        <span style="font-weight: 500;">INV-2024-089</span>
+                    </div>
+
+                    <div style="margin: 12px 0;">
+                        <div style="font-size: 13px; font-weight: 600; color: #991b1b; margin-bottom: 8px;">
+                            Credited Lead (1)
+                        </div>
+                        <div class="lead-card">
+                            <div class="lead-row">
+                                <span>Lead ID:</span>
+                                <span style="font-family: monospace;">L-2024-089-007</span>
+                            </div>
+                            <div class="lead-row">
+                                <span>Postcode:</span>
+                                <span>SW1A 1AA</span>
+                            </div>
+                            <div class="lead-row">
+                                <span>Purchase date:</span>
+                                <span>22 Dec 2024</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reason-box">
+                        <strong>Reason:</strong> Fraudulent lead verified by multiple assessors
+                    </div>
+
+                    <div class="status-applied">✓ Credit applied to future invoices</div>
+                </div>
+            </div>
+        </div>
+        <div class="pro-con">
+            <span class="pro">✓ Clean and simple for single lead</span><br>
+            <span class="con">✗ Doesn't scale well for multiple leads</span>
+        </div>
+
+        <!-- Multiple Leads - Stacked Cards -->
+        <h2>Option 2: Multiple Leads - Stacked Cards</h2>
+        <div class="modal">
+            <div class="modal-header">
+                <h3>CN-2025-002</h3>
+                <div style="text-align: right;">
+                    <div style="font-size: 24px; font-weight: 700; color: #dc2626;">-£45</div>
+                    <div style="font-size: 14px; color: #6b7280;">3 lead credits</div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="credit-details">
+                    <h4>Credit Details</h4>
+                    <div class="info-row">
+                        <span>Original invoice:</span>
+                        <span style="font-weight: 500;">INV-2024-089</span>
+                    </div>
+
+                    <div style="margin: 12px 0;">
+                        <div style="font-size: 13px; font-weight: 600; color: #991b1b; margin-bottom: 8px;">
+                            Credited Leads (3)
+                        </div>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            <div class="lead-card">
+                                <div class="lead-row">
+                                    <span>Lead ID:</span>
+                                    <span style="font-family: monospace;">L-2024-089-007</span>
+                                </div>
+                                <div class="lead-row">
+                                    <span>Postcode:</span>
+                                    <span>SW1A 1AA</span>
+                                </div>
+                                <div class="lead-row">
+                                    <span>Purchase date:</span>
+                                    <span>22 Dec 2024</span>
+                                </div>
+                            </div>
+                            <div class="lead-card">
+                                <div class="lead-row">
+                                    <span>Lead ID:</span>
+                                    <span style="font-family: monospace;">L-2024-089-008</span>
+                                </div>
+                                <div class="lead-row">
+                                    <span>Postcode:</span>
+                                    <span>SW1A 2BB</span>
+                                </div>
+                                <div class="lead-row">
+                                    <span>Purchase date:</span>
+                                    <span>22 Dec 2024</span>
+                                </div>
+                            </div>
+                            <div class="lead-card">
+                                <div class="lead-row">
+                                    <span>Lead ID:</span>
+                                    <span style="font-family: monospace;">L-2024-089-009</span>
+                                </div>
+                                <div class="lead-row">
+                                    <span>Postcode:</span>
+                                    <span>SW1A 3CC</span>
+                                </div>
+                                <div class="lead-row">
+                                    <span>Purchase date:</span>
+                                    <span>22 Dec 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reason-box">
+                        <strong>Reason:</strong> Fraudulent leads from same source
+                    </div>
+
+                    <div class="status-available">⏳ Available for future invoices</div>
+                </div>
+            </div>
+        </div>
+        <div class="pro-con">
+            <span class="pro">✓ Shows all lead details clearly</span><br>
+            <span class="pro">✓ Scrollable if many leads</span><br>
+            <span class="con">✗ Takes up significant space</span>
+        </div>
+
+        <!-- Multiple Leads - Table Format -->
+        <h2>Option 3: Multiple Leads - Table Format</h2>
+        <div class="modal">
+            <div class="modal-header">
+                <h3>CN-2025-002</h3>
+                <div style="text-align: right;">
+                    <div style="font-size: 24px; font-weight: 700; color: #dc2626;">-£45</div>
+                    <div style="font-size: 14px; color: #6b7280;">3 lead credits</div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="credit-details">
+                    <h4>Credit Details</h4>
+                    <div class="info-row">
+                        <span>Original invoice:</span>
+                        <span style="font-weight: 500;">INV-2024-089</span>
+                    </div>
+
+                    <div style="margin: 12px 0;">
+                        <div style="font-size: 13px; font-weight: 600; color: #991b1b; margin-bottom: 8px;">
+                            Credited Leads (3)
+                        </div>
+                        <div style="background: white; border-radius: 4px; overflow: hidden; border: 1px solid #fecaca;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Lead ID</th>
+                                        <th>Postcode</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-family: monospace; font-size: 12px;">L-2024-089-007</td>
+                                        <td>SW1A 1AA</td>
+                                        <td>22 Dec</td>
+                                        <td>£15</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: monospace; font-size: 12px;">L-2024-089-008</td>
+                                        <td>SW1A 2BB</td>
+                                        <td>22 Dec</td>
+                                        <td>£15</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: monospace; font-size: 12px;">L-2024-089-009</td>
+                                        <td>SW1A 3CC</td>
+                                        <td>22 Dec</td>
+                                        <td>£15</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="reason-box">
+                        <strong>Reason:</strong> Fraudulent leads from same source
+                    </div>
+
+                    <div class="status-available">⏳ Available for future invoices</div>
+                </div>
+            </div>
+        </div>
+        <div class="pro-con">
+            <span class="pro">✓ Compact and scannable</span><br>
+            <span class="pro">✓ Familiar table format</span><br>
+            <span class="pro">✓ Good for many leads</span>
+        </div>
+
+        <!-- Multiple Leads - Collapsed Summary -->
+        <h2>Option 4: Multiple Leads - Collapsed Summary</h2>
+        <div class="modal">
+            <div class="modal-header">
+                <h3>CN-2025-002</h3>
+                <div style="text-align: right;">
+                    <div style="font-size: 24px; font-weight: 700; color: #dc2626;">-£45</div>
+                    <div style="font-size: 14px; color: #6b7280;">3 lead credits</div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="credit-details">
+                    <h4>Credit Details</h4>
+                    <div class="info-row">
+                        <span>Original invoice:</span>
+                        <span style="font-weight: 500;">INV-2024-089</span>
+                    </div>
+
+                    <div style="margin: 12px 0;">
+                        <div style="font-size: 13px; font-weight: 600; color: #991b1b; margin-bottom: 8px;">
+                            Credited Leads (3)
+                        </div>
+                        <div class="collapsed-summary">
+                            <div>
+                                <span style="color: #6b7280;">Lead IDs:</span> L-2024-089-007, 008, 009
+                            </div>
+                            <span class="expand-btn">View details</span>
+                        </div>
+                    </div>
+
+                    <div class="reason-box">
+                        <strong>Reason:</strong> Fraudulent leads from same source
+                    </div>
+
+                    <div class="status-available">⏳ Available for future invoices</div>
+                </div>
+            </div>
+        </div>
+        <div class="pro-con">
+            <span class="pro">✓ Clean and minimal by default</span><br>
+            <span class="pro">✓ Details available on demand</span><br>
+            <span class="con">✗ Requires interaction to see details</span>
+        </div>
+
+        <!-- Hybrid Approach -->
+        <h2>Option 5: Hybrid - Smart Display</h2>
+        <div class="modal">
+            <div class="modal-header">
+                <h3>CN-2025-002</h3>
+                <div style="text-align: right;">
+                    <div style="font-size: 24px; font-weight: 700; color: #dc2626;">-£30</div>
+                    <div style="font-size: 14px; color: #6b7280;">2 lead credits</div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="credit-details">
+                    <h4>Credit Details</h4>
+                    <div class="info-row">
+                        <span>Original invoice:</span>
+                        <span style="font-weight: 500;">INV-2024-089</span>
+                    </div>
+
+                    <div style="margin: 12px 0;">
+                        <div style="font-size: 13px; font-weight: 600; color: #991b1b; margin-bottom: 8px;">
+                            Credited Leads (2)
+                        </div>
+                        <!-- Use cards for 1-2 leads, table for 3+ leads -->
+                        <div class="lead-card">
+                            <div class="lead-row">
+                                <span>Lead ID:</span>
+                                <span style="font-family: monospace;">L-2024-089-007</span>
+                            </div>
+                            <div class="lead-row">
+                                <span>Postcode:</span>
+                                <span>SW1A 1AA</span>
+                            </div>
+                        </div>
+                        <div class="lead-card">
+                            <div class="lead-row">
+                                <span>Lead ID:</span>
+                                <span style="font-family: monospace;">L-2024-089-008</span>
+                            </div>
+                            <div class="lead-row">
+                                <span>Postcode:</span>
+                                <span>SW1A 2BB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reason-box">
+                        <strong>Reason:</strong> Duplicate customer submissions
+                    </div>
+
+                    <div class="status-applied">✓ Credit applied to future invoices</div>
+                </div>
+            </div>
+        </div>
+        <div class="pro-con">
+            <span class="pro">✓ Adapts to number of leads</span><br>
+            <span class="pro">✓ Cards for 1-2 leads (detailed)</span><br>
+            <span class="pro">✓ Table for 3+ leads (compact)</span>
+        </div>
+
+        <!-- Clean Separation -->
+        <h2>Option 6: Clean Separation (Recommended)</h2>
+        <div class="modal">
+            <div class="modal-header">
+                <h3>CN-2025-002</h3>
+                <div style="text-align: right;">
+                    <div style="font-size: 24px; font-weight: 700; color: #dc2626;">-£45</div>
+                    <div style="font-size: 14px; color: #6b7280;">3 lead credits</div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="credit-details">
+                    <h4>Credit Details</h4>
+                    <div class="info-row">
+                        <span>Credit Date:</span>
+                        <span>26 Jan 2025</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Original Invoice:</span>
+                        <span style="font-weight: 500;">INV-2024-089</span>
+                    </div>
+
+                    <div class="reason-box">
+                        <strong>Reason:</strong> Fraudulent leads verified by multiple assessors
+                    </div>
+
+                    <div class="status-applied">✓ Credit applied to future invoices</div>
+                </div>
+
+                <!-- Separate section for lead details -->
+                <div style="margin-top: 24px;">
+                    <h4 style="color: #374151; margin-bottom: 12px;">Credited Leads (3)</h4>
+                    <div style="background: white; border-radius: 6px; overflow: hidden; border: 1px solid #e5e7eb;">
+                        <table style="margin-top: 0;">
+                            <thead>
+                                <tr style="background: #f9fafb;">
+                                    <th style="background: #f9fafb; color: #374151; border-bottom: 1px solid #e5e7eb;">Lead ID</th>
+                                    <th style="background: #f9fafb; color: #374151; border-bottom: 1px solid #e5e7eb;">Date</th>
+                                    <th style="background: #f9fafb; color: #374151; border-bottom: 1px solid #e5e7eb;">Post Code</th>
+                                    <th style="background: #f9fafb; color: #374151; border-bottom: 1px solid #e5e7eb;">Address</th>
+                                    <th style="background: #f9fafb; color: #374151; border-bottom: 1px solid #e5e7eb;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-family: monospace; font-size: 12px; border-bottom: 1px solid #f3f4f6;">L-2024-089-007</td>
+                                    <td style="border-bottom: 1px solid #f3f4f6;">22 Dec 2024</td>
+                                    <td style="border-bottom: 1px solid #f3f4f6;">SW1A 1AA</td>
+                                    <td style="border-bottom: 1px solid #f3f4f6;">10 Downing Street</td>
+                                    <td style="border-bottom: 1px solid #f3f4f6;">£15</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family: monospace; font-size: 12px; border-bottom: 1px solid #f3f4f6;">L-2024-089-008</td>
+                                    <td style="border-bottom: 1px solid #f3f4f6;">22 Dec 2024</td>
+                                    <td style="border-bottom: 1px solid #f3f4f6;">SW1A 2AA</td>
+                                    <td style="border-bottom: 1px solid #f3f4f6;">11 Downing Street</td>
+                                    <td style="border-bottom: 1px solid #f3f4f6;">£15</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family: monospace; font-size: 12px;">L-2024-089-009</td>
+                                    <td>22 Dec 2024</td>
+                                    <td>SW1A 0AA</td>
+                                    <td>Westminster Palace</td>
+                                    <td>£15</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pro-con">
+            <span class="pro">✓ Clean separation of concerns</span><br>
+            <span class="pro">✓ Credit details stay simple</span><br>
+            <span class="pro">✓ Lead table is familiar and scannable</span><br>
+            <span class="pro">✓ Works for any number of leads</span>
+        </div>
+
+        <!-- Recommendation -->
+        <h2 style="background: #f0f9ff; padding: 20px; border-radius: 8px; color: #1e40af;">
+            💡 Recommendation: Option 6 - Clean Separation
+        </h2>
+        <div style="background: white; padding: 20px; border-radius: 8px;">
+            <p><strong>Why this works best:</strong></p>
+            <ul>
+                <li>Credit Details section focuses only on the credit note metadata</li>
+                <li>Lead details get their own clear section with proper table headers</li>
+                <li>Consistent with how invoices show lead details</li>
+                <li>Scales perfectly from 1 to many leads</li>
+                <li>Clear visual hierarchy</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Configuration - Profile Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f9fafb;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .preview-btn {
+            padding: 8px 16px;
+            border: 1px solid #667eea;
+            border-radius: 6px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-btn:hover {
+            background: #f8fafc;
+        }
+
+        /* Card styling exactly like existing profile */
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+
+        /* Services stacked layout */
+        .services-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .service-category {
+            /* No extra styling - just content */
+        }
+
+        .category-title {
+            font-weight: 500;
+            margin-bottom: 12px;
+            text-transform: capitalize;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .service-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .service-item:hover {
+            background: #f9fafb;
+        }
+
+        .service-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #667eea;
+        }
+
+        .service-item label {
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        /* Additional offerings section - exactly like existing */
+        .offerings-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .offerings-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .offering-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .offering-item:hover {
+            background: white;
+        }
+
+        .offering-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: #10b981;
+        }
+
+        .offering-label {
+            font-size: 14px;
+            color: #374151;
+        }
+
+        /* Save section */
+        .save-section {
+            margin-top: 24px;
+        }
+
+        .save-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .save-btn:hover {
+            background: #5a67d8;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 24px;
+            color: #065f46;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .offerings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Company Profile</h1>
+            <a href="#" class="preview-btn">
+                <span>👁️</span>
+                Preview as Customer
+            </a>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            ✓ Profile saved successfully!
+        </div>
+
+        <!-- Services Section -->
+        <div class="card">
+            <div class="card-content">
+                <h2 class="section-title">Services</h2>
+                <div class="services-stack">
+                    <div class="service-category">
+                        <h3 class="category-title">
+                            <span>📋</span>
+                            Energy Certificates
+                        </h3>
+                        <div class="service-list">
+                            <div class="service-item">
+                                <input type="checkbox" checked>
+                                <label>Domestic EPC Certificate</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox">
+                                <label>Commercial EPC Certificate</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox" checked>
+                                <label>Display Energy Certificates (DECs)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-category">
+                        <h3 class="category-title">
+                            <span>🏠</span>
+                            Property Services
+                        </h3>
+                        <div class="service-list">
+                            <div class="service-item">
+                                <input type="checkbox" checked>
+                                <label>SAP Calculations</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox">
+                                <label>Floor Plans</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox" checked>
+                                <label>Photography</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox">
+                                <label>Carbon Monoxide</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-category">
+                        <h3 class="category-title">
+                            <span>🔍</span>
+                            Energy Consulting
+                        </h3>
+                        <div class="service-list">
+                            <div class="service-item">
+                                <input type="checkbox">
+                                <label>Energy Audits</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox">
+                                <label>Commercial Energy Audits</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox" checked>
+                                <label>Retrofit Advice</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox" checked>
+                                <label>Energy Efficiency Advice</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox">
+                                <label>Green Deal Advice</label>
+                            </div>
+                            <div class="service-item">
+                                <input type="checkbox">
+                                <label>Grant Funding and Incentive Program Assistance</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Options Section -->
+        <div class="offerings-section">
+            <h3 class="offerings-title">
+                <span>✨</span>
+                Service Options
+            </h3>
+            <div class="offerings-grid">
+                <div class="offering-item">
+                    <input type="checkbox" class="offering-checkbox" checked>
+                    <label class="offering-label">Same-Day Service</label>
+                </div>
+                <div class="offering-item">
+                    <input type="checkbox" class="offering-checkbox" checked>
+                    <label class="offering-label">Instant Online Booking</label>
+                </div>
+                <div class="offering-item">
+                    <input type="checkbox" class="offering-checkbox" checked>
+                    <label class="offering-label">Card Payments Accepted</label>
+                </div>
+                <div class="offering-item">
+                    <input type="checkbox" class="offering-checkbox">
+                    <label class="offering-label">Pay After Survey</label>
+                </div>
+                <div class="offering-item">
+                    <input type="checkbox" class="offering-checkbox" checked>
+                    <label class="offering-label">Free Quotes</label>
+                </div>
+                <div class="offering-item">
+                    <input type="checkbox" class="offering-checkbox">
+                    <label class="offering-label">Instant EPC Certificate</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Section -->
+        <div class="save-section">
+            <button class="save-btn" onclick="saveConfiguration()">
+                Save Profile
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                }
+            });
+        });
+
+        document.querySelectorAll('.offering-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                }
+            });
+        });
+
+        function saveConfiguration() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+
+            // Scroll to top to show the message
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

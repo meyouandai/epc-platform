@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Limit Modal Variations - Updated</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #111827;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .scenario-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .scenario-header {
+            background: #1f2937;
+            color: white;
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .scenario-description {
+            background: #f9fafb;
+            padding: 12px 20px;
+            font-size: 13px;
+            color: #6b7280;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* Modal Styles */
+        .modal-wrapper {
+            background: white;
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-button:hover {
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .current-status {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .status-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .status-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .status-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .account-level {
+            background: #f3e8ff;
+            border: 1px solid #c4b5fd;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .account-badge {
+            background: #8b5cf6;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .account-badge.bronze {
+            background: #cd7f32;
+        }
+
+        .account-badge.silver {
+            background: #c0c0c0;
+            color: #374151;
+        }
+
+        .account-badge.gold {
+            background: #ffd700;
+            color: #374151;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            background: #10b981;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .options-section {
+            margin: 24px 0;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .limit-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .limit-cards-grid.four-col {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .limit-cards-grid.two-col {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .limit-cards-grid.three-col {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .limit-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .limit-card:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .limit-card.selected {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .limit-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f9fafb;
+        }
+
+        .limit-card.disabled:hover {
+            border-color: #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .limit-amount {
+            font-size: 26px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .limit-description {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .limit-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-current {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-locked {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-new {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .help-text {
+            background: #f0f9ff;
+            border-left: 3px solid #3b82f6;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #1e3a8a;
+        }
+
+        .upgrade-notice {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        .silver-notice {
+            background: #f0f9ff;
+            border-left: 3px solid #c0c0c0;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #1e3a8a;
+        }
+
+        .gold-options {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .gold-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .gold-option:hover {
+            background: #fef3c7;
+            border-color: #fbbf24;
+        }
+
+        .gold-option.selected {
+            background: #fef3c7;
+            border-color: #fbbf24;
+        }
+
+        .radio-button {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .radio-button.checked {
+            border-color: #fbbf24;
+        }
+
+        .radio-button.checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #fbbf24;
+            border-radius: 50%;
+        }
+
+        .option-details {
+            flex: 1;
+        }
+
+        .option-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .option-description {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 32px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+        }
+
+        .confirmation-message {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .confirmation-message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .confirmation-title {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .confirmation-details {
+            font-size: 14px;
+            color: #78350f;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        @media (max-width: 768px) {
+            .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .limit-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .limit-cards-grid.four-col {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .limit-amount {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Limit Modal Variations - Updated Design</h1>
+
+        <div class="scenarios-grid">
+            <!-- Scenario 1: Bronze User - Multiple Options Available -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 1: Bronze User - Multiple Options</div>
+                <div class="scenario-description">Bronze user at £100 limit with £150, £250, £500 unlocked</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Manage Your Spending Limit</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge bronze" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #cd7f32; color: white;">Bronze</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£100</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£350</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Progress to Silver</span>
+                                <span class="status-value">£350 of £500</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                        <div class="options-section">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="confirmation-message" data-confirmation>
+                            <div class="confirmation-title">Confirm your new limit</div>
+                            <div class="confirmation-details" data-confirmation-text></div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 2: Silver User - Recently Upgraded -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 2: Silver User - Recently Upgraded</div>
+                <div class="scenario-description">Just upgraded to Silver, still at £500 limit with new options available</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Manage Your Spending Limit</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge silver" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #c0c0c0; color: #374151;">Silver</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£500</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£520</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Progress to Gold</span>
+                                <span class="status-value">£520 of £1000</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 52%"></div>
+                            </div>
+                        </div>
+
+                        <div class="options-section">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£250">
+                                    <div class="limit-amount">£250</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£500">
+                                    <div class="limit-amount">£500</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+
+                                <div class="limit-card disabled" data-amount="£1000">
+                                    <div class="limit-amount">£1000</div>
+                                    <div class="limit-badge badge-locked">Gold</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="confirmation-message" data-confirmation>
+                            <div class="confirmation-title">Confirm your new limit</div>
+                            <div class="confirmation-details" data-confirmation-text></div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 3: Gold User - Payment Options -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 3: Gold User - Payment Method Choice</div>
+                <div class="scenario-description">Gold user can choose between pay-as-go or monthly invoicing</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Choose Your Billing Method</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge gold" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #ffd700; color: #374151;">Gold</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£1000</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£1,250</span>
+                            </div>
+                        </div>
+
+                        <div class="gold-options">
+                            <div class="section-label">Choose Billing Method</div>
+
+                            <div class="gold-option selected" data-method="payasyougo">
+                                <div class="radio-button checked"></div>
+                                <div class="option-details">
+                                    <div class="option-title">Pay-as-you-go (Current)</div>
+                                    <div class="option-description">Set your charge limit.<br>Automatic billing when reached.</div>
+                                </div>
+                            </div>
+
+                            <div class="gold-option" data-method="monthly">
+                                <div class="radio-button"></div>
+                                <div class="option-details">
+                                    <div class="option-title">Monthly Invoice</div>
+                                    <div class="option-description">Invoiced monthly for total usage.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="options-section" id="payasyougo-limits">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£250">
+                                    <div class="limit-amount">£250</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£500">
+                                    <div class="limit-amount">£500</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£1000">
+                                    <div class="limit-amount">£1000</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="confirmation-message" data-confirmation>
+                            <div class="confirmation-title">Confirm your new limit</div>
+                            <div class="confirmation-details" data-confirmation-text></div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 4: Bronze User - Near Silver Upgrade -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 4: Bronze User - Near Silver</div>
+                <div class="scenario-description">Bronze user at £450 with £500 available, close to Silver upgrade</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Manage Your Spending Limit</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge bronze" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #cd7f32; color: white;">Bronze</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£450</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£470</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Progress to Silver</span>
+                                <span class="status-value">£470 of £500</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 94%"></div>
+                            </div>
+                        </div>
+
+                        <div class="options-section">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£250">
+                                    <div class="limit-amount">£250</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£450">
+                                    <div class="limit-amount">£450</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£500">
+                                    <div class="limit-amount">£500</div>
+                                </div>
+
+                                <div class="limit-card disabled" data-amount="£1000">
+                                    <div class="limit-amount">£1000</div>
+                                    <div class="limit-badge badge-locked">Silver</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="confirmation-message" data-confirmation>
+                            <div class="confirmation-title">Confirm your new limit</div>
+                            <div class="confirmation-details" data-confirmation-text></div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Close</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenario 5: Gold User - Card-based Billing Method Choice -->
+            <div class="scenario-container">
+                <div class="scenario-header">Scenario 5: Gold User - Card-based Billing Method</div>
+                <div class="scenario-description">Gold user with billing methods shown as side-by-side cards</div>
+
+                <div class="modal-wrapper">
+                    <div class="modal-header">
+                        <div class="modal-title">Choose Your Billing Method</div>
+                        <div class="modal-subtitle">Choose your preferred payment threshold</div>
+                        <button class="close-button">×</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="current-status">
+                            <div class="status-row">
+                                <span class="status-label">Account Level</span>
+                                <span class="status-value"><span class="account-badge gold" style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; background: #ffd700; color: #374151;">Gold</span></span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Current Limit</span>
+                                <span class="status-value">£1000</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="status-label">Total Spent</span>
+                                <span class="status-value">£1,250</span>
+                            </div>
+                        </div>
+
+                        <div class="options-section">
+                            <div class="section-label">Choose Billing Method</div>
+
+                            <div class="limit-cards-grid two-col">
+                                <div class="limit-card selected" data-method="payasyougo">
+                                    <div>
+                                        <div class="limit-amount" style="font-size: 16px; margin-bottom: 8px;">Pay-as-you-go</div>
+                                        <div class="limit-description" style="font-size: 11px; line-height: 1.3;">Set your charge limit.<br>Automatic billing when reached.</div>
+                                        <div class="limit-badge badge-current">Current</div>
+                                    </div>
+                                </div>
+
+                                <div class="limit-card" data-method="monthly">
+                                    <div>
+                                        <div class="limit-amount" style="font-size: 16px; margin-bottom: 8px;">Monthly Invoice</div>
+                                        <div class="limit-description" style="font-size: 11px; line-height: 1.3;">Invoiced monthly for total usage.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="options-section" id="payasyougo-limits-5">
+                            <div class="section-label">Available Limits</div>
+
+                            <div class="limit-cards-grid">
+                                <div class="limit-card" data-amount="£50">
+                                    <div class="limit-amount">£50</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£100">
+                                    <div class="limit-amount">£100</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£150">
+                                    <div class="limit-amount">£150</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£250">
+                                    <div class="limit-amount">£250</div>
+                                </div>
+
+                                <div class="limit-card" data-amount="£500">
+                                    <div class="limit-amount">£500</div>
+                                </div>
+
+                                <div class="limit-card selected" data-amount="£1000">
+                                    <div class="limit-amount">£1000</div>
+                                    <div class="limit-badge badge-current">Current</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="confirmation-message" data-confirmation>
+                            <div class="confirmation-title">Confirm your new limit</div>
+                            <div class="confirmation-details" data-confirmation-text></div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer single-button" data-footer>
+                        <button class="btn btn-primary" data-action-btn>Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity to all modals
+        document.querySelectorAll('.scenario-container').forEach((container, index) => {
+            const cards = container.querySelectorAll('.limit-card:not(.disabled):not([data-method])');
+            const actionBtn = container.querySelector('[data-action-btn]');
+            const goldOptions = container.querySelectorAll('.gold-option, .limit-card[data-method]');
+            const confirmation = container.querySelector('[data-confirmation]');
+            const confirmationText = container.querySelector('[data-confirmation-text]');
+
+            let currentLimit = getCurrentLimit(container);
+            let selectedAmount = currentLimit;
+            let currentBillingMethod = 'payasyougo'; // Track billing method state
+
+            function getCurrentLimit(container) {
+                const currentLimitRow = Array.from(container.querySelectorAll('.status-row')).find(row => {
+                    const label = row.querySelector('.status-label');
+                    return label && label.textContent === 'Current Limit';
+                });
+                return currentLimitRow ? currentLimitRow.querySelector('.status-value').textContent : null;
+            }
+
+
+            function setupConfirmFlow(container, selectedAmount) {
+                const confirmBtn = container.querySelector('[data-confirm-btn]');
+                const cancelConfirmBtn = container.querySelector('[data-cancel-confirm]');
+
+                if (confirmBtn) {
+                    confirmBtn.addEventListener('click', function() {
+                        // Check if this is switching from monthly to pay-as-you-go (special case)
+                        if (currentBillingMethod === 'monthly' && currentLimit === null) {
+                            // This is confirming switch from monthly to pay-as-you-go
+                            // Switch back to monthly selection and add scheduled badge to pay-as-you-go
+                            const goldOptions = container.querySelectorAll('.gold-option, .limit-card[data-method]');
+                            goldOptions.forEach(o => {
+                                o.classList.remove('selected');
+                                const radioButton = o.querySelector('.radio-button');
+                                if (radioButton) radioButton.classList.remove('checked');
+                            });
+
+                            const monthlyCard = container.querySelector('[data-method="monthly"]');
+                            const payAsYouGoCard = container.querySelector('[data-method="payasyougo"]');
+
+                            // Monthly remains current and selected
+                            if (monthlyCard) {
+                                monthlyCard.classList.add('selected');
+                                const radioButton = monthlyCard.querySelector('.radio-button');
+                                if (radioButton) radioButton.classList.add('checked');
+                                if (!monthlyCard.querySelector('.limit-badge')) {
+                                    const badge = document.createElement('div');
+                                    badge.className = 'limit-badge badge-current';
+                                    badge.textContent = 'Current';
+                                    monthlyCard.appendChild(badge);
+                                }
+                            }
+
+                            // Pay-as-you-go gets scheduled badge
+                            if (payAsYouGoCard) {
+                                const badge = document.createElement('div');
+                                badge.className = 'limit-badge badge-new';
+                                badge.textContent = 'Scheduled';
+                                payAsYouGoCard.appendChild(badge);
+                            }
+
+                            // Hide limit cards since still on monthly
+                            const payasyougoLimits = container.querySelector('#payasyougo-limits') || container.querySelector('#payasyougo-limits-5');
+                            if (payasyougoLimits) payasyougoLimits.style.display = 'none';
+
+                            // Hide current limit row since on monthly
+                            const statusRows = container.querySelectorAll('.status-row');
+                            statusRows.forEach(row => {
+                                const label = row.querySelector('.status-label');
+                                if (label && label.textContent === 'Current Limit') {
+                                    row.style.display = 'none';
+                                }
+                            });
+
+                            // Add pending change message to status section
+                            const statusSection = container.querySelector('.current-status');
+                            if (statusSection) {
+                                const pendingDiv = document.createElement('div');
+                                pendingDiv.className = 'pending-change';
+                                pendingDiv.style.textAlign = 'center';
+                                pendingDiv.style.marginTop = '12px';
+                                pendingDiv.style.fontSize = '13px';
+                                pendingDiv.style.color = '#059669';
+                                pendingDiv.style.fontWeight = '500';
+                                pendingDiv.textContent = `Scheduled: Switch to Pay-as-you-go (${selectedAmount}) on April 1st`;
+                                statusSection.appendChild(pendingDiv);
+                            }
+                        } else {
+                            // Normal limit change flow
+                            currentLimit = selectedAmount;
+                            // Update only the Current Limit row, not the account level
+                            const statusRows = container.querySelectorAll('.status-row');
+                            statusRows.forEach(row => {
+                                const label = row.querySelector('.status-label');
+                                if (label && label.textContent === 'Current Limit') {
+                                    row.querySelector('.status-value').textContent = selectedAmount;
+                                }
+                            });
+
+                            // Update badge on cards
+                            container.querySelectorAll('.limit-badge.badge-current').forEach(badge => badge.remove());
+                            const newCurrentCard = container.querySelector(`[data-amount="${selectedAmount}"]`);
+                            if (newCurrentCard) {
+                                const badge = document.createElement('div');
+                                badge.className = 'limit-badge badge-current';
+                                badge.textContent = 'Current';
+                                newCurrentCard.appendChild(badge);
+                            }
+                        }
+
+                        // Hide confirmation and show single Cancel button since user has interacted
+                        confirmation.classList.remove('show');
+                        const footer = container.querySelector('[data-footer]');
+                        footer.className = 'modal-footer single-button';
+                        footer.innerHTML = '<button class="btn btn-secondary" data-action-btn>Cancel</button>';
+                    });
+                }
+
+                if (cancelConfirmBtn) {
+                    cancelConfirmBtn.addEventListener('click', function() {
+                        // Go back to immediate confirmation state
+                        confirmation.classList.remove('show');
+
+                        // Re-trigger the immediate confirmation logic
+                        const footer = container.querySelector('[data-footer]');
+
+                        // Find Total Spent row for timing logic
+                        let currentSpend = 0;
+                        const statusRows = container.querySelectorAll('.status-row');
+                        statusRows.forEach(row => {
+                            const label = row.querySelector('.status-label');
+                            if (label && label.textContent === 'Total Spent') {
+                                const spendText = row.querySelector('.status-value').textContent;
+                                currentSpend = parseInt(spendText.replace('£', '').replace(',', ''));
+                            }
+                        });
+
+                        const newLimitAmount = parseInt(selectedAmount.replace('£', '').replace(',', ''));
+                        const currentLimitAmount = parseInt(currentLimit.replace('£', '').replace(',', ''));
+
+                        let timingMessage = '';
+                        let chargeMessage = ` You'll be charged automatically when you reach ${selectedAmount}.`;
+
+                        if (newLimitAmount > currentLimitAmount) {
+                            timingMessage = '\n\nYour new limit is active immediately.';
+                        } else if (currentSpend < newLimitAmount) {
+                            timingMessage = '\n\nYour new limit is active immediately.';
+                        } else {
+                            timingMessage = `\n\nYour new limit will apply after your next payment as you've already spent £${currentSpend} this period.`;
+                            chargeMessage = ''; // Don't mention charging at new limit since it's delayed
+                        }
+
+                        confirmationText.textContent = `Your billing limit will change from ${currentLimit} to ${selectedAmount}.${timingMessage}${chargeMessage}`;
+                        confirmation.classList.add('show');
+
+                        // Show Confirm/Cancel buttons immediately
+                        footer.className = 'modal-footer';
+                        footer.innerHTML = `
+                            <button class="btn btn-secondary" data-cancel-confirm>Cancel</button>
+                            <button class="btn btn-primary" data-confirm-btn>Confirm</button>
+                        `;
+
+                        setupConfirmFlow(container, selectedAmount);
+                    });
+                }
+            }
+
+            function resetToOriginal(container, currentLimit) {
+                // Reset selection to current
+                const cards = container.querySelectorAll('.limit-card:not(.disabled):not([data-method])');
+                cards.forEach(c => c.classList.remove('selected'));
+                const currentCard = container.querySelector(`[data-amount="${currentLimit}"]`);
+                if (currentCard) currentCard.classList.add('selected');
+
+                // Reset to single Cancel button since user has interacted
+                const footer = container.querySelector('[data-footer]');
+                footer.className = 'modal-footer single-button';
+                footer.innerHTML = '<button class="btn btn-secondary" data-action-btn>Cancel</button>';
+                confirmation.classList.remove('show');
+                selectedAmount = currentLimit;
+            }
+
+            // Handle limit card selection
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected from all cards in this container
+                    cards.forEach(c => c.classList.remove('selected'));
+                    // Add selected to clicked card
+                    this.classList.add('selected');
+
+                    // Update button text and footer layout
+                    const amount = this.getAttribute('data-amount');
+                    selectedAmount = amount;
+                    const footer = container.querySelector('[data-footer]');
+
+                    // Special case: switching from monthly to pay-as-you-go (currentLimit is null)
+                    if (currentLimit === null) {
+                        // User is switching from monthly billing and selecting their first limit
+                        confirmationText.textContent = `Your account will switch to Pay As You Go method with ${amount} limit set from 1st April.`;
+                        confirmation.classList.add('show');
+
+                        // Show Confirm/Cancel buttons
+                        footer.className = 'modal-footer';
+                        footer.innerHTML = `
+                            <button class="btn btn-secondary" data-cancel-confirm>Cancel</button>
+                            <button class="btn btn-primary" data-confirm-btn>Confirm</button>
+                        `;
+
+                        setupConfirmFlow(container, amount);
+                    }
+                    else if (amount === currentLimit) {
+                        // Single button when no changes - but show Cancel since user has interacted
+                        footer.className = 'modal-footer single-button';
+                        footer.innerHTML = '<button class="btn btn-secondary" data-action-btn>Cancel</button>';
+                        confirmation.classList.remove('show');
+                    } else {
+                        // Show confirmation immediately when different limit is selected
+                        // Find Total Spent row
+                        let currentSpend = 0;
+                        const statusRows = container.querySelectorAll('.status-row');
+                        statusRows.forEach(row => {
+                            const label = row.querySelector('.status-label');
+                            if (label && label.textContent === 'Total Spent') {
+                                const spendText = row.querySelector('.status-value').textContent;
+                                currentSpend = parseInt(spendText.replace('£', '').replace(',', ''));
+                            }
+                        });
+
+                        const newLimitAmount = parseInt(amount.replace('£', '').replace(',', ''));
+                        const currentLimitAmount = parseInt(currentLimit.replace('£', '').replace(',', ''));
+
+                        let timingMessage = '';
+                        let chargeMessage = ` You'll be charged automatically when you reach ${amount}.`;
+
+                        if (newLimitAmount > currentLimitAmount) {
+                            timingMessage = '\n\nYour new limit is active immediately.';
+                        } else if (currentSpend < newLimitAmount) {
+                            timingMessage = '\n\nYour new limit is active immediately.';
+                        } else {
+                            timingMessage = `\n\nYour new limit will apply after your next payment as you've already spent £${currentSpend} this period.`;
+                            chargeMessage = ''; // Don't mention charging at new limit since it's delayed
+                        }
+
+                        confirmationText.textContent = `Your billing limit will change from ${currentLimit} to ${amount}.${timingMessage}${chargeMessage}`;
+                        confirmation.classList.add('show');
+
+                        // Show Confirm/Cancel buttons
+                        footer.className = 'modal-footer';
+                        footer.innerHTML = `
+                            <button class="btn btn-secondary" data-cancel-confirm>Cancel</button>
+                            <button class="btn btn-primary" data-confirm-btn>Confirm</button>
+                        `;
+
+                        setupConfirmFlow(container, amount);
+                    }
+                });
+            });
+
+            // Handle gold payment method options (both radio buttons and cards)
+            goldOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected from all options in this container
+                    goldOptions.forEach(o => {
+                        o.classList.remove('selected');
+                        const radioButton = o.querySelector('.radio-button');
+                        if (radioButton) radioButton.classList.remove('checked');
+                    });
+
+                    // Add selected to clicked option
+                    this.classList.add('selected');
+                    const radioButton = this.querySelector('.radio-button');
+                    if (radioButton) radioButton.classList.add('checked');
+
+                    // Update button text based on method
+                    const method = this.getAttribute('data-method');
+                    // Find the current limit row in the Gold scenario
+                    const statusRows = container.querySelectorAll('.status-row');
+                    let currentLimitRow = null;
+                    statusRows.forEach(row => {
+                        const label = row.querySelector('.status-label');
+                        if (label && label.textContent === 'Current Limit') {
+                            currentLimitRow = row;
+                        }
+                    });
+
+                    const footer = container.querySelector('[data-footer]');
+
+                    if (method === 'monthly') {
+                        // Check if they're already on monthly billing
+                        if (currentBillingMethod === 'monthly') {
+                            // They're clicking monthly when already on monthly - just show Cancel
+                            // Hide pay-as-you-go limits
+                            const payasyougoLimits = container.querySelector('#payasyougo-limits') || container.querySelector('#payasyougo-limits-5');
+                            if (payasyougoLimits) payasyougoLimits.style.display = 'none';
+                            // Hide current limit row for monthly
+                            if (currentLimitRow) currentLimitRow.style.display = 'none';
+
+                            confirmation.classList.remove('show');
+                            footer.className = 'modal-footer single-button';
+                            footer.innerHTML = '<button class="btn btn-secondary" data-action-btn>Cancel</button>';
+                        } else {
+                            // They're switching FROM pay-as-you-go TO monthly
+                            // DON'T update currentBillingMethod yet - only after confirmation
+                            // Hide pay-as-you-go limits
+                            const payasyougoLimits = container.querySelector('#payasyougo-limits') || container.querySelector('#payasyougo-limits-5');
+                            if (payasyougoLimits) payasyougoLimits.style.display = 'none';
+                            // Hide current limit row for monthly
+                            if (currentLimitRow) currentLimitRow.style.display = 'none';
+
+                            // Show confirmation for switching to monthly
+                            confirmationText.textContent = `You're switching from pay-as-you-go to monthly invoicing. You'll receive monthly invoices for your total usage instead of automatic charges.`;
+                            confirmation.classList.add('show');
+
+                            // Two buttons for switching to monthly with confirmation
+                            if (footer) {
+                                footer.className = 'modal-footer';
+                                footer.innerHTML = '<button class="btn btn-secondary" data-cancel-monthly>Cancel</button><button class="btn btn-primary" data-confirm-monthly>Confirm</button>';
+
+                                // Setup monthly confirmation
+                                const confirmMonthlyBtn = container.querySelector('[data-confirm-monthly]');
+                                const cancelMonthlyBtn = container.querySelector('[data-cancel-monthly]');
+
+                                if (confirmMonthlyBtn) {
+                                    confirmMonthlyBtn.addEventListener('click', function() {
+                                        // NOW update the billing method state
+                                        currentBillingMethod = 'monthly';
+
+                                        // Move the "Current" badge to Monthly Invoice (normal switching to monthly)
+                                        container.querySelectorAll('.limit-badge.badge-current').forEach(badge => badge.remove());
+                                        const monthlyCard = container.querySelector('[data-method="monthly"]');
+                                        if (monthlyCard) {
+                                            const badge = document.createElement('div');
+                                            badge.className = 'limit-badge badge-current';
+                                            badge.textContent = 'Current';
+                                            monthlyCard.appendChild(badge);
+                                        }
+
+                                        confirmation.classList.remove('show');
+                                        footer.className = 'modal-footer single-button';
+                                        footer.innerHTML = '<button class="btn btn-secondary" data-action-btn>Cancel</button>';
+                                    });
+                                }
+
+                                if (cancelMonthlyBtn) {
+                                    cancelMonthlyBtn.addEventListener('click', function() {
+                                        // Reset to pay-as-you-go
+                                        goldOptions.forEach(o => {
+                                            o.classList.remove('selected');
+                                            o.querySelector('.radio-button').classList.remove('checked');
+                                        });
+                                        const payAsGoOption = container.querySelector('[data-method="payasyougo"]');
+                                        if (payAsGoOption) {
+                                            payAsGoOption.classList.add('selected');
+                                            payAsGoOption.querySelector('.radio-button').classList.add('checked');
+                                        }
+
+                                        const payasyougoLimits = container.querySelector('#payasyougo-limits') || container.querySelector('#payasyougo-limits-5');
+                                        if (payasyougoLimits) payasyougoLimits.style.display = 'block';
+                                        if (currentLimitRow) currentLimitRow.style.display = 'flex';
+
+                                        confirmation.classList.remove('show');
+                                        footer.className = 'modal-footer single-button';
+                                        footer.innerHTML = '<button class="btn btn-secondary" data-action-btn>Cancel</button>';
+                                    });
+                                }
+                            }
+                        }
+                    } else {
+                        // Show pay-as-you-go limits
+                        const payasyougoLimits = container.querySelector('#payasyougo-limits') || container.querySelector('#payasyougo-limits-5');
+                        if (payasyougoLimits) payasyougoLimits.style.display = 'block';
+                        // Show current limit row for pay-as-you-go
+                        if (currentLimitRow) currentLimitRow.style.display = 'flex';
+
+                        // Check if we're switching FROM monthly TO pay-as-you-go
+                        if (currentBillingMethod === 'monthly') {
+                            // DON'T update currentBillingMethod yet - only after confirmation
+                            // Clear all limit selections and current badges - user must pick a limit
+                            const limitCards = container.querySelectorAll('.limit-card[data-amount]');
+                            limitCards.forEach(card => {
+                                card.classList.remove('selected');
+                                const badge = card.querySelector('.limit-badge.badge-current');
+                                if (badge) badge.remove();
+                            });
+
+                            // Clear the current limit value from status display
+                            if (currentLimitRow) {
+                                const statusValue = currentLimitRow.querySelector('.status-value');
+                                if (statusValue) statusValue.textContent = '—';
+                            }
+
+                            // Create a pending state - don't modify the actual currentLimit yet
+                            let pendingLimit = null;
+                            selectedAmount = null;
+
+                            // Show confirmation message asking user to select a limit
+                            confirmationText.textContent = `Your billing will switch to pay-as-you-go at the end of your current monthly cycle (March 30th). Please select a spending limit to continue.`;
+                            confirmation.classList.add('show');
+
+                            // Only show Cancel button until limit is selected
+                            footer.className = 'modal-footer single-button';
+                            footer.innerHTML = '<button class="btn btn-secondary" data-cancel-switch>Cancel</button>';
+
+                            // Add cancel functionality to go back to monthly
+                            const cancelSwitchBtn = container.querySelector('[data-cancel-switch]');
+                            if (cancelSwitchBtn) {
+                                cancelSwitchBtn.addEventListener('click', function() {
+                                    // Switch back to monthly without affecting currentBillingMethod
+                                    goldOptions.forEach(o => {
+                                        o.classList.remove('selected');
+                                        const radioButton = o.querySelector('.radio-button');
+                                        if (radioButton) radioButton.classList.remove('checked');
+                                    });
+                                    const monthlyOption = container.querySelector('[data-method="monthly"]');
+                                    if (monthlyOption) {
+                                        monthlyOption.classList.add('selected');
+                                        const radioButton = monthlyOption.querySelector('.radio-button');
+                                        if (radioButton) radioButton.classList.add('checked');
+                                        // Re-add the Current badge to monthly
+                                        const badge = document.createElement('div');
+                                        badge.className = 'limit-badge badge-current';
+                                        badge.textContent = 'Current';
+                                        monthlyOption.appendChild(badge);
+                                    }
+
+                                    // Hide limits and current limit row
+                                    const payasyougoLimits = container.querySelector('#payasyougo-limits') || container.querySelector('#payasyougo-limits-5');
+                                    if (payasyougoLimits) payasyougoLimits.style.display = 'none';
+                                    if (currentLimitRow) currentLimitRow.style.display = 'none';
+
+                                    confirmation.classList.remove('show');
+                                    footer.className = 'modal-footer single-button';
+                                    footer.innerHTML = '<button class="btn btn-secondary" data-action-btn>Cancel</button>';
+                                });
+                            }
+                        } else {
+                            // Normal pay-as-you-go selection (already current) - show Cancel since user has interacted
+                            footer.className = 'modal-footer single-button';
+                            footer.innerHTML = '<button class="btn btn-secondary" data-action-btn>Cancel</button>';
+                            confirmation.classList.remove('show');
+                        }
+                    }
+                });
+            });
+
+            // Close button functionality
+            const closeBtn = container.querySelector('.close-button');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    console.log(`Modal ${index + 1} would close`);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

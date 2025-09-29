@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing History - Improved UX Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #374151;
+            margin: 30px 0 20px;
+            padding: 10px;
+            background: #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .design-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        /* Educational Header */
+        .education-header {
+            background: #eff6ff;
+            border: 1px solid #3b82f6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .education-icon {
+            font-size: 20px;
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+
+        .education-content h4 {
+            color: #1e40af;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .education-content p {
+            color: #1e40af;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Period Cards */
+        .periods-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .period-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .period-card.active {
+            border-color: #3b82f6;
+            background: #f8faff;
+        }
+
+        .period-card.completed {
+            background: #f9fafb;
+        }
+
+        .period-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .period-info h4 {
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .period-dates {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .period-progress {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .period-status {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.active {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-badge.completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .period-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .period-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 12px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* Trust Level Info */
+        .trust-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .trust-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .trust-badge.bronze {
+            background: #fed7aa;
+            color: #7c2d12;
+        }
+
+        .trust-badge.silver {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .trust-badge.gold {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .trust-change {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        /* Transaction Details */
+        .transactions-toggle {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 12px;
+        }
+
+        .transactions-list {
+            margin-top: 16px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 16px;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-desc {
+            flex: 1;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-right: 16px;
+        }
+
+        .transaction-amount {
+            font-size: 14px;
+            font-weight: 600;
+            color: #dc2626;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: #9ca3af;
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .empty-subtitle {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        /* Gold Assessor Specific */
+        .gold-period-card {
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+            border: 2px solid #f59e0b;
+        }
+
+        .invoice-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .payment-terms {
+            font-size: 12px;
+            color: #92400e;
+            background: #fef3c7;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .credit-info {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .credit-used {
+            font-size: 14px;
+            color: #0c4a6e;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .period-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .period-status {
+                align-items: flex-start;
+                flex-direction: row;
+            }
+
+            .period-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Billing History - Improved UX Based on User Testing</h1>
+        <p style="color: #6b7280; margin-bottom: 30px;">
+            Addressing confusion points and providing better context for different trust levels
+        </p>
+
+        <!-- BRONZE ASSESSOR - NEW USER -->
+        <h2>🥉 Bronze Assessor - New User (2 weeks experience)</h2>
+
+        <div class="design-section">
+            <div class="section-title">Sarah's First Look - Addressing Common Confusion</div>
+
+            <!-- Educational Header -->
+            <div class="education-header">
+                <div class="education-icon">💡</div>
+                <div class="education-content">
+                    <h4>How Billing Periods Work</h4>
+                    <p>A billing period starts when you buy your first lead and ends when you reach £450 in purchases. You'll be charged automatically at the end of each period, then start a new one immediately.</p>
+                </div>
+            </div>
+
+            <!-- Current Period -->
+            <div class="periods-container">
+                <div class="period-card active">
+                    <div class="trust-indicator">
+                        <span class="trust-badge bronze">Bronze Status</span>
+                        <span style="color: #6b7280; font-size: 12px;">• Automatic payment at £450</span>
+                    </div>
+
+                    <div class="period-header">
+                        <div class="period-info">
+                            <h4>Current Billing Period</h4>
+                            <div class="period-dates">Started: 28 Jan 2025 (14 days ago)</div>
+                            <div class="period-progress">Estimated completion: ~12 more days</div>
+                        </div>
+                        <div class="period-status">
+                            <div class="status-badge active">In Progress</div>
+                            <div class="period-amount">£225</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%;"></div>
+                        </div>
+                        <div class="progress-text">50% complete (15 of 30 leads) • £225 until next payment</div>
+                    </div>
+
+                    <div class="period-metrics">
+                        <div class="metric">
+                            <div class="metric-value">15</div>
+                            <div class="metric-label">Leads Purchased</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">£15</div>
+                            <div class="metric-label">Per Lead</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">1.1</div>
+                            <div class="metric-label">Leads/Day Avg</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">12</div>
+                            <div class="metric-label">Est. Days Left</div>
+                        </div>
+                    </div>
+
+                    <button class="transactions-toggle" onclick="toggleTransactions(this)">
+                        Show 15 transactions ↓
+                    </button>
+                </div>
+
+                <!-- Empty State for New Users -->
+                <div class="empty-state">
+                    <div class="empty-icon">📄</div>
+                    <div class="empty-title">No Previous Billing Periods</div>
+                    <div class="empty-subtitle">Your completed billing periods will appear here once you reach £450 and make your first payment.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRONZE ASSESSOR - EXPERIENCED -->
+        <h2>🥉 Bronze Assessor - Experienced (6 months)</h2>
+
+        <div class="design-section">
+            <div class="section-title">Mike's History - Clear Pattern Recognition</div>
+
+            <div class="periods-container">
+                <!-- Current Period -->
+                <div class="period-card active">
+                    <div class="trust-indicator">
+                        <span class="trust-badge bronze">Bronze Status</span>
+                        <span style="color: #6b7280; font-size: 12px;">• 2 payments until Silver</span>
+                    </div>
+
+                    <div class="period-header">
+                        <div class="period-info">
+                            <h4>Period #4 (Current)</h4>
+                            <div class="period-dates">Started: 15 Jan 2025 (10 days ago)</div>
+                            <div class="period-progress">On track: ~18 more days at current pace</div>
+                        </div>
+                        <div class="period-status">
+                            <div class="status-badge active">In Progress</div>
+                            <div class="period-amount">£225</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%;"></div>
+                        </div>
+                        <div class="progress-text">50% complete • Trending slower than usual</div>
+                    </div>
+
+                    <div class="period-metrics">
+                        <div class="metric">
+                            <div class="metric-value">15</div>
+                            <div class="metric-label">Leads This Period</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">1.5</div>
+                            <div class="metric-label">Leads/Day</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">18</div>
+                            <div class="metric-label">Days to Complete</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">67%</div>
+                            <div class="metric-label">Contact Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed Periods -->
+                <div class="period-card completed">
+                    <div class="trust-indicator">
+                        <span class="trust-badge bronze">Bronze Status</span>
+                    </div>
+
+                    <div class="period-header">
+                        <div class="period-info">
+                            <h4>Period #3</h4>
+                            <div class="period-dates">15 Dec 2024 - 15 Jan 2025 (31 days)</div>
+                            <div class="period-progress">Completed • Paid 16 Jan 2025</div>
+                        </div>
+                        <div class="period-status">
+                            <div class="status-badge completed">Paid</div>
+                            <div class="period-amount">£450</div>
+                        </div>
+                    </div>
+
+                    <div class="period-metrics">
+                        <div class="metric">
+                            <div class="metric-value">30</div>
+                            <div class="metric-label">Total Leads</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">31</div>
+                            <div class="metric-label">Days Duration</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">72%</div>
+                            <div class="metric-label">Contact Rate</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">£450</div>
+                            <div class="metric-label">Total Paid</div>
+                        </div>
+                    </div>
+
+                    <button class="transactions-toggle">View Invoice & 30 Transactions</button>
+                </div>
+
+                <!-- Period #2 with different duration -->
+                <div class="period-card completed">
+                    <div class="trust-indicator">
+                        <span class="trust-badge bronze">Bronze Status</span>
+                    </div>
+
+                    <div class="period-header">
+                        <div class="period-info">
+                            <h4>Period #2</h4>
+                            <div class="period-dates">30 Oct - 15 Dec 2024 (46 days)</div>
+                            <div class="period-progress">Slower period - lower lead volume</div>
+                        </div>
+                        <div class="period-status">
+                            <div class="status-badge completed">Paid</div>
+                            <div class="period-amount">£330</div>
+                        </div>
+                    </div>
+
+                    <div class="period-metrics">
+                        <div class="metric">
+                            <div class="metric-value">22</div>
+                            <div class="metric-label">Total Leads</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">46</div>
+                            <div class="metric-label">Days Duration</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">59%</div>
+                            <div class="metric-label">Contact Rate</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">£330</div>
+                            <div class="metric-label">Partial Threshold</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px; margin-top: 12px; font-size: 14px; color: #92400e;">
+                        <strong>Note:</strong> This period was manually closed at £330 when you paused lead purchasing for 2 weeks in December.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SILVER ASSESSOR -->
+        <h2>🥈 Silver Assessor - Established (10 months)</h2>
+
+        <div class="design-section">
+            <div class="section-title">Emma's Silver Experience - Higher Volume & Better Terms</div>
+
+            <div class="periods-container">
+                <div class="period-card active">
+                    <div class="trust-indicator">
+                        <span class="trust-badge silver">Silver Status</span>
+                        <span class="trust-change">↑ Upgraded from Bronze (Period #7)</span>
+                        <span style="color: #6b7280; font-size: 12px;">• £600 threshold • 3 payments until Gold</span>
+                    </div>
+
+                    <div class="period-header">
+                        <div class="period-info">
+                            <h4>Period #9 (Current - Silver Tier)</h4>
+                            <div class="period-dates">Started: 8 Jan 2025 (17 days ago)</div>
+                            <div class="period-progress">Fast pace: ~8 more days estimated</div>
+                        </div>
+                        <div class="period-status">
+                            <div class="status-badge active">In Progress</div>
+                            <div class="period-amount">£420</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 70%;"></div>
+                        </div>
+                        <div class="progress-text">70% complete • £180 until payment</div>
+                    </div>
+
+                    <div class="period-metrics">
+                        <div class="metric">
+                            <div class="metric-value">28</div>
+                            <div class="metric-label">Leads This Period</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">£600</div>
+                            <div class="metric-label">Silver Threshold</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">1.6</div>
+                            <div class="metric-label">Leads/Day</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">74%</div>
+                            <div class="metric-label">Contact Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- First Silver Period -->
+                <div class="period-card completed">
+                    <div class="trust-indicator">
+                        <span class="trust-badge silver">Silver Status</span>
+                        <span class="trust-change">↑ First Silver Period!</span>
+                    </div>
+
+                    <div class="period-header">
+                        <div class="period-info">
+                            <h4>Period #8 - Silver Upgrade</h4>
+                            <div class="period-dates">18 Dec 2024 - 8 Jan 2025 (21 days)</div>
+                            <div class="period-progress">First period with £600 threshold</div>
+                        </div>
+                        <div class="period-status">
+                            <div class="status-badge completed">Paid</div>
+                            <div class="period-amount">£600</div>
+                        </div>
+                    </div>
+
+                    <div class="period-metrics">
+                        <div class="metric">
+                            <div class="metric-value">40</div>
+                            <div class="metric-label">Total Leads</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">21</div>
+                            <div class="metric-label">Days Duration</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">78%</div>
+                            <div class="metric-label">Contact Rate</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">Priority</div>
+                            <div class="metric-label">Lead Notifications</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px; margin-top: 12px; font-size: 14px; color: #166534;">
+                        🎉 <strong>Congratulations!</strong> You've unlocked Silver status with higher spending limits and priority features.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GOLD ASSESSOR -->
+        <h2>🏆 Gold Assessor - Premium (2 years)</h2>
+
+        <div class="design-section">
+            <div class="section-title">James's Gold Experience - Credit System & NET 30 Terms</div>
+
+            <div class="periods-container">
+                <div class="gold-period-card">
+                    <div class="trust-indicator">
+                        <span class="trust-badge gold">Gold Status</span>
+                        <span style="color: #92400e; font-size: 12px;">• NET 30 Terms • £900 Credit Limit</span>
+                    </div>
+
+                    <div class="period-header">
+                        <div class="period-info">
+                            <h4>Period #24 (Current - Gold Tier)</h4>
+                            <div class="period-dates">Started: 15 Jan 2025 (10 days ago)</div>
+                            <div class="period-progress">Invoice will generate at £450</div>
+                        </div>
+                        <div class="period-status">
+                            <div class="status-badge active">Building Invoice</div>
+                            <div class="period-amount">£225</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%;"></div>
+                        </div>
+                        <div class="progress-text">50% to invoice generation</div>
+                    </div>
+
+                    <div class="credit-info">
+                        <div class="credit-used"><strong>Credit Utilization:</strong> £675 used of £900 limit (75%)</div>
+                        <div style="font-size: 12px; color: #0c4a6e; margin-top: 4px;">
+                            Outstanding: Invoice #2024-012 (£450, 5 days overdue) + Invoice #2025-001 (£225, due Feb 15)
+                        </div>
+                    </div>
+
+                    <div class="invoice-status">
+                        <span class="payment-terms">NET 30</span>
+                        <span style="color: #dc2626; font-size: 12px; font-weight: 500;">⚠️ Payment overdue</span>
+                    </div>
+
+                    <div class="period-metrics">
+                        <div class="metric">
+                            <div class="metric-value">15</div>
+                            <div class="metric-label">Leads This Period</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">2</div>
+                            <div class="metric-label">Outstanding Invoices</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">£225</div>
+                            <div class="metric-label">Credit Remaining</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">82%</div>
+                            <div class="metric-label">Contact Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="period-card completed">
+                    <div class="trust-indicator">
+                        <span class="trust-badge gold">Gold Status</span>
+                    </div>
+
+                    <div class="period-header">
+                        <div class="period-info">
+                            <h4>Period #23 - Invoice #2025-001</h4>
+                            <div class="period-dates">28 Dec 2024 - 15 Jan 2025 (18 days)</div>
+                            <div class="period-progress">Invoice generated • Due: 15 Feb 2025</div>
+                        </div>
+                        <div class="period-status">
+                            <div class="status-badge" style="background: #fef3c7; color: #92400e;">NET 30 Pending</div>
+                            <div class="period-amount">£225</div>
+                        </div>
+                    </div>
+
+                    <div class="period-metrics">
+                        <div class="metric">
+                            <div class="metric-value">15</div>
+                            <div class="metric-label">Total Leads</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">18</div>
+                            <div class="metric-label">Days Duration</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">Feb 15</div>
+                            <div class="metric-label">Payment Due</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">85%</div>
+                            <div class="metric-label">Contact Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUMMARY OF IMPROVEMENTS -->
+        <h2>📊 Key UX Improvements Implemented</h2>
+
+        <div class="design-section">
+            <div class="section-title">Solutions to Identified Problems</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div>
+                    <h4 style="color: #dc2626; margin-bottom: 12px;">❌ Problems Solved:</h4>
+                    <ul style="font-size: 14px; color: #374151; line-height: 1.8;">
+                        <li>"What does billing period mean?" → Educational header</li>
+                        <li>"Why odd dates?" → Clear start dates and duration</li>
+                        <li>"When will I be charged?" → Progress bars and estimates</li>
+                        <li>"Different amounts?" → Context and explanations</li>
+                        <li>"Gold looks same as Bronze?" → Different layouts</li>
+                        <li>"No trust progression?" → Trust level indicators</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: #10b981; margin-bottom: 12px;">✅ New Features Added:</h4>
+                    <ul style="font-size: 14px; color: #374151; line-height: 1.8;">
+                        <li>Educational explanations for new users</li>
+                        <li>Period duration and completion estimates</li>
+                        <li>Trust level progression indicators</li>
+                        <li>Performance metrics per period</li>
+                        <li>Different layouts for different trust levels</li>
+                        <li>Credit utilization for Gold assessors</li>
+                        <li>Context for unusual periods</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTransactions(button) {
+            const isExpanded = button.textContent.includes('Hide');
+            if (isExpanded) {
+                button.textContent = 'Show 15 transactions ↓';
+                // Hide transactions logic here
+            } else {
+                button.textContent = 'Hide transactions ↑';
+                // Show transactions logic here
+            }
+        }
+    </script>
+</body>
+</html>

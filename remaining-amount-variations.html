@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remaining Amount Display Variations</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 30px;
+        }
+
+        .variation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .variation-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .variation-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .spending-section {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            background: #fafafa;
+        }
+
+        .label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .amount-display {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .threshold-amount {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .progress-fill {
+            background: #10b981;
+            height: 100%;
+            width: 70%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 4px;
+        }
+
+        .remaining-info {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+
+        .remaining-highlight {
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .remaining-warning {
+            font-weight: 600;
+            color: #dc2626;
+        }
+
+        .inline-remaining {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 2px 8px;
+            background: #ecfdf5;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .pill-display {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .pill {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pill-spent {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .pill-remaining {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .split-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 8px;
+        }
+
+        .split-left {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .split-right {
+            font-size: 16px;
+            font-weight: 600;
+            color: #059669;
+        }
+
+        /* Special variations */
+        .fraction-display {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .fraction-main {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .fraction-separator {
+            font-size: 20px;
+            color: #9ca3af;
+            margin: 0 4px;
+        }
+
+        .fraction-total {
+            font-size: 20px;
+            color: #6b7280;
+        }
+
+        .visual-remaining {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .visual-icon {
+            font-size: 20px;
+        }
+
+        .visual-text {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .visual-amount {
+            font-weight: 700;
+            color: #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Remaining Amount Display Variations</h1>
+
+        <div class="variation-grid">
+            <!-- Variation 1: Below progress bar -->
+            <div class="variation-card">
+                <div class="variation-title">1. Below Progress Bar</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">£175 <span class="threshold-amount">of £250</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="remaining-info">
+                        <span class="remaining-highlight">£75 remaining</span> before automatic charge
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 2: Inline with amount -->
+            <div class="variation-card">
+                <div class="variation-title">2. Inline Badge</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">
+                        £175 <span class="threshold-amount">of £250</span>
+                        <span class="inline-remaining">£75 left</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 3: Pill display -->
+            <div class="variation-card">
+                <div class="variation-title">3. Pill Indicators</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">£175 <span class="threshold-amount">of £250</span></div>
+                    <div class="pill-display">
+                        <span class="pill pill-spent">Spent: £175</span>
+                        <span class="pill pill-remaining">Remaining: £75</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 4: Split display -->
+            <div class="variation-card">
+                <div class="variation-title">4. Split Layout</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">£175 <span class="threshold-amount">of £250</span></div>
+                    <div class="split-display">
+                        <span class="split-left">Charges in:</span>
+                        <span class="split-right">£75</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 5: Fraction style -->
+            <div class="variation-card">
+                <div class="variation-title">5. Fraction Display</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="fraction-display">
+                        <span class="fraction-main">£175</span>
+                        <span class="fraction-separator">/</span>
+                        <span class="fraction-total">£250</span>
+                        <span class="remaining-info" style="margin-left: 12px; margin-top: 0;">
+                            (<span class="remaining-highlight">£75 left</span>)
+                        </span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 6: Visual with icon -->
+            <div class="variation-card">
+                <div class="variation-title">6. Visual Indicator</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">£175 <span class="threshold-amount">of £250</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="visual-remaining">
+                        <span class="visual-icon">💳</span>
+                        <span class="visual-text">
+                            <span class="visual-amount">£75</span> until next charge
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 7: Contextual message -->
+            <div class="variation-card">
+                <div class="variation-title">7. Contextual Message</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">£175 <span class="threshold-amount">of £250</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="remaining-info">
+                        You can purchase <span class="remaining-highlight">5 more leads</span> (£75 remaining)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 8: Percentage focus -->
+            <div class="variation-card">
+                <div class="variation-title">8. Percentage Focus</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">
+                        £175 <span class="threshold-amount">of £250</span>
+                        <span style="margin-left: 8px; font-size: 16px; color: #6b7280;">(70%)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="remaining-info">
+                        30% remaining • £75
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 9: Warning style (when close) -->
+            <div class="variation-card">
+                <div class="variation-title">9. Warning Style (When Close)</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">£235 <span class="threshold-amount">of £250</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 94%; background: #f59e0b;"></div>
+                    </div>
+                    <div class="remaining-info">
+                        ⚠️ <span class="remaining-warning">Only £15 remaining</span> - charge imminent
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 10: Minimal -->
+            <div class="variation-card">
+                <div class="variation-title">10. Minimal</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">
+                        £175 / £250
+                        <span style="font-size: 14px; color: #059669; margin-left: 12px; font-weight: 500;">
+                            £75 remaining
+                        </span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 11: Above amount -->
+            <div class="variation-card">
+                <div class="variation-title">11. Above Amount</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="remaining-info" style="margin-top: 0; margin-bottom: 4px;">
+                        £75 remaining until charge
+                    </div>
+                    <div class="amount-display">£175 <span class="threshold-amount">of £250</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variation 12: Integrated in progress -->
+            <div class="variation-card">
+                <div class="variation-title">12. In Progress Bar</div>
+                <div class="spending-section">
+                    <div class="label">Your Spending</div>
+                    <div class="amount-display">£175 <span class="threshold-amount">of £250</span></div>
+                    <div class="progress-bar" style="height: 24px; position: relative;">
+                        <div class="progress-fill" style="display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 11px; font-weight: 600;">70% • £75 left</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

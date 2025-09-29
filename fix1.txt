@@ -1,0 +1,155 @@
+Compiled with problems:
+×
+ERROR in src/components/assessor/AssessorBilling.tsx:235:11
+TS2322: Type '"refunded"' is not assignable to type '"pending" | "paid" | "issued" | "applied"'.
+    233 |           amount: 45,
+    234 |           leadCount: 3,
+  > 235 |           status: 'refunded',
+        |           ^^^^^^
+    236 |           relatedToDocument: 'INV-2024-044',
+    237 |           refundDate: new Date('2024-11-22'),
+    238 |           reason: 'Customer requested cash refund for invalid leads'
+ERROR in src/components/assessor/AssessorBilling.tsx:315:39
+TS2367: This comparison appears to be unintentional because the types '"pending" | "paid" | "issued" | "applied"' and '"refunded"' have no overlap.
+    313 |
+    314 |   const getDocumentTypeLabel = (document: BillingDocument) => {
+  > 315 |     if (document.type === 'credit' && document.status === 'refunded') {
+        |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    316 |       return 'Refund';
+    317 |     }
+    318 |     switch (document.type) {
+ERROR in src/components/assessor/AssessorBilling.tsx:1243:37
+TS2339: Property 'refundDate' does not exist on type 'BillingDocument'.
+    1241 |                     </div>
+    1242 |                   )}
+  > 1243 |                   {selectedDocument.refundDate && (
+         |                                     ^^^^^^^^^^
+    1244 |                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f3f4f6' }}>
+    1245 |                       <span style={{ fontWeight: '500', color: '#374151' }}>Refund Date:</span>
+    1246 |                       <span style={{ color: '#6b7280' }}>{formatDate(selectedDocument.refundDate)}</span>
+ERROR in src/components/assessor/AssessorBilling.tsx:1246:87
+TS2339: Property 'refundDate' does not exist on type 'BillingDocument'.
+    1244 |                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f3f4f6' }}>
+    1245 |                       <span style={{ fontWeight: '500', color: '#374151' }}>Refund Date:</span>
+  > 1246 |                       <span style={{ color: '#6b7280' }}>{formatDate(selectedDocument.refundDate)}</span>
+         |                                                                                       ^^^^^^^^^^
+    1247 |                     </div>
+    1248 |                   )}
+    1249 |                   {selectedDocument.status === 'pending' && (
+ERROR in src/components/assessor/AssessorBilling.tsx:1284:24
+TS2367: This comparison appears to be unintentional because the types '"pending" | "paid" | "issued" | "applied"' and '"refunded"' have no overlap.
+    1282 |                   <div style={{ marginTop: '24px' }}>
+    1283 |                     <div>
+  > 1284 |                       {selectedDocument.status === 'refunded' ? (
+         |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    1285 |                         <span style={{ padding: '4px 8px', background: '#fef2f2', borderRadius: '4px', fontSize: '14px', display: 'inline-block', color: '#dc2626' }}>
+    1286 |                           💰 Cash refund issued
+    1287 |                         </span>
+ERROR in src/components/assessor/AssessorBilling.tsx:1302:54
+TS18048: 'selectedDocument.leadCount' is possibly 'undefined'.
+    1300 |               </div>
+    1301 |
+  > 1302 |               {selectedDocument.type === 'credit' && selectedDocument.leadCount > 0 ? (
+         |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    1303 |                 <div className="leads-section" style={{ marginTop: '24px' }}>
+    1304 |                   <h4 style={{ color: '#374151', marginBottom: '12px' }}>{selectedDocument.status === 'refunded' ? 'Refunded' : 'Credited'} Leads ({selectedDocument.leadCount})</h4>
+    1305 |                   <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+ERROR in src/components/assessor/AssessorBilling.tsx:1304:75
+TS2367: This comparison appears to be unintentional because the types '"pending" | "paid" | "issued" | "applied"' and '"refunded"' have no overlap.
+    1302 |               {selectedDocument.type === 'credit' && selectedDocument.leadCount > 0 ? (
+    1303 |                 <div className="leads-section" style={{ marginTop: '24px' }}>
+  > 1304 |                   <h4 style={{ color: '#374151', marginBottom: '12px' }}>{selectedDocument.status === 'refunded' ? 'Refunded' : 'Credited'} Leads ({selectedDocument.leadCount})</h4>
+         |                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    1305 |                   <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+    1306 |                     <table style={{
+    1307 |                       width: '100%',
+ERROR in src/components/assessor/AssessorBilling.tsx:1374:36
+TS2339: Property 'leads' does not exist on type 'BillingDocument'.
+    1372 |                   </div>
+    1373 |                 </div>
+  > 1374 |               ) : selectedDocument.leads && selectedDocument.leads.length > 0 ? (
+         |                                    ^^^^^
+    1375 |                 <div className="leads-section">
+    1376 |                   <h4>Lead Details ({selectedDocument.leadCount} leads{selectedDocument.leads.filter(l => l.status === 'refunded').length > 0 ? `, ${selectedDocument.leads.filter(l => l.status === 'refunded').length} refunded` : ''})</h4>
+    1377 |                   <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+ERROR in src/components/assessor/AssessorBilling.tsx:1374:62
+TS2339: Property 'leads' does not exist on type 'BillingDocument'.
+    1372 |                   </div>
+    1373 |                 </div>
+  > 1374 |               ) : selectedDocument.leads && selectedDocument.leads.length > 0 ? (
+         |                                                              ^^^^^
+    1375 |                 <div className="leads-section">
+    1376 |                   <h4>Lead Details ({selectedDocument.leadCount} leads{selectedDocument.leads.filter(l => l.status === 'refunded').length > 0 ? `, ${selectedDocument.leads.filter(l => l.status === 'refunded').length} refunded` : ''})</h4>
+    1377 |                   <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+ERROR in src/components/assessor/AssessorBilling.tsx:1376:89
+TS2339: Property 'leads' does not exist on type 'BillingDocument'.
+    1374 |               ) : selectedDocument.leads && selectedDocument.leads.length > 0 ? (
+    1375 |                 <div className="leads-section">
+  > 1376 |                   <h4>Lead Details ({selectedDocument.leadCount} leads{selectedDocument.leads.filter(l => l.status === 'refunded').length > 0 ? `, ${selectedDocument.leads.filter(l => l.status === 'refunded').length} refunded` : ''})</h4>
+         |                                                                                         ^^^^^
+    1377 |                   <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+    1378 |                     <table style={{
+    1379 |                       width: '100%',
+ERROR in src/components/assessor/AssessorBilling.tsx:1376:102
+TS7006: Parameter 'l' implicitly has an 'any' type.
+    1374 |               ) : selectedDocument.leads && selectedDocument.leads.length > 0 ? (
+    1375 |                 <div className="leads-section">
+  > 1376 |                   <h4>Lead Details ({selectedDocument.leadCount} leads{selectedDocument.leads.filter(l => l.status === 'refunded').length > 0 ? `, ${selectedDocument.leads.filter(l => l.status === 'refunded').length} refunded` : ''})</h4>
+         |                                                                                                      ^
+    1377 |                   <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+    1378 |                     <table style={{
+    1379 |                       width: '100%',
+ERROR in src/components/assessor/AssessorBilling.tsx:1376:167
+TS2339: Property 'leads' does not exist on type 'BillingDocument'.
+    1374 |               ) : selectedDocument.leads && selectedDocument.leads.length > 0 ? (
+    1375 |                 <div className="leads-section">
+  > 1376 |                   <h4>Lead Details ({selectedDocument.leadCount} leads{selectedDocument.leads.filter(l => l.status === 'refunded').length > 0 ? `, ${selectedDocument.leads.filter(l => l.status === 'refunded').length} refunded` : ''})</h4>
+         |                                                                                                                                                                       ^^^^^
+    1377 |                   <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+    1378 |                     <table style={{
+    1379 |                       width: '100%',
+ERROR in src/components/assessor/AssessorBilling.tsx:1376:180
+TS7006: Parameter 'l' implicitly has an 'any' type.
+    1374 |               ) : selectedDocument.leads && selectedDocument.leads.length > 0 ? (
+    1375 |                 <div className="leads-section">
+  > 1376 |                   <h4>Lead Details ({selectedDocument.leadCount} leads{selectedDocument.leads.filter(l => l.status === 'refunded').length > 0 ? `, ${selectedDocument.leads.filter(l => l.status === 'refunded').length} refunded` : ''})</h4>
+         |                                                                                                                                                                                    ^
+    1377 |                   <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+    1378 |                     <table style={{
+    1379 |                       width: '100%',
+ERROR in src/components/assessor/AssessorBilling.tsx:1393:43
+TS2339: Property 'leads' does not exist on type 'BillingDocument'.
+    1391 |                       </thead>
+    1392 |                       <tbody>
+  > 1393 |                         {selectedDocument.leads.map(lead => (
+         |                                           ^^^^^
+    1394 |                           <tr key={lead.id} style={{
+    1395 |                             background: lead.status === 'refunded' ? '#fef2f2' : 'transparent',
+    1396 |                             color: lead.status === 'refunded' ? '#7f1d1d' : 'inherit',
+ERROR in src/components/assessor/AssessorBilling.tsx:1393:53
+TS7006: Parameter 'lead' implicitly has an 'any' type.
+    1391 |                       </thead>
+    1392 |                       <tbody>
+  > 1393 |                         {selectedDocument.leads.map(lead => (
+         |                                                     ^^^^
+    1394 |                           <tr key={lead.id} style={{
+    1395 |                             background: lead.status === 'refunded' ? '#fef2f2' : 'transparent',
+    1396 |                             color: lead.status === 'refunded' ? '#7f1d1d' : 'inherit',
+ERROR in src/components/assessor/AssessorBilling.tsx:1411:19
+TS18048: 'selectedDocument.leadCount' is possibly 'undefined'.
+    1409 |                   </div>
+    1410 |                 </div>
+  > 1411 |               ) : selectedDocument.leadCount > 0 ? (
+         |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    1412 |                 <div className="leads-section">
+    1413 |                   <h4>Lead Details ({selectedDocument.leadCount} leads)</h4>
+    1414 |                   <div style={{
+ERROR in src/components/assessor/AssessorBilling.tsx:1420:22
+TS2367: This comparison appears to be unintentional because the types '"pending" | "paid" | "issued" | "applied"' and '"refunded"' have no overlap.
+    1418 |                     padding: '16px'
+    1419 |                   }}>
+  > 1420 |                     {selectedDocument.status === 'refunded' ?
+         |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    1421 |                       'All leads from this period were refunded due to data quality issues.' :
+    1422 |                       'All individual leads were delivered successfully. Refund applied at period level due to service issues.'}
+    1423 |                   </div>

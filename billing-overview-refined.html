@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Overview - Refined Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #374151;
+            margin: 30px 0 20px;
+            padding: 10px;
+            background: #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .design-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        /* Component Styles */
+        .billing-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 32px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #1e40af;
+        }
+
+        .status-box {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #166534;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .button-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .button-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .period-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 16px 0;
+            margin: 16px 0;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .period-stat {
+            text-align: center;
+        }
+
+        .period-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .period-stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-bronze {
+            background: #fed7aa;
+            color: #7c2d12;
+        }
+
+        .badge-silver {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .badge-gold {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .notes-section {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .notes-section h3 {
+            color: #374151;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .notes-section ul {
+            margin-left: 20px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .notes-section li {
+            margin-bottom: 8px;
+        }
+
+        /* Gold Assessor Specific */
+        .invoice-list {
+            margin: 16px 0;
+        }
+
+        .invoice-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .invoice-overdue {
+            border-color: #f59e0b;
+            background: #fef8f1;
+        }
+
+        .credit-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .credit-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .credit-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .credit-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .button-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .button-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Billing Overview - Refined Design Based on Feedback</h1>
+        <p style="color: #6b7280; margin-bottom: 30px;">
+            Incorporating "leads this period" and trust status education
+        </p>
+
+        <!-- REFINED BRONZE DESIGN -->
+        <h2>🥉 Bronze Assessor - Refined Option 1</h2>
+
+        <div class="design-section">
+            <div class="section-title">Overview Tab - Bronze Assessor (Simple Progress with Enhancements)</div>
+
+            <div class="billing-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h4 style="margin: 0;">Your Spending This Period</h4>
+                    <span class="badge badge-bronze">BRONZE STATUS</span>
+                </div>
+
+                <div style="font-size: 32px; font-weight: 700; color: #111827;">
+                    £225 <span style="font-size: 18px; color: #6b7280;">of £450</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%;">
+                        50% - 15 leads this period
+                    </div>
+                </div>
+
+                <p style="font-size: 14px; color: #6b7280;">
+                    You'll be charged automatically when you reach £450<br>
+                    Estimated: ~15 days based on current usage
+                </p>
+
+                <div class="period-stats">
+                    <div class="period-stat">
+                        <div class="period-stat-value">15</div>
+                        <div class="period-stat-label">Leads This Period</div>
+                    </div>
+                    <div class="period-stat">
+                        <div class="period-stat-value">£15</div>
+                        <div class="period-stat-label">Cost Per Lead</div>
+                    </div>
+                    <div class="period-stat">
+                        <div class="period-stat-value">15</div>
+                        <div class="period-stat-label">Leads Until Payment</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                ℹ️ <strong>How it works:</strong> Buy leads for £15 each. We'll charge your card automatically when you hit £450 worth (30 leads).
+            </div>
+
+            <div class="status-box">
+                🏆 <strong>Your Bronze Status:</strong> You're building trust with each payment cycle. After 3 successful payments, you'll unlock Silver status with increased spending limits and priority features.
+            </div>
+
+            <div class="button-group">
+                <button class="button button-secondary">Pause Purchasing</button>
+                <button class="button button-secondary">View History</button>
+                <button class="button button-secondary">Update Payment Method</button>
+            </div>
+
+            <div class="notes-section">
+                <h3>💡 Key Points Explained During Onboarding:</h3>
+                <ul>
+                    <li><strong>Period:</strong> A billing period starts when you buy your first lead and ends when you reach £450</li>
+                    <li><strong>Auto-payment:</strong> Your registered card is charged automatically at threshold</li>
+                    <li><strong>Trust levels:</strong> Start at Bronze, unlock benefits by completing payment cycles</li>
+                    <li><strong>Pause option:</strong> You can pause lead purchasing at any time</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SILVER VARIATION -->
+        <h2>🥈 Silver Assessor - Same Design Pattern</h2>
+
+        <div class="design-section">
+            <div class="section-title">Overview Tab - Silver Assessor (Higher Threshold)</div>
+
+            <div class="billing-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h4 style="margin: 0;">Your Spending This Period</h4>
+                    <span class="badge badge-silver">SILVER STATUS</span>
+                </div>
+
+                <div style="font-size: 32px; font-weight: 700; color: #111827;">
+                    £420 <span style="font-size: 18px; color: #6b7280;">of £600</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 70%;">
+                        70% - 28 leads this period
+                    </div>
+                </div>
+
+                <p style="font-size: 14px; color: #6b7280;">
+                    You'll be charged automatically when you reach £600<br>
+                    Estimated: ~7 days based on current usage
+                </p>
+
+                <div class="period-stats">
+                    <div class="period-stat">
+                        <div class="period-stat-value">28</div>
+                        <div class="period-stat-label">Leads This Period</div>
+                    </div>
+                    <div class="period-stat">
+                        <div class="period-stat-value">£15</div>
+                        <div class="period-stat-label">Cost Per Lead</div>
+                    </div>
+                    <div class="period-stat">
+                        <div class="period-stat-value">12</div>
+                        <div class="period-stat-label">Leads Until Payment</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-box">
+                🏆 <strong>Your Silver Status Benefits:</strong> £600 spending threshold (was £450), priority lead notifications, and faster support response. 3 more payment cycles until Gold!
+            </div>
+        </div>
+
+        <!-- GOLD VARIATION -->
+        <h2>🏆 Gold Assessor - Multiple Invoices</h2>
+
+        <div class="design-section">
+            <div class="section-title">Overview Tab - Gold Assessor (Credit System)</div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h4 style="margin: 0; font-size: 18px;">Billing Overview</h4>
+                <span class="badge badge-gold">GOLD STATUS</span>
+            </div>
+
+            <!-- Current Period Card -->
+            <div class="billing-card">
+                <h4 style="margin-bottom: 16px;">Current Period (Active)</h4>
+
+                <div style="font-size: 32px; font-weight: 700; color: #111827;">
+                    £225 <span style="font-size: 18px; color: #6b7280;">of £450</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%;">
+                        50% - 15 leads this period
+                    </div>
+                </div>
+
+                <p style="font-size: 14px; color: #6b7280;">
+                    Invoice will generate at £450 (NET 30 payment terms)
+                </p>
+
+                <div class="period-stats">
+                    <div class="period-stat">
+                        <div class="period-stat-value">15</div>
+                        <div class="period-stat-label">Leads This Period</div>
+                    </div>
+                    <div class="period-stat">
+                        <div class="period-stat-value">68%</div>
+                        <div class="period-stat-label">Contact Rate</div>
+                    </div>
+                    <div class="period-stat">
+                        <div class="period-stat-value">£900</div>
+                        <div class="period-stat-label">Credit Limit</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outstanding Invoices -->
+            <div class="billing-card" style="background: white;">
+                <h4 style="margin-bottom: 16px;">Outstanding Invoices</h4>
+
+                <div class="credit-display">
+                    <div class="credit-box">
+                        <div class="credit-label">Credit Used</div>
+                        <div class="credit-value">£675</div>
+                    </div>
+                    <div class="credit-box">
+                        <div class="credit-label">Credit Available</div>
+                        <div class="credit-value" style="color: #10b981;">£225</div>
+                    </div>
+                </div>
+
+                <div class="invoice-list">
+                    <div class="invoice-item invoice-overdue">
+                        <div>
+                            <strong>Invoice #2024-012</strong><br>
+                            <span style="color: #ef4444; font-size: 13px;">5 days overdue</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 700;">£450</div>
+                            <button class="button button-primary" style="padding: 6px 12px; font-size: 12px; margin-top: 4px;">Pay Now</button>
+                        </div>
+                    </div>
+                    <div class="invoice-item">
+                        <div>
+                            <strong>Invoice #2025-001</strong><br>
+                            <span style="color: #6b7280; font-size: 13px;">Due Feb 15 (20 days)</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 700;">£225</div>
+                            <button class="button button-secondary" style="padding: 6px 12px; font-size: 12px; margin-top: 4px;">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                ⚠️ <strong>Payment Required:</strong> Invoice #2024-012 is overdue. Please pay £450 to maintain your Gold status benefits.
+            </div>
+
+            <div class="status-box">
+                🏆 <strong>Your Gold Status Benefits:</strong> NET 30 payment terms, multiple outstanding invoices allowed (up to £900), priority support, and early access to high-value leads.
+            </div>
+
+            <div class="button-group">
+                <button class="button button-primary">Pay All Outstanding (£675)</button>
+                <button class="button button-secondary">View All Invoices</button>
+                <button class="button button-secondary">Download Statements</button>
+            </div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <h2>🆕 New Assessor - Empty State</h2>
+
+        <div class="design-section">
+            <div class="section-title">Overview Tab - Brand New Assessor</div>
+
+            <div style="text-align: center; padding: 60px 20px; background: #f9fafb; border-radius: 8px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">🚀</div>
+                <h3 style="color: #111827; margin-bottom: 12px; font-size: 24px;">Welcome to Your Billing Dashboard!</h3>
+                <p style="color: #6b7280; max-width: 500px; margin: 0 auto 32px;">
+                    You haven't purchased any leads yet. Here's what to expect:
+                </p>
+
+                <div style="background: white; border-radius: 8px; padding: 24px; max-width: 400px; margin: 0 auto 24px; text-align: left;">
+                    <h4 style="margin-bottom: 16px; color: #111827;">Your Current Status</h4>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                        <span style="color: #6b7280;">Trust Level</span>
+                        <span class="badge badge-bronze">BRONZE</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                        <span style="color: #6b7280;">Spending This Period</span>
+                        <span style="font-weight: 600;">£0 / £450</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                        <span style="color: #6b7280;">Cost Per Lead</span>
+                        <span style="font-weight: 600;">£15</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                        <span style="color: #6b7280;">Payment Method</span>
+                        <span style="font-weight: 600; color: #ef4444;">Not Set</span>
+                    </div>
+                </div>
+
+                <div class="info-box" style="max-width: 500px; margin: 0 auto 24px;">
+                    <strong>How billing works:</strong><br>
+                    • Purchase leads in your postcodes for £15 each<br>
+                    • We track your spending in each period<br>
+                    • Automatic payment when you reach £450 (30 leads)<br>
+                    • Build trust to unlock better terms and features
+                </div>
+
+                <div class="button-group" style="justify-content: center;">
+                    <button class="button button-primary">Add Payment Method</button>
+                    <button class="button button-secondary">Browse Available Leads</button>
+                    <button class="button button-secondary">Learn More</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPARISON -->
+        <h2>📊 Key Improvements in This Design</h2>
+
+        <div class="design-section">
+            <div class="section-title">What We've Solved</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div>
+                    <h4 style="color: #10b981; margin-bottom: 12px;">✅ Clear Language</h4>
+                    <ul style="font-size: 14px; color: #374151; line-height: 1.8;">
+                        <li>"Leads this period" instead of "this month"</li>
+                        <li>"Your spending" instead of "billing cycle"</li>
+                        <li>Shows exactly how many leads until payment</li>
+                        <li>Clear cost per lead (£15)</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: #10b981; margin-bottom: 12px;">✅ Trust Level Context</h4>
+                    <ul style="font-size: 14px; color: #374151; line-height: 1.8;">
+                        <li>Badge shows current status prominently</li>
+                        <li>Status box explains benefits</li>
+                        <li>Clear progression path</li>
+                        <li>Removes gamification confusion</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: #10b981; margin-bottom: 12px;">✅ Period Statistics</h4>
+                    <ul style="font-size: 14px; color: #374151; line-height: 1.8;">
+                        <li>Leads this period clearly shown</li>
+                        <li>Leads remaining until payment</li>
+                        <li>Visual progress in the bar itself</li>
+                        <li>Accurate terminology throughout</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: #10b981; margin-bottom: 12px;">✅ Different UX for Trust Levels</h4>
+                    <ul style="font-size: 14px; color: #374151; line-height: 1.8;">
+                        <li>Bronze/Silver: Simple threshold view</li>
+                        <li>Gold: Credit system with invoices</li>
+                        <li>Adapts to user's actual needs</li>
+                        <li>Progressive complexity</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

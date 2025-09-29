@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Summary Variations - EPC Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .variation {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .variation-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .profile-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .profile-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+
+        .field-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .field-value {
+            font-size: 14px;
+            color: #111827;
+            font-weight: 500;
+        }
+
+        .field-value.status-active {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .field-value.status-paused {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .trust-badge-profile {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #cd7f32;
+            color: white;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.paused {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .add-assessor-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .add-assessor-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .pause-btn {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .pause-btn:hover {
+            background: #d97706;
+        }
+
+        .resume-btn {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .resume-btn:hover {
+            background: #047857;
+        }
+
+        .status-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .status-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .field-with-button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .inline-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="margin-bottom: 32px; text-align: center; color: #1a1a1a;">Account Summary Variations</h1>
+
+        <!-- Variation 1: Status as simple text field -->
+        <div class="variation">
+            <div class="variation-title">Variation 1: Status as Simple Field</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="profile-field">
+                    <span class="field-label">Account Status:</span>
+                    <span class="field-value status-active">Active</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Trust Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Active Post Codes:</span>
+                    <span class="field-value">12 areas</span>
+                </div>
+                <div class="status-actions">
+                    <button class="add-assessor-btn">Pause Purchasing</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 2: Status with badge -->
+        <div class="variation">
+            <div class="variation-title">Variation 2: Status with Badge</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="profile-field">
+                    <span class="field-label">Account Status:</span>
+                    <span class="status-badge active">Active</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Trust Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Active Post Codes:</span>
+                    <span class="field-value">12 areas</span>
+                </div>
+                <div class="status-actions">
+                    <button class="add-assessor-btn">Pause Purchasing</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 3: Status with inline pause button -->
+        <div class="variation">
+            <div class="variation-title">Variation 3: Status with Inline Button</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="profile-field">
+                    <span class="field-label">Lead Purchasing:</span>
+                    <div class="field-with-button">
+                        <span class="field-value status-active">Active</span>
+                        <button class="pause-btn">Pause</button>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Trust Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Active Post Codes:</span>
+                    <span class="field-value">12 areas</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 4: Paused state example -->
+        <div class="variation">
+            <div class="variation-title">Variation 4: Paused State with Resume</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="profile-field">
+                    <span class="field-label">Lead Purchasing:</span>
+                    <div class="field-with-button">
+                        <span class="field-value status-paused">Paused</span>
+                        <button class="resume-btn">Resume</button>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Trust Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Preserved Post Codes:</span>
+                    <span class="field-value">12 areas</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 5: Minimal with purchasing status first -->
+        <div class="variation">
+            <div class="variation-title">Variation 5: Minimal - Status First</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="profile-field">
+                    <span class="field-label">Lead Purchasing:</span>
+                    <div class="inline-status">
+                        <span class="status-badge active">Active</span>
+                        <span style="color: #6b7280; font-size: 13px;">• 12 post codes</span>
+                        <button class="pause-btn">Pause</button>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Trust Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 6: Compact with purchasing status highlighted -->
+        <div class="variation">
+            <div class="variation-title">Variation 6: Highlighted Status Section</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="status-section">
+                    <div class="profile-field" style="border: none; padding: 0;">
+                        <span class="field-label">Lead Purchasing Status:</span>
+                        <div class="field-with-button">
+                            <span class="field-value status-active">Active - 12 post codes</span>
+                            <button class="pause-btn">Pause</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Trust Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 7: Account Level badge + Account Status colored text -->
+        <div class="variation">
+            <div class="variation-title">Variation 7: Account Level Badge + Status Colored Text</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="profile-field">
+                    <span class="field-label">Account Status:</span>
+                    <span class="field-value status-active">Active</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 7b: Same but with Paused status example -->
+        <div class="variation">
+            <div class="variation-title">Variation 7b: Account Level Badge + Status Colored Text (Paused)</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="profile-field">
+                    <span class="field-label">Account Status:</span>
+                    <span class="field-value status-paused">Paused</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variation 7c: Same but with Suspended status example -->
+        <div class="variation">
+            <div class="variation-title">Variation 7c: Account Level Badge + Status Colored Text (Suspended)</div>
+            <div class="profile-card">
+                <h3>Account Summary</h3>
+                <div class="profile-field">
+                    <span class="field-label">Account Status:</span>
+                    <span class="field-value" style="color: #dc2626; font-weight: 600;">Suspended</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Level:</span>
+                    <span class="trust-badge-profile">Bronze</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Member Since:</span>
+                    <span class="field-value">15 August 2024</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Total Leads:</span>
+                    <span class="field-value">234</span>
+                </div>
+                <div class="profile-field">
+                    <span class="field-label">Account Age:</span>
+                    <span class="field-value">5 months</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

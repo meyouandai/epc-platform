@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Limit - Card-Based Modal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .modal-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .modal-variation {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            overflow: hidden;
+            margin: 40px 0;
+        }
+
+        .modal-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8fafc;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .current-status {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .current-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0c4a6e;
+            margin-bottom: 8px;
+        }
+
+        .current-label {
+            font-size: 14px;
+            color: #0369a1;
+            margin-bottom: 12px;
+        }
+
+        .progress-indicator {
+            font-size: 12px;
+            color: #075985;
+            background: #bae6fd;
+            padding: 6px 12px;
+            border-radius: 16px;
+            display: inline-block;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .limit-card {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .limit-card:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+        }
+
+        .limit-card.selected {
+            border-color: #10b981;
+            background: #ecfdf5;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .limit-card.locked {
+            background: #f9fafb;
+            border-color: #e5e7eb;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .limit-card.locked:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .card-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .card-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-current {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-locked {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-available {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .card-progress {
+            font-size: 10px;
+            color: #059669;
+            background: #dcfce7;
+            padding: 3px 8px;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .special-option {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border: 2px solid #8b5cf6;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .special-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .special-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #5b21b6;
+            margin-bottom: 8px;
+        }
+
+        .special-description {
+            font-size: 14px;
+            color: #6b21a8;
+        }
+
+        .modal-footer {
+            padding: 24px 32px;
+            border-top: 1px solid #e5e7eb;
+            background: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-info {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .footer-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .version-label {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .section-divider {
+            margin: 32px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .section-divider span {
+            background: white;
+            padding: 0 16px;
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .compact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .compact-card {
+            padding: 16px 12px;
+            min-height: 90px;
+        }
+
+        .compact-card .card-amount {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .compact-card .card-label {
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-container">
+        <h1>Manage Limit Modal - Card-Based Interface</h1>
+        <p class="intro">Visual card-based approach similar to the billing page layout</p>
+
+        <!-- VARIATION 1: Bronze User - Standard Cards -->
+        <div class="modal-variation">
+            <div class="version-label">Bronze User - Standard Card Size</div>
+
+            <div class="modal-header">
+                <div class="modal-title">Manage Your Spending Limit</div>
+                <div class="modal-subtitle">Choose your preferred payment threshold</div>
+            </div>
+
+            <div class="modal-body">
+                <div class="current-status">
+                    <div class="current-amount">£150</div>
+                    <div class="current-label">Current Limit</div>
+                    <div class="progress-indicator">£150 of £300 spent for next tier</div>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="limit-card">
+                        <div class="card-amount">£50</div>
+                        <div class="card-label">Starter</div>
+                    </div>
+
+                    <div class="limit-card">
+                        <div class="card-amount">£100</div>
+                        <div class="card-label">Basic</div>
+                    </div>
+
+                    <div class="limit-card selected">
+                        <div class="card-badge badge-current">Current</div>
+                        <div class="card-amount">£150</div>
+                        <div class="card-label">Your Level</div>
+                    </div>
+
+                    <div class="limit-card locked">
+                        <div class="card-badge badge-locked">Locked</div>
+                        <div class="card-amount">£250</div>
+                        <div class="card-label">Need £150 more</div>
+                    </div>
+
+                    <div class="limit-card locked">
+                        <div class="card-badge badge-locked">Locked</div>
+                        <div class="card-amount">£500</div>
+                        <div class="card-label">Future</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="footer-info">Changes take effect immediately</div>
+                <div class="footer-buttons">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Keep £150</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VARIATION 2: Silver User - More Options -->
+        <div class="modal-variation">
+            <div class="version-label">Silver User - Multiple Tiers Available</div>
+
+            <div class="modal-header">
+                <div class="modal-title">Manage Your Spending Limit</div>
+                <div class="modal-subtitle">Silver Member - Enhanced Options</div>
+            </div>
+
+            <div class="modal-body">
+                <div class="current-status">
+                    <div class="current-amount">£500</div>
+                    <div class="current-label">Current Limit</div>
+                    <div class="progress-indicator">Silver Member - £750 available</div>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="limit-card">
+                        <div class="card-amount">£250</div>
+                        <div class="card-label">Lower Option</div>
+                    </div>
+
+                    <div class="limit-card selected">
+                        <div class="card-badge badge-current">Current</div>
+                        <div class="card-amount">£500</div>
+                        <div class="card-label">Entry Silver</div>
+                    </div>
+
+                    <div class="limit-card">
+                        <div class="card-badge badge-available">Available</div>
+                        <div class="card-amount">£750</div>
+                        <div class="card-label">Mid Silver</div>
+                    </div>
+
+                    <div class="limit-card locked">
+                        <div class="card-badge badge-locked">Locked</div>
+                        <div class="card-amount">£1000</div>
+                        <div class="card-label">Need £500 more</div>
+                        <div class="card-progress">£500 more at £750</div>
+                    </div>
+                </div>
+
+                <div class="section-divider">
+                    <span>Future Options</span>
+                </div>
+
+                <div class="special-option">
+                    <div class="special-title">🏆 Gold Membership</div>
+                    <div class="special-description">Monthly billing available at £2000 total lifetime spending</div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="footer-info">Progress continues regardless of limit changes</div>
+                <div class="footer-buttons">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Update Limit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VARIATION 3: Gold User - Smart Grouping -->
+        <div class="modal-variation">
+            <div class="version-label">Gold User - Smart Contextual Options</div>
+
+            <div class="modal-header">
+                <div class="modal-title">Manage Your Account Settings</div>
+                <div class="modal-subtitle">Gold Member - Maximum Flexibility</div>
+            </div>
+
+            <div class="modal-body">
+                <div class="current-status">
+                    <div class="current-amount">£1000</div>
+                    <div class="current-label">Current Auto-pay Limit</div>
+                </div>
+
+                <div class="special-option">
+                    <div class="special-title">💳 Switch to Monthly Billing</div>
+                    <div class="special-description">Professional invoicing with NET 30 terms - up to £1500 credit</div>
+                </div>
+
+                <div class="section-divider">
+                    <span>Auto-pay Limits</span>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="limit-card">
+                        <div class="card-amount">£750</div>
+                        <div class="card-label">Lower</div>
+                    </div>
+
+                    <div class="limit-card selected">
+                        <div class="card-badge badge-current">Current</div>
+                        <div class="card-amount">£1000</div>
+                        <div class="card-label">Standard Gold</div>
+                    </div>
+
+                    <div class="limit-card">
+                        <div class="card-badge badge-available">Available</div>
+                        <div class="card-amount">£1250</div>
+                        <div class="card-label">Higher</div>
+                    </div>
+
+                    <div class="limit-card">
+                        <div class="card-badge badge-available">Available</div>
+                        <div class="card-amount">£1500</div>
+                        <div class="card-label">Maximum</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="#" style="color: #3b82f6; font-size: 14px; text-decoration: none;">Show all limit options →</a>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="footer-info">Gold members enjoy maximum flexibility</div>
+                <div class="footer-buttons">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Update Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VARIATION 4: Compact Cards for Many Options -->
+        <div class="modal-variation">
+            <div class="version-label">Compact Cards - Fits More Options</div>
+
+            <div class="modal-header">
+                <div class="modal-title">All Available Limits</div>
+                <div class="modal-subtitle">Gold Member - Complete Selection</div>
+            </div>
+
+            <div class="modal-body">
+                <div class="current-status">
+                    <div class="current-amount">£750</div>
+                    <div class="current-label">Current Limit</div>
+                </div>
+
+                <div class="compact-grid">
+                    <div class="limit-card compact-card">
+                        <div class="card-amount">£50</div>
+                        <div class="card-label">Bronze</div>
+                    </div>
+
+                    <div class="limit-card compact-card">
+                        <div class="card-amount">£100</div>
+                        <div class="card-label">Bronze</div>
+                    </div>
+
+                    <div class="limit-card compact-card">
+                        <div class="card-amount">£150</div>
+                        <div class="card-label">Bronze</div>
+                    </div>
+
+                    <div class="limit-card compact-card">
+                        <div class="card-amount">£250</div>
+                        <div class="card-label">Bronze</div>
+                    </div>
+
+                    <div class="limit-card compact-card">
+                        <div class="card-amount">£500</div>
+                        <div class="card-label">Silver</div>
+                    </div>
+
+                    <div class="limit-card compact-card selected">
+                        <div class="card-badge badge-current">✓</div>
+                        <div class="card-amount">£750</div>
+                        <div class="card-label">Silver</div>
+                    </div>
+
+                    <div class="limit-card compact-card">
+                        <div class="card-amount">£1000</div>
+                        <div class="card-label">Gold</div>
+                    </div>
+
+                    <div class="limit-card compact-card">
+                        <div class="card-amount">£1250</div>
+                        <div class="card-label">Gold</div>
+                    </div>
+
+                    <div class="limit-card compact-card">
+                        <div class="card-amount">£1500</div>
+                        <div class="card-label">Gold</div>
+                    </div>
+                </div>
+
+                <div class="special-option">
+                    <div class="special-title">💼 Monthly Billing</div>
+                    <div class="special-description">Switch to professional invoicing</div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="footer-info">All 9 limit options visible at once</div>
+                <div class="footer-buttons">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary">Confirm Selection</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYSIS SECTION -->
+        <div style="margin-top: 40px; padding: 24px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h2 style="margin-bottom: 20px; color: #111827;">Card-Based Interface Analysis</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 20px 0;">
+                <div>
+                    <h3 style="color: #059669; margin-bottom: 12px;">✅ Advantages</h3>
+                    <ul style="color: #374151; line-height: 1.6; padding-left: 20px;">
+                        <li>Much more visual and scannable than list format</li>
+                        <li>Clear visual hierarchy with current selection highlighted</li>
+                        <li>Locked/available states immediately obvious</li>
+                        <li>Feels familiar (like billing page cards)</li>
+                        <li>Easy to compare options at a glance</li>
+                        <li>Hover states provide nice interactive feedback</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 style="color: #dc2626; margin-bottom: 12px;">⚠️ Challenges</h3>
+                    <ul style="color: #374151; line-height: 1.6; padding-left: 20px;">
+                        <li>Takes more vertical space than list</li>
+                        <li>Compact cards might be too small on mobile</li>
+                        <li>9+ cards still creates choice paralysis</li>
+                        <li>Need to balance card size vs number of options</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="color: #7c3aed; margin: 20px 0 12px 0;">🎯 Recommendations</h3>
+            <p style="color: #374151; line-height: 1.6;">
+                <strong>Variation 3 (Gold Smart Grouping)</strong> is the best approach - shows contextually relevant cards with special monthly billing option prominently featured. The "show all options" link handles edge cases without cluttering the main interface.
+            </p>
+
+            <p style="color: #374151; line-height: 1.6; margin-top: 16px;">
+                <strong>Card sizing:</strong> Standard cards work well for 4-5 options. Use compact cards only when showing complete selection for power users.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

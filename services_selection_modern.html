@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Services Selection Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-600: #4f46e5;
+            --primary-700: #4338ca;
+            --primary-50: #eef2ff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --green-50: #f0fdf4;
+            --green-500: #22c55e;
+            --green-600: #16a34a;
+            --blue-50: #eff6ff;
+            --blue-500: #3b82f6;
+            --orange-50: #fff7ed;
+            --orange-500: #f97316;
+            --red-50: #fef2f2;
+            --red-500: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+            font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 48px 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pattern-grid {
+            display: grid;
+            gap: 48px;
+        }
+
+        .pattern {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-200);
+        }
+
+        .pattern-header {
+            margin-bottom: 32px;
+        }
+
+        .pattern-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .pattern-subtitle {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+        }
+
+        /* Pattern 1: Modern Card Selection */
+        .modern-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            border-color: var(--primary-600);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .service-card:hover::before {
+            background: var(--primary-600);
+        }
+
+        .service-card.selected {
+            border-color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        .service-card.selected::before {
+            background: var(--primary-600);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .service-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .service-description {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .service-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .service-price {
+            font-weight: 600;
+            color: var(--green-600);
+            font-size: 1.125rem;
+        }
+
+        .service-badge {
+            background: var(--green-50);
+            color: var(--green-600);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .checkbox-modern {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .service-card.selected .checkbox-modern {
+            background: var(--primary-600);
+            border-color: var(--primary-600);
+        }
+
+        .service-card.selected .checkbox-modern::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Pattern 2: Category Sections */
+        .category-section {
+            margin-bottom: 32px;
+            background: var(--gray-50);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .service-item:hover {
+            border-color: var(--primary-600);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-item.active {
+            border-color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: var(--gray-300);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-600);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        .service-info {
+            flex: 1;
+        }
+
+        .service-name {
+            font-weight: 500;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .service-subtitle {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* Pattern 3: Simplified Grid */
+        .simple-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .simple-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .simple-card:hover {
+            border-color: var(--primary-600);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .simple-card.selected {
+            border-color: var(--primary-600);
+            background: var(--primary-50);
+            box-shadow: 0 0 0 1px var(--primary-600);
+        }
+
+        .simple-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .simple-icon {
+            font-size: 24px;
+        }
+
+        .simple-title {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .simple-description {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        /* Pattern 4: Feature Matrix */
+        .feature-table {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-header {
+            background: var(--gray-50);
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .table-content {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        th {
+            background: var(--gray-50);
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table-service {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-icon {
+            font-size: 20px;
+        }
+
+        .table-service-info h4 {
+            font-weight: 500;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+        }
+
+        .table-service-info p {
+            color: var(--gray-600);
+            font-size: 0.75rem;
+        }
+
+        .feature-toggle {
+            width: 40px;
+            height: 20px;
+            background: var(--gray-300);
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .feature-toggle.active {
+            background: var(--green-500);
+        }
+
+        .feature-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        .price-input {
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            padding: 8px 12px;
+            width: 100px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: var(--primary-600);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Pattern 5: Modern Builder Interface */
+        .builder-interface {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+
+        .service-pool {
+            background: var(--gray-50);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px dashed var(--gray-300);
+        }
+
+        .selected-services {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid var(--primary-600);
+        }
+
+        .pool-header {
+            margin-bottom: 20px;
+        }
+
+        .pool-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .pool-subtitle {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .service-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .service-tag:hover {
+            border-color: var(--primary-600);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-tag.selected {
+            background: var(--primary-600);
+            color: white;
+            border-color: var(--primary-600);
+        }
+
+        .tag-icon {
+            font-size: 16px;
+        }
+
+        .remove-btn {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .summary-panel {
+            background: var(--blue-50);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .summary-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .summary-text {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-700);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .builder-interface {
+                grid-template-columns: 1fr;
+            }
+
+            .modern-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Service Selection Interface</h1>
+            <p>Modern UX patterns for assessors to configure their service offerings</p>
+        </div>
+
+        <div class="pattern-grid">
+            <!-- Pattern 1: Modern Card Selection -->
+            <div class="pattern">
+                <div class="pattern-header">
+                    <h2 class="pattern-title">Modern Card Selection</h2>
+                    <p class="pattern-subtitle">Visual cards with hover effects and clear selection states</p>
+                </div>
+
+                <div class="modern-cards">
+                    <div class="service-card selected">
+                        <div class="checkbox-modern"></div>
+                        <div class="service-icon" style="background: var(--blue-50); color: var(--blue-500);">🏠</div>
+                        <div class="service-title">Domestic EPC Certificate</div>
+                        <div class="service-description">Energy performance certificates for residential properties under 1000m². Fast turnaround and competitive pricing.</div>
+                        <div class="service-meta">
+                            <div class="service-price">From £45</div>
+                            <div class="service-badge">Popular</div>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="checkbox-modern"></div>
+                        <div class="service-icon" style="background: var(--orange-50); color: var(--orange-500);">🏢</div>
+                        <div class="service-title">Commercial EPC Certificate</div>
+                        <div class="service-description">Energy performance certificates for commercial and industrial buildings. Comprehensive assessments with detailed reporting.</div>
+                        <div class="service-meta">
+                            <div class="service-price">From £120</div>
+                            <div class="service-badge" style="background: var(--orange-50); color: var(--orange-500);">Premium</div>
+                        </div>
+                    </div>
+
+                    <div class="service-card selected">
+                        <div class="checkbox-modern"></div>
+                        <div class="service-icon" style="background: var(--green-50); color: var(--green-500);">📊</div>
+                        <div class="service-title">SAP Calculations</div>
+                        <div class="service-description">Standard Assessment Procedure calculations for energy efficiency ratings. Essential for new builds and renovations.</div>
+                        <div class="service-meta">
+                            <div class="service-price">From £80</div>
+                            <div class="service-badge">Essential</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern 2: Category Sections -->
+            <div class="pattern">
+                <div class="pattern-header">
+                    <h2 class="pattern-title">Organized Categories</h2>
+                    <p class="pattern-subtitle">Services grouped by type with toggle switches for quick selection</p>
+                </div>
+
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon" style="background: var(--primary-600);">📋</div>
+                        <div class="category-title">Energy Performance Certificates</div>
+                    </div>
+                    <div class="services-list">
+                        <div class="service-item active">
+                            <div class="service-info">
+                                <div class="service-name">Domestic EPC Certificate</div>
+                                <div class="service-subtitle">Residential properties under 1000m²</div>
+                            </div>
+                            <div class="toggle-switch active"></div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-info">
+                                <div class="service-name">Commercial EPC Certificate</div>
+                                <div class="service-subtitle">Commercial and industrial buildings</div>
+                            </div>
+                            <div class="toggle-switch"></div>
+                        </div>
+                        <div class="service-item active">
+                            <div class="service-info">
+                                <div class="service-name">Display Energy Certificates</div>
+                                <div class="service-subtitle">Public buildings over 1000m²</div>
+                            </div>
+                            <div class="toggle-switch active"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-icon" style="background: var(--green-600);">🔍</div>
+                        <div class="category-title">Energy Assessments</div>
+                    </div>
+                    <div class="services-list">
+                        <div class="service-item active">
+                            <div class="service-info">
+                                <div class="service-name">SAP Calculations</div>
+                                <div class="service-subtitle">Standard Assessment Procedure calculations</div>
+                            </div>
+                            <div class="toggle-switch active"></div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-info">
+                                <div class="service-name">Energy Audits</div>
+                                <div class="service-subtitle">Comprehensive energy efficiency reviews</div>
+                            </div>
+                            <div class="toggle-switch"></div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-info">
+                                <div class="service-name">Retrofit Advice</div>
+                                <div class="service-subtitle">Energy improvement recommendations</div>
+                            </div>
+                            <div class="toggle-switch"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern 3: Simplified Grid -->
+            <div class="pattern">
+                <div class="pattern-header">
+                    <h2 class="pattern-title">Clean Grid Layout</h2>
+                    <p class="pattern-subtitle">Minimal design with clear visual hierarchy and selection states</p>
+                </div>
+
+                <div class="simple-grid">
+                    <div class="simple-card selected">
+                        <div class="simple-header">
+                            <div class="simple-icon">🏠</div>
+                            <div class="simple-title">Domestic EPC</div>
+                        </div>
+                        <div class="simple-description">Energy performance certificates for residential properties</div>
+                    </div>
+
+                    <div class="simple-card">
+                        <div class="simple-header">
+                            <div class="simple-icon">🏢</div>
+                            <div class="simple-title">Commercial EPC</div>
+                        </div>
+                        <div class="simple-description">Certificates for commercial and industrial buildings</div>
+                    </div>
+
+                    <div class="simple-card selected">
+                        <div class="simple-header">
+                            <div class="simple-icon">📊</div>
+                            <div class="simple-title">SAP Calculations</div>
+                        </div>
+                        <div class="simple-description">Standard Assessment Procedure calculations</div>
+                    </div>
+
+                    <div class="simple-card">
+                        <div class="simple-header">
+                            <div class="simple-icon">🔍</div>
+                            <div class="simple-title">Energy Audits</div>
+                        </div>
+                        <div class="simple-description">Comprehensive energy efficiency reviews</div>
+                    </div>
+
+                    <div class="simple-card selected">
+                        <div class="simple-header">
+                            <div class="simple-icon">📷</div>
+                            <div class="simple-title">Photography</div>
+                        </div>
+                        <div class="simple-description">Professional property photography services</div>
+                    </div>
+
+                    <div class="simple-card">
+                        <div class="simple-header">
+                            <div class="simple-icon">📐</div>
+                            <div class="simple-title">Floor Plans</div>
+                        </div>
+                        <div class="simple-description">Detailed property layout drawings</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern 4: Feature Matrix -->
+            <div class="pattern">
+                <div class="pattern-header">
+                    <h2 class="pattern-title">Feature Matrix</h2>
+                    <p class="pattern-subtitle">Comprehensive table view with service features and pricing</p>
+                </div>
+
+                <div class="feature-table">
+                    <div class="table-header">
+                        <div class="table-title">Service Configuration</div>
+                    </div>
+                    <div class="table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Service</th>
+                                    <th style="width: 15%;">Enabled</th>
+                                    <th style="width: 15%;">Same Day</th>
+                                    <th style="width: 15%;">Online Booking</th>
+                                    <th style="width: 20%;">Starting Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="table-service">
+                                            <div class="table-icon">🏠</div>
+                                            <div class="table-service-info">
+                                                <h4>Domestic EPC Certificate</h4>
+                                                <p>Residential properties under 1000m²</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><div class="feature-toggle active"></div></td>
+                                    <td><div class="feature-toggle active"></div></td>
+                                    <td><div class="feature-toggle active"></div></td>
+                                    <td><input type="text" class="price-input" value="£45" /></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="table-service">
+                                            <div class="table-icon">🏢</div>
+                                            <div class="table-service-info">
+                                                <h4>Commercial EPC Certificate</h4>
+                                                <p>Commercial and industrial buildings</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><div class="feature-toggle"></div></td>
+                                    <td><div class="feature-toggle"></div></td>
+                                    <td><div class="feature-toggle"></div></td>
+                                    <td><input type="text" class="price-input" placeholder="£120" disabled /></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="table-service">
+                                            <div class="table-icon">📊</div>
+                                            <div class="table-service-info">
+                                                <h4>SAP Calculations</h4>
+                                                <p>Standard Assessment Procedure</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><div class="feature-toggle active"></div></td>
+                                    <td><div class="feature-toggle"></div></td>
+                                    <td><div class="feature-toggle active"></div></td>
+                                    <td><input type="text" class="price-input" value="£80" /></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="table-service">
+                                            <div class="table-icon">📷</div>
+                                            <div class="table-service-info">
+                                                <h4>Photography</h4>
+                                                <p>Professional property photography</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><div class="feature-toggle active"></div></td>
+                                    <td><div class="feature-toggle active"></div></td>
+                                    <td><div class="feature-toggle"></div></td>
+                                    <td><input type="text" class="price-input" value="£25" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern 5: Modern Builder Interface -->
+            <div class="pattern">
+                <div class="pattern-header">
+                    <h2 class="pattern-title">Service Builder</h2>
+                    <p class="pattern-subtitle">Interactive drag-and-drop style interface for building service portfolios</p>
+                </div>
+
+                <div class="builder-interface">
+                    <div class="service-pool">
+                        <div class="pool-header">
+                            <div class="pool-title">Available Services</div>
+                            <div class="pool-subtitle">Click to add services to your profile</div>
+                        </div>
+                        <div class="service-tags">
+                            <div class="service-tag">
+                                <div class="tag-icon">🏢</div>
+                                Commercial EPC
+                            </div>
+                            <div class="service-tag">
+                                <div class="tag-icon">🔍</div>
+                                Energy Audits
+                            </div>
+                            <div class="service-tag">
+                                <div class="tag-icon">📐</div>
+                                Floor Plans
+                            </div>
+                            <div class="service-tag">
+                                <div class="tag-icon">🛡️</div>
+                                Carbon Monoxide Testing
+                            </div>
+                            <div class="service-tag">
+                                <div class="tag-icon">💰</div>
+                                Grant Assistance
+                            </div>
+                            <div class="service-tag">
+                                <div class="tag-icon">♻️</div>
+                                Green Deal Advice
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="selected-services">
+                        <div class="pool-header">
+                            <div class="pool-title">Your Service Portfolio</div>
+                            <div class="pool-subtitle">5 services selected</div>
+                        </div>
+                        <div class="service-tags">
+                            <div class="service-tag selected">
+                                <div class="tag-icon">🏠</div>
+                                Domestic EPC
+                                <button class="remove-btn">×</button>
+                            </div>
+                            <div class="service-tag selected">
+                                <div class="tag-icon">📊</div>
+                                Display Energy Certificates
+                                <button class="remove-btn">×</button>
+                            </div>
+                            <div class="service-tag selected">
+                                <div class="tag-icon">📊</div>
+                                SAP Calculations
+                                <button class="remove-btn">×</button>
+                            </div>
+                            <div class="service-tag selected">
+                                <div class="tag-icon">📷</div>
+                                Photography
+                                <button class="remove-btn">×</button>
+                            </div>
+                            <div class="service-tag selected">
+                                <div class="tag-icon">💡</div>
+                                Energy Efficiency Advice
+                                <button class="remove-btn">×</button>
+                            </div>
+                        </div>
+
+                        <div class="summary-panel">
+                            <div class="summary-title">Portfolio Summary</div>
+                            <div class="summary-text">You're offering 5 services across 3 categories. This provides a well-rounded service portfolio for your customers.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-secondary">Preview Portfolio</button>
+            <button class="btn btn-primary">Save Configuration</button>
+        </div>
+    </div>
+
+    <script>
+        // Add interactive functionality
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('selected');
+            });
+        });
+
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggle.classList.toggle('active');
+                const serviceItem = toggle.closest('.service-item');
+                if (serviceItem) {
+                    serviceItem.classList.toggle('active');
+                }
+            });
+        });
+
+        document.querySelectorAll('.simple-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('selected');
+            });
+        });
+
+        document.querySelectorAll('.feature-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
+
+        document.querySelectorAll('.service-tag:not(.selected)').forEach(tag => {
+            tag.addEventListener('click', () => {
+                tag.classList.add('selected');
+                tag.innerHTML += ' <button class="remove-btn">×</button>';
+            });
+        });
+
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                btn.closest('.service-tag').remove();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust Level Card Variations</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f3f4f6;
+        }
+
+        .demo-section {
+            margin: 40px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .demo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #374151;
+        }
+
+        .cards-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        /* Base card styles */
+        .trust-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px 20px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .trust-level {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .bronze { color: #cd7f32; }
+        .silver { color: #c0c0c0; }
+        .gold { color: #ffd700; }
+
+        .current-status {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .benefit-text {
+            font-size: 12px;
+            color: #059669;
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        .next-level {
+            font-size: 11px;
+            color: #6366f1;
+            margin: 6px 0;
+        }
+
+        .trust-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .upgrade-btn, .downgrade-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid;
+        }
+
+        .upgrade-btn {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .downgrade-btn {
+            background: white;
+            color: #6b7280;
+            border-color: #d1d5db;
+        }
+
+        .payment-progress {
+            font-size: 12px;
+            color: #374151;
+            margin: 8px 0;
+        }
+
+        .threshold-highlight {
+            font-weight: 600;
+            color: #111827;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trust Level Card Variations (12+ Options)</h1>
+
+    <!-- BRONZE LEVEL VARIATIONS -->
+    <div class="demo-section">
+        <div class="demo-title">BRONZE LEVEL - 4 Variations</div>
+        <div class="cards-row">
+
+            <!-- Bronze V1: Status Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status">£450 threshold • 3/3 on-time payments</div>
+                <div class="benefit-text">✓ Eligible for £600 limit</div>
+                <div class="next-level">Silver available after 5 payments: £600+ thresholds</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase to £600</button>
+                    <button class="downgrade-btn">Reduce Limit</button>
+                </div>
+            </div>
+
+            <!-- Bronze V2: Progress Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="payment-progress">Payment History: 3 of 3 on-time</div>
+                <div class="current-status">Current: <span class="threshold-highlight">£450 auto-pay threshold</span></div>
+                <div class="benefit-text">Silver unlocks at 5 payments: Higher thresholds (£600+)</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Upgrade Eligible Limit</button>
+                    <button class="downgrade-btn">Lower Threshold</button>
+                </div>
+            </div>
+
+            <!-- Bronze V3: Benefit Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status">Auto-pay at £450 • Perfect payment record</div>
+                <div class="benefit-text">✓ Earned £600 threshold eligibility</div>
+                <div class="next-level">Silver benefits (£600+ limits) unlock after 2 more payments</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Use £600 Threshold</button>
+                    <button class="downgrade-btn">Reduce to £300</button>
+                </div>
+            </div>
+
+            <!-- Bronze V4: Simple & Clear -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status">£450 threshold</div>
+                <div class="payment-progress">3/3 payments on-time</div>
+                <div class="benefit-text">Eligible for £600 limit</div>
+                <div class="next-level">Silver at 5 payments: £600+ thresholds available</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase Limit</button>
+                    <button class="downgrade-btn">Decrease Limit</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SILVER LEVEL VARIATIONS -->
+    <div class="demo-section">
+        <div class="demo-title">SILVER LEVEL - 4 Variations</div>
+        <div class="cards-row">
+
+            <!-- Silver V1: Status Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="current-status">£600 threshold • 6/6 on-time payments</div>
+                <div class="benefit-text">✓ Higher limits active • Priority support</div>
+                <div class="next-level">Gold available after 8 payments: NET 30 billing terms</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase to £750</button>
+                    <button class="upgrade-btn">Upgrade to Gold</button>
+                    <button class="downgrade-btn">Back to Bronze</button>
+                </div>
+            </div>
+
+            <!-- Silver V2: Progress Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="payment-progress">Payment History: 6 of 6 on-time</div>
+                <div class="current-status">Current: <span class="threshold-highlight">£600 threshold + priority support</span></div>
+                <div class="benefit-text">Gold unlocks at 8 payments: NET 30 terms available</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase Threshold</button>
+                    <button class="downgrade-btn">Reduce Level</button>
+                </div>
+            </div>
+
+            <!-- Silver V3: Benefit Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="current-status">£600 auto-pay + priority support active</div>
+                <div class="benefit-text">✓ Higher thresholds unlocked • Faster response times</div>
+                <div class="next-level">Gold benefits (NET 30 terms) available after 2 more payments</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Upgrade to Gold</button>
+                    <button class="downgrade-btn">Lower Threshold</button>
+                </div>
+            </div>
+
+            <!-- Silver V4: Simple & Clear -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="current-status">£600 threshold • Priority support</div>
+                <div class="payment-progress">6/6 payments on-time</div>
+                <div class="benefit-text">Higher limits • Priority notifications</div>
+                <div class="next-level">Gold at 8 payments: NET 30 billing available</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Upgrade to Gold</button>
+                    <button class="downgrade-btn">Return to Bronze</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- GOLD LEVEL VARIATIONS -->
+    <div class="demo-section">
+        <div class="demo-title">GOLD LEVEL - 4 Variations</div>
+        <div class="cards-row">
+
+            <!-- Gold V1: Status Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level gold">Gold</div>
+                <div class="current-status">NET 30 terms • 10/10 on-time payments</div>
+                <div class="benefit-text">✓ Invoice billing • Multiple outstanding invoices • Priority support</div>
+                <div class="next-level">Maximum trust level achieved</div>
+                <div class="trust-actions">
+                    <button class="downgrade-btn">Switch to Auto-pay</button>
+                    <button class="downgrade-btn">Downgrade Level</button>
+                </div>
+            </div>
+
+            <!-- Gold V2: Progress Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level gold">Gold</div>
+                <div class="payment-progress">Payment History: 10 of 10 on-time</div>
+                <div class="current-status">Current: <span class="threshold-highlight">NET 30 billing terms</span></div>
+                <div class="benefit-text">Maximum flexibility • Up to £900 outstanding</div>
+                <div class="trust-actions">
+                    <button class="downgrade-btn">Switch to Auto-pay</button>
+                    <button class="downgrade-btn">Lower Trust Level</button>
+                </div>
+            </div>
+
+            <!-- Gold V3: Benefit Focused -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level gold">Gold</div>
+                <div class="current-status">NET 30 terms active • Perfect payment record</div>
+                <div class="benefit-text">✓ Invoice billing • Multiple invoices allowed • Dedicated support</div>
+                <div class="next-level">Premium tier - all benefits unlocked</div>
+                <div class="trust-actions">
+                    <button class="downgrade-btn">Change Billing Terms</button>
+                </div>
+            </div>
+
+            <!-- Gold V4: Simple & Clear -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level gold">Gold</div>
+                <div class="current-status">NET 30 billing • Up to £900 credit</div>
+                <div class="payment-progress">10/10 payments on-time</div>
+                <div class="benefit-text">Invoice terms • Multiple outstanding invoices</div>
+                <div class="next-level">Maximum benefits active</div>
+                <div class="trust-actions">
+                    <button class="downgrade-btn">Return to Auto-pay</button>
+                    <button class="downgrade-btn">Downgrade Level</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BRONZE PROGRESSION STATES -->
+    <div class="demo-section">
+        <div class="demo-title">BRONZE PROGRESSION STATES - Beginner to Ready</div>
+        <div class="cards-row">
+
+            <!-- Bronze Beginner: 1 payment -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status">£100 threshold • 1/1 on-time payments</div>
+                <div class="benefit-text">✓ Earned £150 threshold eligibility</div>
+                <div class="next-level">Keep making on-time payments to unlock higher limits</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase to £150</button>
+                </div>
+            </div>
+
+            <!-- Bronze Early: 2 payments -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status">£200 threshold • 2/2 on-time payments</div>
+                <div class="benefit-text">✓ Building trust • Earned £300 limit</div>
+                <div class="next-level">3 more payments until Silver benefits (£600+ thresholds)</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase to £300</button>
+                    <button class="downgrade-btn">Reduce to £150</button>
+                </div>
+            </div>
+
+            <!-- Bronze Middle: 3-4 payments -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status">£350 threshold • 4/4 on-time payments</div>
+                <div class="benefit-text">✓ Earned £500 threshold eligibility</div>
+                <div class="next-level">1 more payment until Silver (£600+ limits + priority support)</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase to £500</button>
+                    <button class="downgrade-btn">Reduce Limit</button>
+                </div>
+            </div>
+
+            <!-- Bronze Ready: 5+ payments -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status">£450 threshold • 5/5 on-time payments</div>
+                <div class="benefit-text">🎉 Silver benefits unlocked!</div>
+                <div class="next-level">Ready for £600+ thresholds + priority support</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Upgrade to Silver</button>
+                    <button class="upgrade-btn">Increase to £600</button>
+                    <button class="downgrade-btn">Stay at Bronze</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SILVER PROGRESSION STATES -->
+    <div class="demo-section">
+        <div class="demo-title">SILVER PROGRESSION STATES - Beginner to Ready</div>
+        <div class="cards-row">
+
+            <!-- Silver Beginner: 5 payments -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="current-status">£600 threshold • 5/5 on-time payments</div>
+                <div class="benefit-text">🎉 Welcome to Silver! Priority support active</div>
+                <div class="next-level">3 more payments until Gold benefits (NET 30 billing)</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase to £750</button>
+                    <button class="downgrade-btn">Back to Bronze</button>
+                </div>
+            </div>
+
+            <!-- Silver Early: 6 payments -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="current-status">£650 threshold • 6/6 on-time payments</div>
+                <div class="benefit-text">✓ Higher limits + priority support active</div>
+                <div class="next-level">2 more payments until Gold (NET 30 terms available)</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase Threshold</button>
+                    <button class="downgrade-btn">Lower Limit</button>
+                </div>
+            </div>
+
+            <!-- Silver Middle: 7 payments -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="current-status">£750 threshold • 7/7 on-time payments</div>
+                <div class="benefit-text">✓ Established Silver member • High limits active</div>
+                <div class="next-level">1 more payment until Gold benefits (NET 30 billing terms)</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase Limit</button>
+                    <button class="downgrade-btn">Reduce Level</button>
+                </div>
+            </div>
+
+            <!-- Silver Ready: 8+ payments -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="current-status">£750 threshold • 8/8 on-time payments</div>
+                <div class="benefit-text">🎉 Gold benefits unlocked!</div>
+                <div class="next-level">Ready for NET 30 billing terms + multiple invoices</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Upgrade to Gold</button>
+                    <button class="upgrade-btn">Switch to NET 30</button>
+                    <button class="downgrade-btn">Stay at Silver</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BONUS VARIATIONS -->
+    <div class="demo-section">
+        <div class="demo-title">BONUS VARIATIONS - Alternative Layouts</div>
+        <div class="cards-row">
+
+            <!-- Compact Bronze -->
+            <div class="trust-card" style="min-height: 160px;">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze" style="font-size: 28px;">Bronze</div>
+                <div class="current-status">£450 • 3/3 on-time</div>
+                <div class="benefit-text">Silver (£600+) at 5 payments</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Increase Limit</button>
+                </div>
+            </div>
+
+            <!-- Detailed Silver -->
+            <div class="trust-card" style="min-height: 240px;">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level silver">Silver</div>
+                <div class="current-status">£600 threshold</div>
+                <div class="payment-progress">6/6 payments on-time</div>
+                <div class="benefit-text">✓ Priority support active</div>
+                <div class="benefit-text">✓ Higher thresholds unlocked</div>
+                <div class="next-level">Gold (NET 30) after 2 more payments</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Unlock Gold Benefits</button>
+                    <button class="downgrade-btn">Reduce Threshold</button>
+                </div>
+            </div>
+
+            <!-- Minimal Gold -->
+            <div class="trust-card" style="min-height: 140px;">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level gold" style="font-size: 24px;">Gold</div>
+                <div class="current-status">NET 30 • £900 credit</div>
+                <div class="benefit-text">All benefits active</div>
+            </div>
+
+            <!-- Action-Heavy Bronze -->
+            <div class="trust-card">
+                <div class="stat-label">Trust Level</div>
+                <div class="trust-level bronze">Bronze</div>
+                <div class="current-status">£450 threshold • Perfect record</div>
+                <div class="benefit-text">✓ £600 limit earned</div>
+                <div class="next-level">Silver benefits at 5 payments</div>
+                <div class="trust-actions">
+                    <button class="upgrade-btn">Use £600 Limit</button>
+                    <button class="upgrade-btn">View Silver Benefits</button>
+                    <button class="downgrade-btn">Lower to £300</button>
+                    <button class="downgrade-btn">Lower to £200</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

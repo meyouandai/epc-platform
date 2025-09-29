@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inline Edit Profile Design - EPC Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+
+        .profile-header {
+            margin-bottom: 32px;
+        }
+
+        .profile-header h2 {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .profile-header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .profile-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .profile-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .profile-field {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+
+        .field-info {
+            flex: 1;
+        }
+
+        .field-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 2px;
+        }
+
+        .field-value {
+            font-size: 14px;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .field-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .edit-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .support-btn {
+            padding: 6px 12px;
+            background: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .support-btn:hover {
+            background: #d97706;
+        }
+
+        .auto-populated {
+            padding: 6px 12px;
+            background: #e5e7eb;
+            color: #6b7280;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: not-allowed;
+        }
+
+        .companies-house-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .close-button:hover {
+            color: #1a1a1a;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .verification-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .verification-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 8px;
+        }
+
+        .verification-steps {
+            font-size: 12px;
+            color: #075985;
+        }
+
+        .verification-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+        }
+
+        .instant-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-header">
+            <h2>Account Settings</h2>
+            <p>Manage your profile, preferences, and account status</p>
+        </div>
+
+        <!-- Personal Information Card -->
+        <div class="profile-card">
+            <h3>Personal Information</h3>
+
+            <div class="profile-field">
+                <div class="field-info">
+                    <div class="field-label">Full Name</div>
+                    <div class="field-value">John Smith</div>
+                </div>
+                <div class="field-actions">
+                    <button class="edit-btn" onclick="openModal('name-modal')">Edit</button>
+                </div>
+            </div>
+
+            <div class="profile-field">
+                <div class="field-info">
+                    <div class="field-label">Email Address</div>
+                    <div class="field-value">john.smith@epc-assessments.co.uk</div>
+                </div>
+                <div class="field-actions">
+                    <button class="edit-btn" onclick="openModal('email-modal')">Edit</button>
+                </div>
+            </div>
+
+            <div class="profile-field">
+                <div class="field-info">
+                    <div class="field-label">Phone Number</div>
+                    <div class="field-value">+44 7700 900123</div>
+                </div>
+                <div class="field-actions">
+                    <button class="edit-btn" onclick="openModal('phone-modal')">Edit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Information Card -->
+        <div class="profile-card">
+            <h3>Business Information <span class="companies-house-badge">🏢 Companies House</span></h3>
+
+            <div class="profile-field">
+                <div class="field-info">
+                    <div class="field-label">Trading Name</div>
+                    <div class="field-value">Smith Energy Solutions</div>
+                </div>
+                <div class="field-actions">
+                    <button class="edit-btn" onclick="openModal('trading-modal')">Edit</button>
+                </div>
+            </div>
+
+            <div class="profile-field">
+                <div class="field-info">
+                    <div class="field-label">Company Name</div>
+                    <div class="field-value">Smith Energy Solutions Limited</div>
+                </div>
+                <div class="field-actions">
+                    <button class="edit-btn" onclick="openModal('company-modal')">Edit</button>
+                </div>
+            </div>
+
+            <div class="profile-field">
+                <div class="field-info">
+                    <div class="field-label">Company Number</div>
+                    <div class="field-value">12345678</div>
+                </div>
+                <div class="field-actions">
+                    <button class="edit-btn" onclick="openModal('company-number-modal')">Edit</button>
+                </div>
+            </div>
+
+            <div class="profile-field">
+                <div class="field-info">
+                    <div class="field-label">Registered Address</div>
+                    <div class="field-value">123 Energy Street, Business Park, Manchester, M1 2AB</div>
+                </div>
+                <div class="field-actions">
+                    <button class="edit-btn" onclick="openModal('address-modal')">Edit</button>
+                </div>
+            </div>
+
+            <div class="profile-field">
+                <div class="field-info">
+                    <div class="field-label">VAT Number</div>
+                    <div class="field-value">GB123456789</div>
+                </div>
+                <div class="field-actions">
+                    <button class="edit-btn" onclick="openModal('vat-modal')">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phone Number Modal -->
+    <div class="modal-overlay" id="phone-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Change Phone Number</div>
+                <div class="modal-subtitle">Update your contact phone number</div>
+                <button class="close-button" onclick="closeModal('phone-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current Phone Number</label>
+                    <input type="tel" value="+44 7700 900123" disabled style="background: #f9fafb; color: #6b7280;">
+                </div>
+                <div class="form-group">
+                    <label>New Phone Number</label>
+                    <input type="tel" placeholder="Enter your new phone number" autofocus>
+                </div>
+                <div class="verification-info">
+                    <div class="verification-title">Verification Process</div>
+                    <div class="verification-steps">
+                        <div class="verification-step">
+                            <div class="step-number">1</div>
+                            <span>Email verification sent to confirm your identity</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">2</div>
+                            <span>SMS code sent to your new number to verify ownership</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">3</div>
+                            <span>Phone number updated automatically after verification</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('phone-modal')">Cancel</button>
+                <button class="btn btn-primary">Send Verification</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trading Name Modal -->
+    <div class="modal-overlay" id="trading-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Change Trading Name <span class="instant-badge">Instant</span></div>
+                <div class="modal-subtitle">Update your business trading name</div>
+                <button class="close-button" onclick="closeModal('trading-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Trading Name</label>
+                    <input type="text" value="Smith Energy Solutions" autofocus>
+                </div>
+                <div class="verification-info" style="background: #f0fdf4; border-color: #bbf7d0;">
+                    <div class="verification-title" style="color: #166534;">Instant Change</div>
+                    <div class="verification-steps" style="color: #15803d;">
+                        This change will be applied immediately after saving. You can use any trading name for your business.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('trading-modal')">Cancel</button>
+                <button class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div class="modal-overlay" id="email-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Change Email Address</div>
+                <div class="modal-subtitle">Update your login email address</div>
+                <button class="close-button" onclick="closeModal('email-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current Email</label>
+                    <input type="email" value="john.smith@epc-assessments.co.uk" disabled style="background: #f9fafb; color: #6b7280;">
+                </div>
+                <div class="form-group">
+                    <label>New Email Address</label>
+                    <input type="email" placeholder="Enter your new email address" autofocus>
+                </div>
+                <div class="verification-info">
+                    <div class="verification-title">Verification Process</div>
+                    <div class="verification-steps">
+                        <div class="verification-step">
+                            <div class="step-number">1</div>
+                            <span>SMS code sent to your phone (+44 ****0123) to verify identity</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">2</div>
+                            <span>Verification email sent to your new address</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">3</div>
+                            <span>Email updated and you'll need to log in with new credentials</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('email-modal')">Cancel</button>
+                <button class="btn btn-primary">Start Verification</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Name Modal -->
+    <div class="modal-overlay" id="name-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Change Full Name</div>
+                <div class="modal-subtitle">Update your personal name</div>
+                <button class="close-button" onclick="closeModal('name-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" value="John Smith" autofocus>
+                </div>
+                <div class="verification-info">
+                    <div class="verification-title">SMS Verification Required</div>
+                    <div class="verification-steps">
+                        <div class="verification-step">
+                            <div class="step-number">1</div>
+                            <span>SMS code sent to your phone (+44 ****0123) to confirm change</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">2</div>
+                            <span>Name updated immediately after verification</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('name-modal')">Cancel</button>
+                <button class="btn btn-primary">Send SMS Code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VAT Number Modal -->
+    <div class="modal-overlay" id="vat-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">VAT Registration</div>
+                <div class="modal-subtitle">Manage your VAT registration status</div>
+                <button class="close-button" onclick="closeModal('vat-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current VAT Number</label>
+                    <input type="text" value="GB123456789" disabled style="background: #f9fafb; color: #6b7280;">
+                </div>
+                <div class="verification-info" style="background: #fefbeb; border-color: #fde68a;">
+                    <div class="verification-title" style="color: #92400e;">VAT Management Options</div>
+                    <div class="verification-steps" style="color: #92400e;">
+                        <div class="verification-step">
+                            <div class="step-number">•</div>
+                            <span><strong>Keep current registration:</strong> No changes needed</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">•</div>
+                            <span><strong>Remove VAT registration:</strong> If your turnover drops below £85k</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">•</div>
+                            <span><strong>Add VAT registration:</strong> If you're not currently registered</span>
+                        </div>
+                    </div>
+                </div>
+                <p style="font-size: 13px; color: #6b7280; margin-top: 16px;">
+                    Our support team will help verify your VAT status and process any required changes with HMRC.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('vat-modal')">Cancel</button>
+                <button class="btn btn-primary">Contact Support</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Company Number Modal -->
+    <div class="modal-overlay" id="company-number-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Company Number</div>
+                <div class="modal-subtitle">Update your company registration</div>
+                <button class="close-button" onclick="closeModal('company-number-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current Company Number</label>
+                    <input type="text" value="12345678" disabled style="background: #f9fafb; color: #6b7280;">
+                </div>
+                <div class="verification-info" style="background: #fefbeb; border-color: #fde68a;">
+                    <div class="verification-title" style="color: #92400e;">Company Registration Change</div>
+                    <div class="verification-steps" style="color: #92400e;">
+                        <p style="margin-bottom: 12px;">Changing your company number means you're registering as a different legal entity. This requires:</p>
+                        <div class="verification-step">
+                            <div class="step-number">1</div>
+                            <span>New incorporation documents from Companies House</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">2</div>
+                            <span>Verification that you're authorized to represent the new company</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">3</div>
+                            <span>Review of contracts and account settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('company-number-modal')">Cancel</button>
+                <button class="btn btn-primary">Contact Support</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Company Name Modal -->
+    <div class="modal-overlay" id="company-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Company Name</div>
+                <div class="modal-subtitle">Your registered company name</div>
+                <button class="close-button" onclick="closeModal('company-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current Company Name</label>
+                    <input type="text" value="Smith Energy Solutions Limited" disabled style="background: #f9fafb; color: #6b7280;">
+                </div>
+                <div class="verification-info" style="background: #f0f9ff; border-color: #bae6fd;">
+                    <div class="verification-title" style="color: #0c4a6e;">Companies House Integration</div>
+                    <div class="verification-steps" style="color: #075985;">
+                        <p style="margin-bottom: 8px;">This company name is automatically synchronized with Companies House records.</p>
+                        <p style="margin-bottom: 8px;"><strong>To change your company name:</strong></p>
+                        <div class="verification-step">
+                            <div class="step-number">1</div>
+                            <span>Change the name with Companies House first</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">2</div>
+                            <span>Contact our support team to refresh your details</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('company-modal')">Cancel</button>
+                <button class="btn btn-primary">Contact Support</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Address Modal -->
+    <div class="modal-overlay" id="address-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Registered Address</div>
+                <div class="modal-subtitle">Your company's registered address</div>
+                <button class="close-button" onclick="closeModal('address-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current Address</label>
+                    <textarea rows="3" disabled style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; background: #f9fafb; color: #6b7280; resize: none;">123 Energy Street, Business Park, Manchester, M1 2AB</textarea>
+                </div>
+                <div class="verification-info" style="background: #f0f9ff; border-color: #bae6fd;">
+                    <div class="verification-title" style="color: #0c4a6e;">Address Change Process</div>
+                    <div class="verification-steps" style="color: #075985;">
+                        <p style="margin-bottom: 8px;">Registered address changes require verification:</p>
+                        <div class="verification-step">
+                            <div class="step-number">1</div>
+                            <span>Update your address with Companies House</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">2</div>
+                            <span>Provide proof of address (utility bill, lease agreement)</span>
+                        </div>
+                        <div class="verification-step">
+                            <div class="step-number">3</div>
+                            <span>Our team will verify and update your records</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('address-modal')">Cancel</button>
+                <button class="btn btn-primary">Contact Support</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

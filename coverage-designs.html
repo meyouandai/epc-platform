@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coverage Management - Design Options</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f7fafc;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .design-option {
+            margin-bottom: 60px;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .option-title {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 12px;
+        }
+
+        .option-description {
+            color: #718096;
+            margin-bottom: 24px;
+        }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .summary-card.warning {
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+        }
+
+        .summary-card.danger {
+            background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+        }
+
+        .summary-card.success {
+            background: linear-gradient(135deg, #68d391 0%, #48bb78 100%);
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .card-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .card-sub {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        /* Option 1: Simple Hierarchy */
+        .coverage-tree {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tree-item {
+            border-bottom: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .tree-item:last-child {
+            border-bottom: none;
+        }
+
+        .tree-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .tree-header:hover {
+            background: #f8fafc;
+        }
+
+        .tree-header.expanded {
+            background: #f7fafc;
+            font-weight: 600;
+        }
+
+        .tree-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .expand-icon {
+            width: 20px;
+            transition: transform 0.2s;
+        }
+
+        .tree-header.expanded .expand-icon {
+            transform: rotate(90deg);
+        }
+
+        .tree-label {
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .tree-stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #718096;
+        }
+
+        .coverage-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .coverage-good {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .coverage-low {
+            background: #fef5e7;
+            color: #c05621;
+        }
+
+        .coverage-none {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .tree-children {
+            padding-left: 40px;
+            background: #fcfcfc;
+            display: none;
+        }
+
+        .tree-header.expanded + .tree-children {
+            display: block;
+        }
+
+        .child-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .child-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Option 2: Compact with inline stats */
+        .coverage-compact {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .compact-header {
+            background: #f7fafc;
+            padding: 12px 20px;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .compact-row {
+            display: grid;
+            grid-template-columns: 30px 2fr 1fr 1fr 1fr 1fr 120px;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .compact-row:hover {
+            background: #f8fafc;
+        }
+
+        .compact-row.expanded {
+            background: #f7fafc;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-green { background: #48bb78; }
+        .status-yellow { background: #ed8936; }
+        .status-red { background: #f56565; }
+
+        .location-name {
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .metric {
+            text-align: center;
+            color: #4a5568;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-warning {
+            background: #f6ad55;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #ed8936;
+        }
+
+        /* Option 3: Card Grid */
+        .coverage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .coverage-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .coverage-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .card-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+            padding: 16px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .card-districts {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .district-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .district-chip {
+            padding: 4px 8px;
+            background: #edf2f7;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+
+        /* Option 4: Hybrid Table/Visual */
+        .hybrid-view {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 24px;
+        }
+
+        .main-table {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .side-panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .panel-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+
+        .heat-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .heat-high {
+            background: linear-gradient(90deg, #fed7d7 0%, #fc8181 100%);
+        }
+
+        .heat-medium {
+            background: linear-gradient(90deg, #fef5e7 0%, #f6ad55 100%);
+        }
+
+        .heat-low {
+            background: linear-gradient(90deg, #c6f6d5 0%, #68d391 100%);
+        }
+
+        .toggle-view {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 4px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .expand-all {
+            text-align: right;
+            margin-bottom: 12px;
+        }
+
+        .link-btn {
+            color: #667eea;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: #2d3748; margin-bottom: 32px;">Coverage Management - Design Options</h1>
+
+        <!-- Option 1: Clean Hierarchical with Summary -->
+        <div class="design-option">
+            <h2 class="option-title">Option 1: Clean Hierarchical View</h2>
+            <p class="option-description">Focus on clear hierarchy with expandable regions. Best for understanding coverage depth.</p>
+
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="card-label">Total Coverage</div>
+                    <div class="card-value">82%</div>
+                    <div class="card-sub">235 of 287 areas</div>
+                </div>
+                <div class="summary-card warning">
+                    <div class="card-label">Low Coverage</div>
+                    <div class="card-value">31</div>
+                    <div class="card-sub">Areas need attention</div>
+                </div>
+                <div class="summary-card danger">
+                    <div class="card-label">Coverage Gaps</div>
+                    <div class="card-value">52</div>
+                    <div class="card-sub">No assessors</div>
+                </div>
+                <div class="summary-card success">
+                    <div class="card-label">Monthly Revenue</div>
+                    <div class="card-value">£127k</div>
+                    <div class="card-sub">↑ 12% this month</div>
+                </div>
+            </div>
+
+            <div class="coverage-tree">
+                <div class="tree-item">
+                    <div class="tree-header expanded" onclick="toggleExpand(this)">
+                        <div class="tree-info">
+                            <span class="expand-icon">▶</span>
+                            <span class="tree-label">Greater London</span>
+                            <span class="coverage-badge coverage-good">Good Coverage</span>
+                        </div>
+                        <div class="tree-stats">
+                            <div class="stat">
+                                <div class="stat-value">45</div>
+                                <div class="stat-label">Assessors</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">12/15</div>
+                                <div class="stat-label">Districts</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">2,847</div>
+                                <div class="stat-label">Leads</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">£14,235</div>
+                                <div class="stat-label">Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tree-children">
+                        <div class="child-item">
+                            <div class="tree-info">
+                                <span class="expand-icon">▶</span>
+                                <span>Westminster</span>
+                                <span class="coverage-badge coverage-good">12 assessors</span>
+                            </div>
+                            <div class="tree-stats">
+                                <span>SW1A, SW1P, W1K, WC2N</span>
+                                <button class="action-btn btn-primary">View Details</button>
+                            </div>
+                        </div>
+                        <div class="child-item">
+                            <div class="tree-info">
+                                <span class="expand-icon">▶</span>
+                                <span>Camden</span>
+                                <span class="coverage-badge coverage-low">2 assessors</span>
+                            </div>
+                            <div class="tree-stats">
+                                <span>NW1, NW3, WC1H</span>
+                                <button class="action-btn btn-warning">Recruit Here</button>
+                            </div>
+                        </div>
+                        <div class="child-item">
+                            <div class="tree-info">
+                                <span class="expand-icon">▶</span>
+                                <span>Hackney</span>
+                                <span class="coverage-badge coverage-none">No coverage</span>
+                            </div>
+                            <div class="tree-stats">
+                                <span>E8, E9, N1</span>
+                                <button class="action-btn btn-warning">Urgent - Recruit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tree-item">
+                    <div class="tree-header" onclick="toggleExpand(this)">
+                        <div class="tree-info">
+                            <span class="expand-icon">▶</span>
+                            <span class="tree-label">West Midlands</span>
+                            <span class="coverage-badge coverage-low">Low Coverage</span>
+                        </div>
+                        <div class="tree-stats">
+                            <div class="stat">
+                                <div class="stat-value">7</div>
+                                <div class="stat-label">Assessors</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">3/12</div>
+                                <div class="stat-label">Districts</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">428</div>
+                                <div class="stat-label">Leads</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">£2,140</div>
+                                <div class="stat-label">Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tree-children">
+                        <!-- Children would go here -->
+                    </div>
+                </div>
+
+                <div class="tree-item">
+                    <div class="tree-header" onclick="toggleExpand(this)">
+                        <div class="tree-info">
+                            <span class="expand-icon">▶</span>
+                            <span class="tree-label">Greater Manchester</span>
+                            <span class="coverage-badge coverage-good">Good Coverage</span>
+                        </div>
+                        <div class="tree-stats">
+                            <div class="stat">
+                                <div class="stat-value">23</div>
+                                <div class="stat-label">Assessors</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">8/10</div>
+                                <div class="stat-label">Districts</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">1,234</div>
+                                <div class="stat-label">Leads</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">£6,170</div>
+                                <div class="stat-label">Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 2: Compact Table Style -->
+        <div class="design-option">
+            <h2 class="option-title">Option 2: Compact Table View</h2>
+            <p class="option-description">Dense information display with inline actions. Best for quick scanning and bulk operations.</p>
+
+            <div class="expand-all">
+                <button class="link-btn">Expand All</button> |
+                <button class="link-btn">Collapse All</button>
+            </div>
+
+            <div class="coverage-compact">
+                <div class="compact-header">
+                    <div style="display: grid; grid-template-columns: 30px 2fr 1fr 1fr 1fr 1fr 120px;">
+                        <span></span>
+                        <span>Location</span>
+                        <span style="text-align: center;">Assessors</span>
+                        <span style="text-align: center;">Coverage</span>
+                        <span style="text-align: center;">Leads</span>
+                        <span style="text-align: center;">Revenue</span>
+                        <span style="text-align: center;">Action</span>
+                    </div>
+                </div>
+
+                <div class="compact-row expanded" onclick="toggleExpand(this)">
+                    <div class="status-dot status-green"></div>
+                    <div class="location-name">▼ Greater London</div>
+                    <div class="metric"><span class="metric-value">45</span></div>
+                    <div class="metric"><span class="metric-value">80%</span></div>
+                    <div class="metric"><span class="metric-value">2,847</span></div>
+                    <div class="metric"><span class="metric-value">£14,235</span></div>
+                    <div><button class="action-btn btn-primary">Manage</button></div>
+                </div>
+
+                <div style="padding-left: 40px; background: #fcfcfc;">
+                    <div class="compact-row">
+                        <div class="status-dot status-green"></div>
+                        <div class="location-name" style="padding-left: 20px;">Westminster (12 assessors across 4 postcodes)</div>
+                        <div class="metric">12</div>
+                        <div class="metric">100%</div>
+                        <div class="metric">834</div>
+                        <div class="metric">£4,170</div>
+                        <div><button class="action-btn btn-primary">View</button></div>
+                    </div>
+                    <div class="compact-row">
+                        <div class="status-dot status-yellow"></div>
+                        <div class="location-name" style="padding-left: 20px;">Camden (2 assessors across 3 postcodes)</div>
+                        <div class="metric">2</div>
+                        <div class="metric">33%</div>
+                        <div class="metric">234</div>
+                        <div class="metric">£1,170</div>
+                        <div><button class="action-btn btn-warning">Recruit</button></div>
+                    </div>
+                </div>
+
+                <div class="compact-row" onclick="toggleExpand(this)">
+                    <div class="status-dot status-yellow"></div>
+                    <div class="location-name">▶ West Midlands</div>
+                    <div class="metric"><span class="metric-value">7</span></div>
+                    <div class="metric"><span class="metric-value">25%</span></div>
+                    <div class="metric"><span class="metric-value">428</span></div>
+                    <div class="metric"><span class="metric-value">£2,140</span></div>
+                    <div><button class="action-btn btn-warning">Expand</button></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 3: Card Grid -->
+        <div class="design-option">
+            <h2 class="option-title">Option 3: Card Grid View</h2>
+            <p class="option-description">Visual cards for each region. Best for at-a-glance understanding and visual appeal.</p>
+
+            <div class="coverage-grid">
+                <div class="coverage-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Greater London</h3>
+                        <span class="coverage-badge coverage-good">80%</span>
+                    </div>
+                    <div class="card-stats">
+                        <div>
+                            <div class="stat-value">45</div>
+                            <div class="stat-label">Assessors</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">12/15</div>
+                            <div class="stat-label">Districts</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">2,847</div>
+                            <div class="stat-label">Leads/mo</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">£14k</div>
+                            <div class="stat-label">Revenue</div>
+                        </div>
+                    </div>
+                    <div class="card-districts">
+                        <strong>Top Districts:</strong>
+                        <div class="district-list">
+                            <span class="district-chip">Westminster ✓</span>
+                            <span class="district-chip">Kensington ✓</span>
+                            <span class="district-chip">Camden ⚠</span>
+                            <span class="district-chip">Hackney ✗</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="coverage-card">
+                    <div class="card-header">
+                        <h3 class="card-title">West Midlands</h3>
+                        <span class="coverage-badge coverage-low">25%</span>
+                    </div>
+                    <div class="card-stats">
+                        <div>
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Assessors</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">3/12</div>
+                            <div class="stat-label">Districts</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">428</div>
+                            <div class="stat-label">Leads/mo</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">£2.1k</div>
+                            <div class="stat-label">Revenue</div>
+                        </div>
+                    </div>
+                    <div class="card-districts">
+                        <strong>Coverage Gaps:</strong>
+                        <div class="district-list">
+                            <span class="district-chip">Birmingham ⚠</span>
+                            <span class="district-chip">Coventry ✗</span>
+                            <span class="district-chip">Solihull ✗</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="coverage-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Greater Manchester</h3>
+                        <span class="coverage-badge coverage-good">75%</span>
+                    </div>
+                    <div class="card-stats">
+                        <div>
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Assessors</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">8/10</div>
+                            <div class="stat-label">Districts</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">1,234</div>
+                            <div class="stat-label">Leads/mo</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">£6.2k</div>
+                            <div class="stat-label">Revenue</div>
+                        </div>
+                    </div>
+                    <div class="card-districts">
+                        <strong>Top Districts:</strong>
+                        <div class="district-list">
+                            <span class="district-chip">Manchester ✓</span>
+                            <span class="district-chip">Salford ✓</span>
+                            <span class="district-chip">Bolton ⚠</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 4: Hybrid with Side Panel -->
+        <div class="design-option">
+            <h2 class="option-title">Option 4: Hybrid Table + Analytics Panel</h2>
+            <p class="option-description">Combines table with visual analytics sidebar. Best for detailed analysis.</p>
+
+            <div class="toggle-view">
+                <button class="toggle-btn active">Table View</button>
+                <button class="toggle-btn">Map View (Coming Soon)</button>
+            </div>
+
+            <div class="hybrid-view">
+                <div class="main-table">
+                    <div class="coverage-compact">
+                        <div class="compact-header">
+                            <div style="display: grid; grid-template-columns: 30px 2fr 1fr 1fr 1fr 120px;">
+                                <span></span>
+                                <span>Location</span>
+                                <span style="text-align: center;">Coverage</span>
+                                <span style="text-align: center;">Leads</span>
+                                <span style="text-align: center;">Revenue</span>
+                                <span style="text-align: center;">Action</span>
+                            </div>
+                        </div>
+
+                        <div class="compact-row">
+                            <div class="status-dot status-green"></div>
+                            <div class="location-name">Greater London</div>
+                            <div class="metric">80%</div>
+                            <div class="metric">2,847</div>
+                            <div class="metric">£14,235</div>
+                            <div><button class="action-btn btn-primary">Manage</button></div>
+                        </div>
+
+                        <div class="compact-row">
+                            <div class="status-dot status-yellow"></div>
+                            <div class="location-name">West Midlands</div>
+                            <div class="metric">25%</div>
+                            <div class="metric">428</div>
+                            <div class="metric">£2,140</div>
+                            <div><button class="action-btn btn-warning">Expand</button></div>
+                        </div>
+
+                        <div class="compact-row">
+                            <div class="status-dot status-green"></div>
+                            <div class="location-name">Greater Manchester</div>
+                            <div class="metric">75%</div>
+                            <div class="metric">1,234</div>
+                            <div class="metric">£6,170</div>
+                            <div><button class="action-btn btn-primary">Manage</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-panel">
+                    <h3 class="panel-title">🔴 Urgent Attention</h3>
+                    <div class="heat-indicator heat-high">
+                        <span>Hackney, London</span>
+                        <span>0 assessors</span>
+                    </div>
+                    <div class="heat-indicator heat-high">
+                        <span>Coventry, W Midlands</span>
+                        <span>0 assessors</span>
+                    </div>
+                    <div class="heat-indicator heat-high">
+                        <span>Solihull, W Midlands</span>
+                        <span>0 assessors</span>
+                    </div>
+
+                    <h3 class="panel-title" style="margin-top: 24px;">🟡 Low Coverage</h3>
+                    <div class="heat-indicator heat-medium">
+                        <span>Camden, London</span>
+                        <span>2 assessors</span>
+                    </div>
+                    <div class="heat-indicator heat-medium">
+                        <span>Birmingham, W Midlands</span>
+                        <span>3 assessors</span>
+                    </div>
+
+                    <h3 class="panel-title" style="margin-top: 24px;">🟢 Top Performing</h3>
+                    <div class="heat-indicator heat-low">
+                        <span>Westminster, London</span>
+                        <span>£4,170/mo</span>
+                    </div>
+                    <div class="heat-indicator heat-low">
+                        <span>Manchester</span>
+                        <span>£3,890/mo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleExpand(element) {
+            element.classList.toggle('expanded');
+        }
+    </script>
+</body>
+</html>
