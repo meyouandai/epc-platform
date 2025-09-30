@@ -4,6 +4,11 @@ const { mockAdmins } = require('./mockData');
 // Check if we should use mock data
 const USE_MOCK_DATA = process.env.USE_MOCK_DATA === 'true' || !process.env.DATABASE_URL;
 
+console.log('🔍 Admin model initialization:');
+console.log('  USE_MOCK_DATA env:', process.env.USE_MOCK_DATA);
+console.log('  DATABASE_URL exists:', !!process.env.DATABASE_URL);
+console.log('  Final USE_MOCK_DATA:', USE_MOCK_DATA);
+
 // Find admin by email
 const findAdminByEmail = async (email) => {
   if (USE_MOCK_DATA) {

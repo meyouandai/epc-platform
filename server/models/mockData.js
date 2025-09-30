@@ -66,7 +66,7 @@ const mockAssessors = [
 // Mock admins data
 const mockAdmins = [
   {
-    id: 'admin_001',
+    id: '00000000-0000-0000-0000-000000000001',
     email: 'admin@epcplatform.com',
     password: '$2a$12$l/SJZ/gG.xb9uXvxXvkMIue2i7qbgaGnWGqxFUVYA09u6mQB2PBh6', // password123
     name: 'Platform Administrator',
