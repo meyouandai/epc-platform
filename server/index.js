@@ -27,6 +27,33 @@ app.use('/api/assessors', require('./routes/assessors'));
 app.use('/api/leads', require('./routes/leads'));
 app.use('/api/payments', require('./routes/payments'));
 
+// Database setup endpoint (temporary)
+app.post('/api/setup-database', async (req, res) => {
+  try {
+    const { query } = require('./models/database');
+    const fs = require('fs');
+    const path = require('path');
+
+    // Read the schema file
+    const schemaPath = path.join(__dirname, 'database', 'schema.sql');
+    const schema = fs.readFileSync(schemaPath, 'utf8');
+
+    // Execute the schema
+    await query(schema);
+
+    res.json({
+      success: true,
+      message: 'Database schema created successfully'
+    });
+  } catch (error) {
+    console.error('Database setup error:', error);
+    res.status(500).json({
+      error: 'Database setup failed',
+      details: error.message
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`EPC Platform server running on port ${PORT}`);
 });
