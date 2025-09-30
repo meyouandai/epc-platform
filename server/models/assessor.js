@@ -126,10 +126,36 @@ const createAssessor = async (assessorData) => {
   try {
     const coordinates = postcodeToCoordinates(assessorData.postcode || 'SW1A 1AA');
 
+    // First create table if it doesn't exist (without PostGIS)
+    await query(`
+      CREATE TABLE IF NOT EXISTS assessors (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        company VARCHAR(255),
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        phone VARCHAR(255),
+        price VARCHAR(50) DEFAULT '£80',
+        lat DECIMAL(10, 8),
+        lng DECIMAL(11, 8),
+        rating DECIMAL(3, 2) DEFAULT 0,
+        review_count INTEGER DEFAULT 0,
+        verified BOOLEAN DEFAULT false,
+        status VARCHAR(50) DEFAULT 'active',
+        trust_level VARCHAR(50) DEFAULT 'bronze',
+        spending_threshold DECIMAL(10, 2) DEFAULT 100.00,
+        current_period_spend DECIMAL(10, 2) DEFAULT 0,
+        total_successful_payments INTEGER DEFAULT 0,
+        account_paused BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        approved_at TIMESTAMP
+      )
+    `);
+
     const result = await query(`
       INSERT INTO assessors (
-        name, company, email, password, phone, price, coordinates, status
-      ) VALUES ($1, $2, $3, $4, $5, $6, ST_MakePoint($7, $8), $9)
+        name, company, email, password, phone, price, lat, lng, status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *
     `, [
       assessorData.name,
@@ -138,8 +164,8 @@ const createAssessor = async (assessorData) => {
       assessorData.password,
       assessorData.phone,
       assessorData.price || '£80',
-      coordinates.lng,
       coordinates.lat,
+      coordinates.lng,
       'active'
     ]);
 
