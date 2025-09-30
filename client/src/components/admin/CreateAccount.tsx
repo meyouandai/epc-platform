@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { apiCall } from '../../utils/api';
 
 interface CreateAccountProps {
   token: string;
@@ -52,7 +53,7 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ token }) => {
 
     try {
       // Call the assessor registration API
-      const response = await fetch('/api/auth/register', {
+      const response = await apiCall('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

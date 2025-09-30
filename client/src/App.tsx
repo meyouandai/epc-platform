@@ -4,6 +4,7 @@ import PostcodeSearch from './components/PostcodeSearch';
 import AssessorList from './components/AssessorList';
 import AssessorApp from './components/assessor/AssessorApp';
 import AdminApp from './components/admin/AdminApp';
+import SimpleTest from './components/SimpleTest';
 
 interface Assessor {
   id: string;
@@ -17,7 +18,7 @@ interface Assessor {
   email: string;
 }
 
-type ViewMode = 'customer' | 'assessor' | 'admin';
+type ViewMode = 'customer' | 'assessor' | 'admin' | 'test';
 
 function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('customer');
@@ -57,10 +58,25 @@ function App() {
     );
   }
 
+  if (viewMode === 'test') {
+    return (
+      <div className="App">
+        <SimpleTest />
+      </div>
+    );
+  }
+
   return (
     <div className="App">
       <nav className="app-nav">
         <div className="nav-buttons">
+          <button
+            onClick={() => setViewMode('test')}
+            className="nav-button test-button"
+            style={{ backgroundColor: '#ff6b35', color: 'white' }}
+          >
+            🧪 Database Test
+          </button>
           <button
             onClick={() => setViewMode('admin')}
             className="nav-button admin-login"
