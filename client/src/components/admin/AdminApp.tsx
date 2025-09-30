@@ -7,6 +7,7 @@ import LeadsManagement from './LeadsManagement';
 import PaymentsManagement from './PaymentsManagement';
 import CreateAccount from './CreateAccount';
 import AdminProfile from './AdminProfile';
+import { apiCall } from '../../utils/api';
 
 const AdminApp: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -36,7 +37,7 @@ const AdminApp: React.FC = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/admin/login', {
+      const response = await apiCall('/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
