@@ -95,6 +95,34 @@ const findAssessorsByPostcode = async (postcode) => {
 
 // Create new assessor
 const createAssessor = async (assessorData) => {
+  if (USE_MOCK_DATA) {
+    // Create new assessor in mock data
+    const newAssessor = {
+      id: `asm_${Date.now()}`,
+      name: assessorData.name,
+      company: assessorData.company,
+      email: assessorData.email,
+      password: assessorData.password,
+      phone: assessorData.phone,
+      rating: 0,
+      review_count: 0,
+      price: assessorData.price || '£80',
+      verified: false,
+      status: 'pending',
+      trust_level: 'bronze',
+      spending_threshold: 100.00,
+      current_period_spend: 0,
+      total_successful_payments: 0,
+      account_paused: false,
+      created_at: new Date(),
+      approved_at: null
+    };
+
+    // Add to mock data array
+    mockAssessors.push(newAssessor);
+    return newAssessor;
+  }
+
   try {
     const coordinates = postcodeToCoordinates(assessorData.postcode || 'SW1A 1AA');
 
@@ -175,8 +203,24 @@ const findAssessorById = async (id) => {
 // Get all assessors (for admin)
 const getAllAssessors = async (filters = {}) => {
   if (USE_MOCK_DATA) {
-    // Return empty array for demo - no real assessors exist
-    return [];
+    // Return mock assessors data
+    let assessors = [...mockAssessors];
+
+    // Apply filters if provided
+    if (filters.status) {
+      assessors = assessors.filter(a => a.status === filters.status);
+    }
+
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      assessors = assessors.filter(a =>
+        a.name.toLowerCase().includes(searchTerm) ||
+        a.email.toLowerCase().includes(searchTerm) ||
+        a.company.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    return assessors;
   }
 
   try {
