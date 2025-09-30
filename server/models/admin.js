@@ -54,6 +54,26 @@ const updateAdminMock = (id, updates) => {
 
 // Get dashboard metrics
 const getDashboardMetrics = async (period = '30days', startDate = null, endDate = null) => {
+  if (USE_MOCK_DATA) {
+    // Return zeros for mock data - no real data exists
+    return {
+      totalLeads: 0,
+      totalRevenue: 0,
+      totalOverdue: 0,
+      newAssessors: 0,
+      activeAssessors: 0,
+      totalDistricts: 0,
+      trends: {
+        totalLeads: 0,
+        totalRevenue: 0,
+        totalOverdue: 0,
+        newAssessors: 0,
+        activeAssessors: 0,
+        totalDistricts: 0
+      }
+    };
+  }
+
   try {
     let dateFilter = '';
     let dateValues = [];
@@ -131,6 +151,11 @@ const getDashboardMetrics = async (period = '30days', startDate = null, endDate 
 
 // Get area data for coverage management
 const getAreaData = async () => {
+  if (USE_MOCK_DATA) {
+    // Return empty array for mock data - no real coverage data exists
+    return [];
+  }
+
   try {
     const result = await query(`
       SELECT
