@@ -174,6 +174,11 @@ const findAssessorById = async (id) => {
 
 // Get all assessors (for admin)
 const getAllAssessors = async (filters = {}) => {
+  if (USE_MOCK_DATA) {
+    // Return empty array for demo - no real assessors exist
+    return [];
+  }
+
   try {
     let whereClause = 'WHERE 1=1';
     const values = [];

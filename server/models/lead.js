@@ -1,5 +1,8 @@
 const { query } = require('./database');
 
+// Check if we should use mock data
+const USE_MOCK_DATA = process.env.USE_MOCK_DATA === 'true' || !process.env.DATABASE_URL;
+
 // Create new lead
 const createLead = async (leadData) => {
   try {
@@ -91,6 +94,11 @@ const getLeadsForAssessor = async (assessorId, filters = {}) => {
 
 // Get all leads (for admin)
 const getAllLeads = async (filters = {}) => {
+  if (USE_MOCK_DATA) {
+    // Return empty array for demo - no real leads exist
+    return [];
+  }
+
   try {
     let whereClause = 'WHERE 1=1';
     const values = [];
