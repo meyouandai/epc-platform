@@ -182,6 +182,93 @@ router.patch('/assessors/:id/status', authenticateToken, async (req, res) => {
   }
 });
 
+// Get admin profile
+router.get('/profile', authenticateToken, async (req, res) => {
+  try {
+    const admin = await findAdminById(req.assessorId);
+    if (!admin) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+
+    res.json({
+      success: true,
+      admin: {
+        id: admin.id,
+        email: admin.email,
+        name: admin.name,
+        firstName: admin.first_name || admin.name?.split(' ')[0] || '',
+        lastName: admin.last_name || admin.name?.split(' ').slice(1).join(' ') || ''
+      }
+    });
+  } catch (error) {
+    console.error('Get admin profile error:', error);
+    res.status(500).json({ error: 'Failed to fetch admin profile' });
+  }
+});
+
+// Update admin profile
+router.put('/profile', authenticateToken, async (req, res) => {
+  try {
+    const admin = await findAdminById(req.assessorId);
+    if (!admin) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+
+    const { firstName, lastName, email, password } = req.body;
+
+    // Validation
+    if (!firstName || !lastName || !email) {
+      return res.status(400).json({ error: 'firstName, lastName, and email are required' });
+    }
+
+    const { query } = require('../models/database');
+
+    // Build update query
+    let updateQuery = 'UPDATE admins SET ';
+    const updateValues = [];
+    let valueIndex = 1;
+
+    // Always update name fields
+    updateQuery += `name = $${valueIndex++}, `;
+    updateValues.push(`${firstName} ${lastName}`);
+
+    updateQuery += `email = $${valueIndex++}`;
+    updateValues.push(email);
+
+    // If password is provided, hash and update it
+    if (password && password.length >= 6) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateQuery += `, password = $${valueIndex++}`;
+      updateValues.push(hashedPassword);
+    }
+
+    updateQuery += ` WHERE id = $${valueIndex} RETURNING id, name, email`;
+    updateValues.push(req.assessorId);
+
+    const result = await query(updateQuery, updateValues);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Admin not found' });
+    }
+
+    const updatedAdmin = result.rows[0];
+
+    res.json({
+      success: true,
+      admin: {
+        id: updatedAdmin.id,
+        email: updatedAdmin.email,
+        name: updatedAdmin.name,
+        firstName: firstName,
+        lastName: lastName
+      }
+    });
+  } catch (error) {
+    console.error('Update admin profile error:', error);
+    res.status(500).json({ error: 'Failed to update admin profile' });
+  }
+});
+
 // Admin search endpoint
 router.get('/search', authenticateToken, async (req, res) => {
   try {
