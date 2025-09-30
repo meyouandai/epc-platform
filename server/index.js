@@ -51,6 +51,37 @@ app.use('/api/leads', require('./routes/leads'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/simple', require('./routes/simple'));
 
+// Database migration endpoint
+app.post('/api/migrate-database', async (req, res) => {
+  try {
+    const { query } = require('./models/database');
+
+    // Add verified column if it doesn't exist
+    await query(`
+      ALTER TABLE assessors
+      ADD COLUMN IF NOT EXISTS verified BOOLEAN DEFAULT FALSE
+    `);
+
+    // Update existing assessors to have verified based on their status
+    await query(`
+      UPDATE assessors
+      SET verified = (status = 'active')
+      WHERE verified IS NULL
+    `);
+
+    res.json({
+      success: true,
+      message: 'Database migration completed successfully'
+    });
+  } catch (error) {
+    console.error('Database migration error:', error);
+    res.status(500).json({
+      error: 'Database migration failed',
+      details: error.message
+    });
+  }
+});
+
 // Database seed endpoint
 app.post('/api/seed-database', async (req, res) => {
   try {
