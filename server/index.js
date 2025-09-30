@@ -165,6 +165,11 @@ app.post('/api/setup-database', async (req, res) => {
     // Enable UUID extension
     await query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
+    // Drop and recreate assessors table to ensure correct schema
+    await query(`DROP TABLE IF EXISTS assessor_postcodes CASCADE`);
+    await query(`DROP TABLE IF EXISTS lead_assessors CASCADE`);
+    await query(`DROP TABLE IF EXISTS assessors CASCADE`);
+
     // Create assessors table without PostGIS
     await query(`
       CREATE TABLE IF NOT EXISTS assessors (
