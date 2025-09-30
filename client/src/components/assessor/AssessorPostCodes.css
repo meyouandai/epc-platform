@@ -1,0 +1,358 @@
+/* AssessorPostCodes.css - V1 Design */
+
+.postcode-selector {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.postcode-header {
+  margin-bottom: 24px;
+}
+
+.postcode-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1f2937;
+}
+
+.postcode-header p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Search Section */
+.postcode-search {
+  margin-bottom: 24px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  max-width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 36px 8px 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.clear-search {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.clear-search:hover {
+  color: #4b5563;
+}
+
+/* Stats Cards */
+.postcode-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.stat-value.active {
+  color: #1db954;
+}
+
+.stat-value.paused {
+  color: #f97316;
+}
+
+/* Regions Container */
+.regions-container {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.region-section {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.region-section:last-child {
+  border-bottom: none;
+}
+
+/* Region Header */
+.region-header {
+  padding: 16px;
+  background: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.region-header:hover {
+  background: #f9fafb;
+}
+
+.region-header.expanded {
+  background: #f9fafb;
+}
+
+.region-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chevron {
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.chevron.expanded {
+  transform: rotate(180deg);
+}
+
+/* Cities Container */
+.cities-container {
+  padding-left: 24px;
+}
+
+.city-section {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.city-section:last-child {
+  border-bottom: none;
+}
+
+.city-header {
+  padding: 12px 16px;
+  background: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.city-header:hover {
+  background: #f9fafb;
+}
+
+.city-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Count Badges */
+.count-badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.count-badge.active {
+  background: #1db954;
+  color: white;
+}
+
+.count-badge.paused {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+/* City Actions */
+.city-actions {
+  padding: 8px 16px 8px 48px;
+  display: flex;
+  gap: 16px;
+}
+
+.city-actions .action-link {
+  font-size: 14px;
+  color: #3b82f6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0;
+}
+
+.city-actions .action-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.city-actions .action-link.paused {
+  color: #f97316;
+}
+
+.city-actions .action-link.paused:hover {
+  color: #ea580c;
+}
+
+/* Postcodes Container */
+.postcodes-container {
+  padding: 12px 16px 12px 48px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Postcode Pills */
+.postcode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.postcode-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.postcode-pill.selected {
+  border-color: #3b82f6;
+  background: white;
+  color: #3b82f6;
+  border-width: 2px;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.postcode-pill.active {
+  border-color: #1db954;
+  background: #1db954;
+  color: white;
+}
+
+.postcode-pill.paused {
+  border-color: #f97316;
+  background: #f97316;
+  color: white;
+}
+
+.postcode-pill.unavailable {
+  border-color: #fed7aa;
+  background: #fff7ed;
+  color: #9a3412;
+  cursor: not-allowed;
+}
+
+.postcode-pill.unavailable:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.pill-price {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.postcode-pill.selected .pill-price {
+  color: #3b82f6;
+  opacity: 0.8;
+}
+
+.postcode-pill.active .pill-price {
+  color: white;
+  opacity: 0.9;
+}
+
+.postcode-pill.paused .pill-price {
+  color: white;
+  opacity: 0.9;
+}
+
+.postcode-pill.unavailable .pill-price {
+  color: #9a3412;
+  opacity: 0.8;
+}
+
+/* Bulk mode styling - when Select All is active */
+.postcode-pill.bulk-mode {
+  cursor: default !important;
+}
+
+.postcode-pill.bulk-mode:not(.selected) {
+  opacity: 0.7;
+}
+
+.postcode-pill.bulk-mode:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .header-content {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .postcode-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .cities-container {
+    padding-left: 12px;
+  }
+
+  .city-actions {
+    padding-left: 24px;
+  }
+
+  .postcodes-container {
+    padding-left: 24px;
+  }
+}
