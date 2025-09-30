@@ -21,6 +21,10 @@ const findAdminByEmail = async (email) => {
 
 // Find admin by ID
 const findAdminById = async (id) => {
+  if (USE_MOCK_DATA) {
+    return mockAdmins.find(admin => admin.id === id) || null;
+  }
+
   try {
     const result = await query('SELECT * FROM admins WHERE id = $1', [id]);
     return result.rows[0] || null;
