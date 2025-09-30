@@ -76,7 +76,9 @@ router.get('/assessors', authenticateToken, async (req, res) => {
     if (status) filters.status = status;
     if (search) filters.search = search;
 
+    console.log('🔍 Fetching assessors with filters:', filters);
     const assessors = await getAllAssessors(filters);
+    console.log(`✅ Got ${assessors.length} assessors from getAllAssessors`);
 
     res.json({
       success: true,

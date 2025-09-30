@@ -241,6 +241,8 @@ const getAllAssessors = async (filters = {}) => {
       values.push(`%${filters.search}%`);
     }
 
+    console.log('🔍 getAllAssessors query:', whereClause, values);
+
     const result = await query(`
       SELECT *
       FROM assessors
@@ -248,9 +250,11 @@ const getAllAssessors = async (filters = {}) => {
       ORDER BY created_at DESC
     `, values);
 
+    console.log(`✅ Query returned ${result.rows.length} rows`);
     return result.rows;
   } catch (error) {
-    console.error('Error getting all assessors:', error);
+    console.error('❌ Error getting all assessors:', error);
+    console.error('Stack:', error.stack);
     throw error;
   }
 };
