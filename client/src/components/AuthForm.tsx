@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { apiCall } from '../utils/api';
 
 interface AuthFormProps {
   onLogin: (token: string, assessorId: string) => void;
@@ -29,7 +30,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
         ? { email: formData.email, password: formData.password }
         : formData;
 
-      const response = await fetch(endpoint, {
+      const response = await apiCall(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
