@@ -65,17 +65,20 @@ app.post('/api/setup-database', async (req, res) => {
     // Execute the schema
     await query(schema);
 
-    // Create default admin user with specific ID to match JWT tokens
+    // Create default admin user with specific UUID that matches JWT tokens
     const hashedPassword = await bcrypt.hash('password123', 10);
+
+    // Use a fixed UUID for admin_001 (instead of string)
+    const adminUuid = '00000000-0000-0000-0000-000000000001';
 
     // First delete any existing admin user to ensure clean state
     await query(`DELETE FROM admins WHERE email = $1`, ['admin@epcplatform.com']);
 
-    // Then create admin user with correct ID
+    // Then create admin user with correct UUID
     await query(`
       INSERT INTO admins (id, name, email, password)
       VALUES ($1, $2, $3, $4)
-    `, ['admin_001', 'Platform Administrator', 'admin@epcplatform.com', hashedPassword]);
+    `, [adminUuid, 'Platform Administrator', 'admin@epcplatform.com', hashedPassword]);
 
     res.json({
       success: true,
