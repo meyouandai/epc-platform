@@ -31,6 +31,7 @@ app.use('/api/payments', require('./routes/payments'));
 app.post('/api/setup-database', async (req, res) => {
   try {
     const { query } = require('./models/database');
+    const bcrypt = require('bcryptjs');
     const fs = require('fs');
     const path = require('path');
 
@@ -41,9 +42,17 @@ app.post('/api/setup-database', async (req, res) => {
     // Execute the schema
     await query(schema);
 
+    // Create default admin user
+    const hashedPassword = await bcrypt.hash('password123', 10);
+    await query(`
+      INSERT INTO admins (name, email, password)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (email) DO NOTHING
+    `, ['Admin User', 'admin@epcplatform.com', hashedPassword]);
+
     res.json({
       success: true,
-      message: 'Database schema created successfully'
+      message: 'Database schema and admin user created successfully'
     });
   } catch (error) {
     console.error('Database setup error:', error);
