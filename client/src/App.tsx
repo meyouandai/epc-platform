@@ -5,6 +5,7 @@ import AssessorList from './components/AssessorList';
 import AssessorApp from './components/assessor/AssessorApp';
 import AdminApp from './components/admin/AdminApp';
 import SimpleTest from './components/SimpleTest';
+import { apiCall } from './utils/api';
 
 interface Assessor {
   id: string;
@@ -31,7 +32,7 @@ function App() {
     setSearchedPostcode(postcode);
 
     try {
-      const response = await fetch(`/api/assessors/search?postcode=${postcode}`);
+      const response = await apiCall(`/api/assessors/search?postcode=${postcode}`);
       const data = await response.json();
       setAssessors(data.assessors || []);
     } catch (error) {

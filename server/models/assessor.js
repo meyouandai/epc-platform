@@ -241,7 +241,7 @@ const getAllAssessors = async (filters = {}) => {
     }
 
     const result = await query(`
-      SELECT *, ST_X(coordinates) as lng, ST_Y(coordinates) as lat
+      SELECT *
       FROM assessors
       ${whereClause}
       ORDER BY created_at DESC
