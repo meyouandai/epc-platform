@@ -109,7 +109,7 @@ const LeadsManagement: React.FC<LeadsManagementProps> = ({ token }) => {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .leads-management {
           padding: 20px;
         }

@@ -75,7 +75,7 @@ const PaymentsManagement: React.FC<PaymentsManagementProps> = ({ token }) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .payments-management {
           padding: 20px;
         }
