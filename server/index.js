@@ -56,15 +56,104 @@ app.post('/api/setup-database', async (req, res) => {
   try {
     const { query } = require('./models/database');
     const bcrypt = require('bcryptjs');
-    const fs = require('fs');
-    const path = require('path');
 
-    // Read the schema file
-    const schemaPath = path.join(__dirname, 'database', 'schema.sql');
-    const schema = fs.readFileSync(schemaPath, 'utf8');
+    // Create tables without PostGIS dependencies
 
-    // Execute the schema
-    await query(schema);
+    // Enable UUID extension
+    await query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
+
+    // Create assessors table without PostGIS
+    await query(`
+      CREATE TABLE IF NOT EXISTS assessors (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name VARCHAR(255) NOT NULL,
+        company VARCHAR(255),
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        phone VARCHAR(50),
+        rating DECIMAL(2,1) DEFAULT 0.0,
+        review_count INTEGER DEFAULT 0,
+        price VARCHAR(20) DEFAULT '£80',
+        verified BOOLEAN DEFAULT FALSE,
+        status VARCHAR(50) DEFAULT 'active',
+        lat DECIMAL(10, 8),
+        lng DECIMAL(11, 8),
+        stripe_customer_id VARCHAR(255),
+        trust_level VARCHAR(20) DEFAULT 'bronze',
+        spending_threshold DECIMAL(10,2) DEFAULT 250.00,
+        current_period_spend DECIMAL(10,2) DEFAULT 0.00,
+        total_successful_payments INTEGER DEFAULT 0,
+        account_paused BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        approved_at TIMESTAMP WITH TIME ZONE,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create admins table
+    await query(`
+      CREATE TABLE IF NOT EXISTS admins (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        role VARCHAR(50) DEFAULT 'admin',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create leads table without PostGIS
+    await query(`
+      CREATE TABLE IF NOT EXISTS leads (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        customer_name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(50) NOT NULL,
+        address TEXT NOT NULL,
+        postcode VARCHAR(20) NOT NULL,
+        property_type VARCHAR(50) NOT NULL,
+        bedrooms INTEGER,
+        timeframe VARCHAR(50) NOT NULL,
+        additional_info TEXT,
+        status VARCHAR(50) DEFAULT 'new',
+        price DECIMAL(10,2) NOT NULL,
+        lat DECIMAL(10, 8),
+        lng DECIMAL(11, 8),
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create other tables
+    await query(`
+      CREATE TABLE IF NOT EXISTS lead_assessors (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        lead_id UUID REFERENCES leads(id) ON DELETE CASCADE,
+        assessor_id UUID REFERENCES assessors(id) ON DELETE CASCADE,
+        assigned_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        status VARCHAR(50) DEFAULT 'assigned',
+        notes TEXT,
+        UNIQUE(lead_id, assessor_id)
+      )
+    `);
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS assessor_postcodes (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        assessor_id UUID REFERENCES assessors(id) ON DELETE CASCADE,
+        postcode VARCHAR(20) NOT NULL,
+        status VARCHAR(20) DEFAULT 'active',
+        price DECIMAL(10,2) NOT NULL,
+        added_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(assessor_id, postcode)
+      )
+    `);
+
+    // Create indexes
+    await query(`CREATE INDEX IF NOT EXISTS idx_assessors_email ON assessors(email)`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_assessors_status ON assessors(status)`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_leads_postcode ON leads(postcode)`);
+    await query(`CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status)`);
 
     // Create default admin user with specific UUID that matches JWT tokens
     const hashedPassword = await bcrypt.hash('password123', 10);
