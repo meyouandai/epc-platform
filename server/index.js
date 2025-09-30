@@ -67,10 +67,14 @@ app.post('/api/setup-database', async (req, res) => {
 
     // Create default admin user with specific ID to match JWT tokens
     const hashedPassword = await bcrypt.hash('password123', 10);
+
+    // First delete any existing admin user to ensure clean state
+    await query(`DELETE FROM admins WHERE email = $1`, ['admin@epcplatform.com']);
+
+    // Then create admin user with correct ID
     await query(`
       INSERT INTO admins (id, name, email, password)
       VALUES ($1, $2, $3, $4)
-      ON CONFLICT (email) DO NOTHING
     `, ['admin_001', 'Platform Administrator', 'admin@epcplatform.com', hashedPassword]);
 
     res.json({
