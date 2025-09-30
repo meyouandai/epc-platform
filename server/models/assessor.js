@@ -140,7 +140,7 @@ const createAssessor = async (assessorData) => {
       assessorData.price || '£80',
       coordinates.lng,
       coordinates.lat,
-      'pending'
+      'active'
     ]);
 
     return result.rows[0];
