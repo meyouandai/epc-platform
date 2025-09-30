@@ -72,4 +72,33 @@ router.post('/add', async (req, res) => {
   }
 });
 
+// DEBUG: Test assessors query
+router.get('/test-assessors', async (req, res) => {
+  try {
+    const { query } = require('../models/database');
+
+    console.log('Testing direct assessors query...');
+    const result = await query('SELECT * FROM assessors ORDER BY created_at DESC');
+
+    console.log(`Found ${result.rows.length} assessors`);
+
+    res.json({
+      success: true,
+      count: result.rows.length,
+      assessors: result.rows.map(a => ({
+        name: a.name,
+        email: a.email,
+        status: a.status,
+        verified: a.verified
+      }))
+    });
+  } catch (error) {
+    console.error('Test assessors error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 module.exports = router;
