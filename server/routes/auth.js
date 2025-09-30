@@ -110,4 +110,13 @@ router.get('/me', require('../middleware/auth').authenticateToken, async (req, r
   }
 });
 
+// Simple test route
+router.get('/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Auth route test works!',
+    timestamp: new Date().toISOString()
+  });
+});
+
 module.exports = router;

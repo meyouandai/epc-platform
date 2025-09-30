@@ -49,6 +49,7 @@ app.use('/api/admin', require('./routes/admin'));
 app.use('/api/assessors', require('./routes/assessors'));
 app.use('/api/leads', require('./routes/leads'));
 app.use('/api/payments', require('./routes/payments'));
+app.use('/api/simple', require('./routes/simple'));
 
 // Database setup endpoint (temporary)
 app.post('/api/setup-database', async (req, res) => {
