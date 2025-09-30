@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiCall } from '../../utils/api';
 
 interface AdminProfileProps {
   token: string;
@@ -40,7 +41,7 @@ const AdminProfile: React.FC<AdminProfileProps> = ({ token }) => {
 
     const loadProfile = async () => {
       try {
-        const response = await fetch('/api/admin/profile', {
+        const response = await apiCall('/api/admin/profile', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -106,7 +107,7 @@ const AdminProfile: React.FC<AdminProfileProps> = ({ token }) => {
         updateData.password = profileData.newPassword;
       }
 
-      const response = await fetch('/api/admin/profile', {
+      const response = await apiCall('/api/admin/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

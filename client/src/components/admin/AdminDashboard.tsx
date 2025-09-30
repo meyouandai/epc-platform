@@ -213,34 +213,36 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token }) => {
       <div className="recent-activity">
         <h2>Recent Activity</h2>
         <div className="activity-list">
-          <div className="activity-item">
-            <span className="activity-icon">👨‍💼</span>
-            <div className="activity-details">
-              <p><strong>New assessor registered</strong></p>
-              <span className="activity-time">2 hours ago</span>
+          {metrics && (metrics.totalLeads > 0 || metrics.newAssessors > 0) ? (
+            <>
+              {metrics.newAssessors > 0 && (
+                <div className="activity-item">
+                  <span className="activity-icon">👨‍💼</span>
+                  <div className="activity-details">
+                    <p><strong>{metrics.newAssessors} new assessor{metrics.newAssessors > 1 ? 's' : ''} registered</strong></p>
+                    <span className="activity-time">In last 30 days</span>
+                  </div>
+                </div>
+              )}
+              {metrics.totalLeads > 0 && (
+                <div className="activity-item">
+                  <span className="activity-icon">📋</span>
+                  <div className="activity-details">
+                    <p><strong>{metrics.totalLeads} lead{metrics.totalLeads > 1 ? 's' : ''} generated</strong></p>
+                    <span className="activity-time">In last 30 days</span>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="activity-item">
+              <span className="activity-icon">🚀</span>
+              <div className="activity-details">
+                <p><strong>Platform ready for first assessors!</strong></p>
+                <span className="activity-time">No activity yet - share the assessor signup link to get started</span>
+              </div>
             </div>
-          </div>
-          <div className="activity-item">
-            <span className="activity-icon">📋</span>
-            <div className="activity-details">
-              <p><strong>Lead generated in SW1A</strong></p>
-              <span className="activity-time">4 hours ago</span>
-            </div>
-          </div>
-          <div className="activity-item">
-            <span className="activity-icon">💰</span>
-            <div className="activity-details">
-              <p><strong>Payment processed</strong></p>
-              <span className="activity-time">6 hours ago</span>
-            </div>
-          </div>
-          <div className="activity-item">
-            <span className="activity-icon">🗺️</span>
-            <div className="activity-details">
-              <p><strong>Coverage area updated</strong></p>
-              <span className="activity-time">1 day ago</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
