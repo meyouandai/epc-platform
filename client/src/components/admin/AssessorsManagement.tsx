@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiCall } from '../../utils/api';
 
 interface Assessor {
   id: string;
@@ -86,7 +87,7 @@ const AssessorsManagement: React.FC<AssessorsManagementProps> = ({ token }) => {
 
   const fetchAssessors = async () => {
     try {
-      const response = await fetch('/api/admin/assessors', {
+      const response = await apiCall('/api/admin/assessors', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -109,7 +110,7 @@ const AssessorsManagement: React.FC<AssessorsManagementProps> = ({ token }) => {
   const handleToggleVerification = async (assessorId: string, currentVerified: boolean) => {
     try {
       const newStatus = currentVerified ? 'inactive' : 'active';
-      const response = await fetch(`/api/admin/assessors/${assessorId}/status`, {
+      const response = await apiCall(`/api/admin/assessors/${assessorId}/status`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
