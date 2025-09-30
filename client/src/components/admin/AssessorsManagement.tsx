@@ -110,6 +110,8 @@ const AssessorsManagement: React.FC<AssessorsManagementProps> = ({ token }) => {
   const handleToggleVerification = async (assessorId: string, currentVerified: boolean) => {
     try {
       const newStatus = currentVerified ? 'inactive' : 'active';
+      console.log(`Updating assessor ${assessorId} to status: ${newStatus}`);
+
       const response = await apiCall(`/api/admin/assessors/${assessorId}/status`, {
         method: 'PATCH',
         headers: {
@@ -119,16 +121,28 @@ const AssessorsManagement: React.FC<AssessorsManagementProps> = ({ token }) => {
         body: JSON.stringify({ status: newStatus })
       });
 
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Response error:', errorText);
+        alert(`Failed to update: ${response.status} - ${errorText}`);
+        return;
+      }
+
       const data = await response.json();
+      console.log('Response data:', data);
+
       if (data.success) {
+        alert(`Successfully ${newStatus === 'active' ? 'activated' : 'deactivated'} assessor!`);
         // Refresh assessors list
         fetchAssessors();
       } else {
-        alert('Failed to update assessor status');
+        alert('Failed to update assessor status: ' + (data.error || 'Unknown error'));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to update assessor:', error);
-      alert('Failed to update assessor status');
+      alert('Failed to update assessor status: ' + error.message);
     }
   };
 
@@ -223,17 +237,21 @@ const AssessorsManagement: React.FC<AssessorsManagementProps> = ({ token }) => {
 
   return (
     <div className="assessors-management">
-      {/* DEBUG INFO */}
+      {/* DEBUG INFO - SUPER OBVIOUS */}
       <div style={{
-        backgroundColor: '#ff6b35',
+        backgroundColor: '#ff0000',
         color: 'white',
-        padding: '15px',
+        padding: '30px',
         marginBottom: '20px',
         borderRadius: '8px',
         fontWeight: 'bold',
-        fontSize: '16px'
+        fontSize: '24px',
+        textAlign: 'center',
+        border: '5px solid yellow'
       }}>
-        🔴 ACTIVE - Railway Backend Connected | Total Assessors Loaded: {assessors.length} | Filtered: {filteredAssessors.length}
+        ⚠️⚠️⚠️ VERSION CHECK - LATEST BUILD ACTIVE ⚠️⚠️⚠️<br/>
+        Total Assessors from Railway: {assessors.length}<br/>
+        Showing: {filteredAssessors.length}
       </div>
 
       <div className="assessors-header">
