@@ -14,8 +14,31 @@ const limiter = rateLimit({
 
 app.use(helmet());
 app.use(limiter);
-app.use(cors());
+
+// Enhanced CORS configuration for Vercel deployment
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://epc-platform-14n4h0mco-craig-meyouandaics-projects.vercel.app',
+    'https://epc-platform-git-main-craig-meyouandaics-projects.vercel.app',
+    /^https:\/\/.*\.vercel\.app$/
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json({ limit: '10mb' }));
+
+// Debug middleware for admin routes
+app.use('/api/admin', (req, res, next) => {
+  console.log(`🔍 Admin request: ${req.method} ${req.url}`);
+  console.log(`🌐 Origin: ${req.headers.origin}`);
+  console.log(`📝 Headers:`, req.headers);
+  console.log(`📦 Body:`, req.body);
+  next();
+});
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'EPC Platform API is running', timestamp: new Date().toISOString() });
