@@ -1,5 +1,3 @@
 {
-  "buildCommand": "cd client && npm ci && npm run build",
-  "outputDirectory": "client/build",
-  "installCommand": "echo 'Dependencies installed via buildCommand'"
+  "outputDirectory": "client/build"
 }
