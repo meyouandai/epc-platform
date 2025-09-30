@@ -203,7 +203,10 @@ const findAssessorById = async (id) => {
 
 // Get all assessors (for admin)
 const getAllAssessors = async (filters = {}) => {
+  console.log(`🔍 getAllAssessors called. USE_MOCK_DATA=${USE_MOCK_DATA}, DATABASE_URL=${process.env.DATABASE_URL ? 'SET' : 'NOT SET'}`);
+
   if (USE_MOCK_DATA) {
+    console.log('⚠️ Using MOCK DATA mode');
     // Return mock assessors data
     let assessors = [...mockAssessors];
 
