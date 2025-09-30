@@ -1,5 +1,8 @@
 {
   "buildCommand": "npm install --prefix client && CI=false npm run build --prefix client",
   "outputDirectory": "client/build",
-  "installCommand": "npm install --prefix client"
+  "installCommand": "npm install --prefix client",
+  "env": {
+    "REACT_APP_API_URL": "https://epc-platform-production.up.railway.app"
+  }
 }
