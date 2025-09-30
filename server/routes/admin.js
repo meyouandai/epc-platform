@@ -162,6 +162,17 @@ router.patch('/assessors/:id/status', authenticateToken, async (req, res) => {
     const { updateAssessor } = require('../models/assessor');
     const updates = { status };
 
+    // When approving (setting to active), also set verified to true
+    if (status === 'active') {
+      updates.verified = true;
+      updates.approved_at = new Date();
+    }
+
+    // When rejecting/deactivating, set verified to false
+    if (status === 'inactive' || status === 'health_risk') {
+      updates.verified = false;
+    }
+
     if (status === 'health_risk' && reason) {
       updates.health_risk_reasons = [reason];
     }

@@ -128,8 +128,8 @@ const createAssessor = async (assessorData) => {
 
     const result = await query(`
       INSERT INTO assessors (
-        name, company, email, password, phone, price, lat, lng, status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        name, company, email, password, phone, price, lat, lng, status, verified
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *
     `, [
       assessorData.name,
@@ -140,7 +140,8 @@ const createAssessor = async (assessorData) => {
       assessorData.price || '£80',
       coordinates.lat,
       coordinates.lng,
-      'active'
+      'pending',
+      false
     ]);
 
     return result.rows[0];

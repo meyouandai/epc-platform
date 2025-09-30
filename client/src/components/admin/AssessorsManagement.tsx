@@ -106,6 +106,31 @@ const AssessorsManagement: React.FC<AssessorsManagementProps> = ({ token }) => {
     }
   };
 
+  const handleToggleVerification = async (assessorId: string, currentVerified: boolean) => {
+    try {
+      const newStatus = currentVerified ? 'inactive' : 'active';
+      const response = await fetch(`/api/admin/assessors/${assessorId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        // Refresh assessors list
+        fetchAssessors();
+      } else {
+        alert('Failed to update assessor status');
+      }
+    } catch (error) {
+      console.error('Failed to update assessor:', error);
+      alert('Failed to update assessor status');
+    }
+  };
+
   const toggleCardExpansion = (assessorId: string) => {
     const newExpanded = new Set(expandedCards);
     if (newExpanded.has(assessorId)) {
@@ -369,7 +394,10 @@ const AssessorsManagement: React.FC<AssessorsManagementProps> = ({ token }) => {
                       <div className="action-buttons">
                         <button className="action-btn edit-btn">Edit Details</button>
                         <button className="action-btn history-btn">Payment History</button>
-                        <button className="action-btn deactivate-btn">
+                        <button
+                          className={`action-btn ${assessor.verified ? 'deactivate-btn' : 'activate-btn'}`}
+                          onClick={() => handleToggleVerification(assessor.id, assessor.verified)}
+                        >
                           {assessor.verified ? 'Deactivate Account' : 'Activate Account'}
                         </button>
                       </div>
