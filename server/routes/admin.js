@@ -209,12 +209,18 @@ router.get('/profile', authenticateToken, async (req, res) => {
 // Update admin profile
 router.put('/profile', authenticateToken, async (req, res) => {
   try {
+    console.log('🔍 PUT /profile - Admin ID from token:', req.assessorId);
+
     const admin = await findAdminById(req.assessorId);
     if (!admin) {
+      console.log('❌ Admin not found for ID:', req.assessorId);
       return res.status(403).json({ error: 'Admin access required' });
     }
 
+    console.log('✅ Admin found:', admin);
+
     const { firstName, lastName, email, password } = req.body;
+    console.log('📝 Update request:', { firstName, lastName, email, passwordProvided: !!password });
 
     // Validation
     if (!firstName || !lastName || !email) {
@@ -245,9 +251,14 @@ router.put('/profile', authenticateToken, async (req, res) => {
     updateQuery += ` WHERE id = $${valueIndex} RETURNING id, name, email`;
     updateValues.push(req.assessorId);
 
+    console.log('🔍 Update query:', updateQuery);
+    console.log('🔍 Update values:', updateValues);
+
     const result = await query(updateQuery, updateValues);
+    console.log('🔍 Update result:', result.rows);
 
     if (result.rows.length === 0) {
+      console.log('❌ No rows updated for admin ID:', req.assessorId);
       return res.status(404).json({ error: 'Admin not found' });
     }
 
