@@ -39,6 +39,19 @@ const findAdminById = async (id) => {
   }
 };
 
+// Update admin in mock data
+const updateAdminMock = (id, updates) => {
+  const admin = mockAdmins.find(a => a.id === id);
+  if (!admin) return null;
+
+  // Update admin properties
+  if (updates.name) admin.name = updates.name;
+  if (updates.email) admin.email = updates.email;
+  if (updates.password) admin.password = updates.password;
+
+  return admin;
+};
+
 // Get dashboard metrics
 const getDashboardMetrics = async (period = '30days', startDate = null, endDate = null) => {
   try {
@@ -172,6 +185,7 @@ const getAreaName = (areaCode) => {
 module.exports = {
   findAdminByEmail,
   findAdminById,
+  updateAdminMock,
   getDashboardMetrics,
   getAreaData
 };

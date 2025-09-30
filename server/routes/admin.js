@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { generateToken, authenticateToken } = require('../middleware/auth');
-const { findAdminByEmail, findAdminById, getDashboardMetrics, getAreaData } = require('../models/admin');
+const { findAdminByEmail, findAdminById, updateAdminMock, getDashboardMetrics, getAreaData } = require('../models/admin');
 const { getAllAssessors } = require('../models/assessor');
 const { getAllLeads } = require('../models/lead');
 
@@ -227,53 +227,91 @@ router.put('/profile', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'firstName, lastName, and email are required' });
     }
 
-    const { query } = require('../models/database');
+    // Check if using mock data
+    const USE_MOCK_DATA = process.env.USE_MOCK_DATA === 'true' || !process.env.DATABASE_URL;
 
-    // Build update query
-    let updateQuery = 'UPDATE admins SET ';
-    const updateValues = [];
-    let valueIndex = 1;
+    if (USE_MOCK_DATA) {
+      console.log('📝 Using mock data update');
 
-    // Always update name fields
-    updateQuery += `name = $${valueIndex++}, `;
-    updateValues.push(`${firstName} ${lastName}`);
+      // Prepare updates for mock data
+      const updates = {
+        name: `${firstName} ${lastName}`,
+        email: email
+      };
 
-    updateQuery += `email = $${valueIndex++}`;
-    updateValues.push(email);
-
-    // If password is provided, hash and update it
-    if (password && password.length >= 6) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updateQuery += `, password = $${valueIndex++}`;
-      updateValues.push(hashedPassword);
-    }
-
-    updateQuery += ` WHERE id = $${valueIndex} RETURNING id, name, email`;
-    updateValues.push(req.assessorId);
-
-    console.log('🔍 Update query:', updateQuery);
-    console.log('🔍 Update values:', updateValues);
-
-    const result = await query(updateQuery, updateValues);
-    console.log('🔍 Update result:', result.rows);
-
-    if (result.rows.length === 0) {
-      console.log('❌ No rows updated for admin ID:', req.assessorId);
-      return res.status(404).json({ error: 'Admin not found' });
-    }
-
-    const updatedAdmin = result.rows[0];
-
-    res.json({
-      success: true,
-      admin: {
-        id: updatedAdmin.id,
-        email: updatedAdmin.email,
-        name: updatedAdmin.name,
-        firstName: firstName,
-        lastName: lastName
+      // If password is provided, hash it
+      if (password && password.length >= 6) {
+        updates.password = await bcrypt.hash(password, 10);
       }
-    });
+
+      // Update mock data directly
+      const updatedAdmin = updateAdminMock(req.assessorId, updates);
+
+      if (!updatedAdmin) {
+        return res.status(404).json({ error: 'Admin not found in mock data' });
+      }
+
+      res.json({
+        success: true,
+        admin: {
+          id: updatedAdmin.id,
+          email: updatedAdmin.email,
+          name: updatedAdmin.name,
+          firstName: firstName,
+          lastName: lastName
+        }
+      });
+    } else {
+      console.log('📝 Using database update');
+
+      const { query } = require('../models/database');
+
+      // Build update query
+      let updateQuery = 'UPDATE admins SET ';
+      const updateValues = [];
+      let valueIndex = 1;
+
+      // Always update name fields
+      updateQuery += `name = $${valueIndex++}, `;
+      updateValues.push(`${firstName} ${lastName}`);
+
+      updateQuery += `email = $${valueIndex++}`;
+      updateValues.push(email);
+
+      // If password is provided, hash and update it
+      if (password && password.length >= 6) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        updateQuery += `, password = $${valueIndex++}`;
+        updateValues.push(hashedPassword);
+      }
+
+      updateQuery += ` WHERE id = $${valueIndex} RETURNING id, name, email`;
+      updateValues.push(req.assessorId);
+
+      console.log('🔍 Update query:', updateQuery);
+      console.log('🔍 Update values:', updateValues);
+
+      const result = await query(updateQuery, updateValues);
+      console.log('🔍 Update result:', result.rows);
+
+      if (result.rows.length === 0) {
+        console.log('❌ No rows updated for admin ID:', req.assessorId);
+        return res.status(404).json({ error: 'Admin not found' });
+      }
+
+      const updatedAdmin = result.rows[0];
+
+      res.json({
+        success: true,
+        admin: {
+          id: updatedAdmin.id,
+          email: updatedAdmin.email,
+          name: updatedAdmin.name,
+          firstName: firstName,
+          lastName: lastName
+        }
+      });
+    }
   } catch (error) {
     console.error('Update admin profile error:', error);
     res.status(500).json({ error: 'Failed to update admin profile' });
