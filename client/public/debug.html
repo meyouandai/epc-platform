@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Debug</title>
+</head>
+<body>
+    <h1>EPC Platform API Debug</h1>
+    <div id="debug-info"></div>
+    <script>
+        const debugInfo = document.getElementById('debug-info');
+
+        // Check environment variable
+        const apiUrl = process.env.REACT_APP_API_URL || 'undefined';
+        debugInfo.innerHTML += `<p><strong>REACT_APP_API_URL:</strong> ${apiUrl}</p>`;
+
+        // Test API call
+        debugInfo.innerHTML += `<p><strong>Testing admin login API call...</strong></p>`;
+
+        fetch(`${apiUrl}/api/admin/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: 'admin@epcplatform.com',
+                password: 'password123'
+            })
+        })
+        .then(response => {
+            debugInfo.innerHTML += `<p><strong>Response status:</strong> ${response.status}</p>`;
+            return response.json();
+        })
+        .then(data => {
+            debugInfo.innerHTML += `<p><strong>Response data:</strong> ${JSON.stringify(data, null, 2)}</p>`;
+        })
+        .catch(error => {
+            debugInfo.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
+        });
+    </script>
+</body>
+</html>
