@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiCall } from '../../utils/api';
 
 interface DashboardMetrics {
   totalLeads: number;
@@ -42,7 +43,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ token }) => {
         params.append('endDate', customDateRange.end);
       }
 
-      const response = await fetch(`/api/admin/dashboard?${params}`, {
+      const response = await apiCall(`/api/admin/dashboard?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
