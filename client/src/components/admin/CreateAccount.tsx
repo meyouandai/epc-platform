@@ -51,36 +51,47 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ token }) => {
     setLoading(true);
 
     try {
-      // Mock API response for now - replace with real API later
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
-
-      // Simulate successful account creation
-      setSuccess(`Assessor account created successfully for ${assessorData.firstName} ${assessorData.lastName}!`);
-      setAssessorData({
-        firstName: '',
-        lastName: '',
-        company: '',
-        phoneNumber: '',
-        email: '',
-        accreditationNumber: '',
-        accreditationCompany: '',
-        password: '',
-        confirmPassword: ''
+      // Call the assessor registration API
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: `${assessorData.firstName} ${assessorData.lastName}`,
+          company: assessorData.company || '',
+          email: assessorData.email,
+          password: assessorData.password,
+          phone: assessorData.phoneNumber,
+          price: '£80' // Default price
+        }),
       });
 
-      // TODO: Replace with actual API call to /api/admin/create-assessor
-      console.log('Assessor account data:', {
-        firstName: assessorData.firstName,
-        lastName: assessorData.lastName,
-        company: assessorData.company || null,
-        phoneNumber: assessorData.phoneNumber,
-        email: assessorData.email,
-        accreditationNumber: assessorData.accreditationNumber,
-        accreditationCompany: assessorData.accreditationCompany,
-        password: assessorData.password
-      });
-    } catch (error) {
-      setError('Network error. Please try again.');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create assessor account');
+      }
+
+      if (data.success) {
+        setSuccess(`Assessor account created successfully for ${assessorData.firstName} ${assessorData.lastName}!`);
+        setAssessorData({
+          firstName: '',
+          lastName: '',
+          company: '',
+          phoneNumber: '',
+          email: '',
+          accreditationNumber: '',
+          accreditationCompany: '',
+          password: '',
+          confirmPassword: ''
+        });
+      } else {
+        throw new Error(data.error || 'Failed to create assessor account');
+      }
+    } catch (error: any) {
+      console.error('Assessor creation error:', error);
+      setError(error.message || 'Network error. Please try again.');
     } finally {
       setLoading(false);
     }
