@@ -223,6 +223,19 @@ const AssessorsManagement: React.FC<AssessorsManagementProps> = ({ token }) => {
 
   return (
     <div className="assessors-management">
+      {/* DEBUG INFO */}
+      <div style={{
+        backgroundColor: '#ff6b35',
+        color: 'white',
+        padding: '15px',
+        marginBottom: '20px',
+        borderRadius: '8px',
+        fontWeight: 'bold',
+        fontSize: '16px'
+      }}>
+        🔴 ACTIVE - Railway Backend Connected | Total Assessors Loaded: {assessors.length} | Filtered: {filteredAssessors.length}
+      </div>
+
       <div className="assessors-header">
         <div className="header-content">
           <div>
